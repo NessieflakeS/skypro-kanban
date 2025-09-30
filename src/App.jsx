@@ -314,12 +314,12 @@ function App() {
       <header className="header">
         <div className="container">
           <div className="header__block">
-            <div className="header__logo _show _light">
+            <div className={`header__logo ${!isDarkTheme ? '_show' : '_hide'}`}>
               <a href="" target="_self" rel="noopener noreferrer">
                 <img src="/images/logo.png" alt="logo" />
               </a>
             </div>
-            <div className="header__logo _dark">
+            <div className={`header__logo ${isDarkTheme ? '_show' : '_hide'}`}>
               <a href="" target="_self" rel="noopener noreferrer">
                 <img src="/images/logo_dark.png" alt="logo" />
               </a>
