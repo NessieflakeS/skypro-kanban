@@ -1,8 +1,27 @@
 import './App.css'
+import { useState, useEffect } from 'react'
 
 function App() {
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  // Переключение темы
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
+
+  // Применяем класс темы к body при изменении
+  useEffect(() => {
+    if (isDarkTheme) {
+      document.body.classList.add('dark-theme');
+      document.body.classList.remove('light-theme');
+    } else {
+      document.body.classList.add('light-theme');
+      document.body.classList.remove('dark-theme');
+    }
+  }, [isDarkTheme]);
+
   return (
-    <div className="wrapper">
+    <div className={`wrapper ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
       {/* pop-up start*/}
       <div className="pop-exit" id="popExit">
         <div className="pop-exit__container">
@@ -45,7 +64,7 @@ function App() {
                   <p className="calendar__ttl subttl">Даты</p>                                    
                   <div className="calendar__block">
                     <div className="calendar__nav">
-                      <div className="calendar__month">Сентябрь 2023</div>
+                      <div className="calendar__month">Сентябрь 2025</div>
                       <div className="nav__actions">
                         <div className="nav__action" data-action="prev">
                           <svg xmlns="http://www.w3.org/2000/svg" width="6" height="11" viewBox="0 0 6 11">
@@ -70,10 +89,12 @@ function App() {
                         <div className="calendar__day-name">вс</div>
                       </div>
                       <div className="calendar__cells">
+                        <div className="calendar__cell _other-month">26</div>
+                        <div className="calendar__cell _other-month">27</div>
                         <div className="calendar__cell _other-month">28</div>
                         <div className="calendar__cell _other-month">29</div>
                         <div className="calendar__cell _other-month">30</div>
-                        <div className="calendar__cell _cell-day">31</div>
+                        <div className="calendar__cell _other-month">31</div>
                         <div className="calendar__cell _cell-day">1</div>
                         <div className="calendar__cell _cell-day">2</div>
                         <div className="calendar__cell _cell-day">3</div>
@@ -108,7 +129,7 @@ function App() {
                       </div>
                     </div>
                     
-                    <input type="hidden" id="datepick_value" value="08.09.2023" />
+                    <input type="hidden" id="datepick_value" value="08.09.2025" />
                     <div className="calendar__period">
                       <p className="calendar__p date-end">Выберите срок исполнения <span className="date-control"></span>.</p>
                     </div>
@@ -176,7 +197,7 @@ function App() {
                   <p className="calendar__ttl subttl">Даты</p>
                   <div className="calendar__block">
                     <div className="calendar__nav">
-                      <div className="calendar__month">Сентябрь 2023</div>
+                      <div className="calendar__month">Сентябрь 2025</div>
                       <div className="nav__actions">
                         <div className="nav__action" data-action="prev">
                           <svg xmlns="http://www.w3.org/2000/svg" width="6" height="11" viewBox="0 0 6 11">
@@ -201,10 +222,12 @@ function App() {
                         <div className="calendar__day-name">вс</div>
                       </div>
                       <div className="calendar__cells">
+                        <div className="calendar__cell _other-month">26</div>
+                        <div className="calendar__cell _other-month">27</div>
                         <div className="calendar__cell _other-month">28</div>
                         <div className="calendar__cell _other-month">29</div>
                         <div className="calendar__cell _other-month">30</div>
-                        <div className="calendar__cell _cell-day">31</div>
+                        <div className="calendar__cell _other-month">31</div>
                         <div className="calendar__cell _cell-day">1</div>
                         <div className="calendar__cell _cell-day">2</div>
                         <div className="calendar__cell _cell-day">3</div>
@@ -239,9 +262,9 @@ function App() {
                       </div>
                     </div>
                 
-                    <input type="hidden" id="datepick_value" value="08.09.2023" />
+                    <input type="hidden" id="datepick_value" value="08.09.2025" />
                     <div className="calendar__period">
-                      <p className="calendar__p date-end">Срок исполнения: <span className="date-control">09.09.23</span></p>
+                      <p className="calendar__p date-end">Срок исполнения: <span className="date-control">09.09.25</span></p>
                     </div>
                   </div>
                 </div>
@@ -311,7 +334,13 @@ function App() {
                 <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
                 <div className="pop-user-set__theme">
                   <p>Темная тема</p>
-                  <input type="checkbox" className="checkbox" name="checkbox" />
+                  <input 
+                    type="checkbox" 
+                    className="checkbox" 
+                    name="checkbox" 
+                    checked={isDarkTheme}
+                    onChange={toggleTheme}
+                  />
                 </div>
                 <button type="button" className="_hover03">
                   <a href="#popExit">Выйти</a>
@@ -373,7 +402,7 @@ function App() {
                               </clipPath>
                             </defs>
                           </svg>
-                          <p>30.10.23</p>
+                          <p>15.09.25</p>
                         </div>
                       </div>
                     </div>
@@ -420,7 +449,7 @@ function App() {
                               </clipPath>
                             </defs>
                           </svg>
-                          <p>30.10.23</p>
+                          <p>20.09.25</p>
                         </div>
                       </div>
                     </div>
@@ -475,7 +504,7 @@ function App() {
                               </clipPath>
                             </defs>
                           </svg>
-                          <p>30.10.23</p>
+                          <p>25.09.25</p>
                         </div>
                       </div>
                     </div>
@@ -530,7 +559,7 @@ function App() {
                               </clipPath>
                             </defs>
                           </svg>
-                          <p>30.10.23</p>
+                          <p>10.09.25</p>
                         </div>
                       </div>
                     </div>
@@ -585,7 +614,7 @@ function App() {
                               </clipPath>
                             </defs>
                           </svg>
-                          <p>30.10.23</p>
+                          <p>28.09.25</p>
                         </div>
                       </div>
                     </div>
@@ -640,7 +669,7 @@ function App() {
                               </clipPath>
                             </defs>
                           </svg>
-                          <p>30.10.23</p>
+                          <p>05.09.25</p>
                         </div>
                       </div>
                     </div>

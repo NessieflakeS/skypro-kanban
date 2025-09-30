@@ -1087,3 +1087,83 @@ body {
     display: block;
   }
 }
+
+.button {
+  white-space: nowrap;
+  overflow: visible;
+  padding: 10px 20px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.add-card-button, 
+.create-task-button {
+  width: auto;
+  min-width: 140px;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .add-card-button, 
+  .create-task-button {
+    min-width: 120px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
+
+.light-theme {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #000000;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+}
+
+/* Темная тема */
+.dark-theme {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --border-color: #404040;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.app__main {
+  background-color: var(--bg-primary);
+}
+
+.column {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.theme-toggle {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--border-color);
+}
