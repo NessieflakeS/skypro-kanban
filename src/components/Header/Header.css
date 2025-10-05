@@ -3,8 +3,6 @@
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
   padding: 15px 0;
-  position: relative;
-  z-index: 100;
 }
 
 .header__block {
@@ -88,7 +86,7 @@
   display: none;
 }
 
-.header__pop-user-set.active {
+.header__pop-user-set:target {
   display: block;
 }
 

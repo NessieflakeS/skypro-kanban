@@ -228,7 +228,7 @@ body {
   margin-bottom: 10px;
 }
 .pop-user-set__theme {
-   display: flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
@@ -1316,16 +1316,17 @@ body {
 }
 
 .checkbox {
-  width: 50px;
-  height: 26px;
+  width: 44px;
+  height: 24px;
   background: #ccc;
-  border-radius: 25px;
+  border-radius: 24px;
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
   appearance: none;
   -webkit-appearance: none;
-  border: 2px solid transparent;
+  border: none;
+  outline: none;
 }
 
 .checkbox:checked {
@@ -1333,10 +1334,10 @@ body {
 }
 
 .checkbox::before {
-   content: '';
+  content: '';
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: white;
   top: 2px;
@@ -1346,12 +1347,28 @@ body {
 }
 
 .checkbox:checked::before {
-  transform: translateX(24px);
+  transform: translateX(20px);
 }
 
 .checkbox:focus {
   outline: none;
-  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+.light-theme .checkbox {
+  background: #ccc;
+}
+
+.light-theme .checkbox:checked {
+  background: #4CAF50;
+}
+
+.dark-theme .checkbox {
+  background: #666;
+}
+
+.dark-theme .checkbox:checked {
+  background: #4CAF50;
 }
 
 ._orange, ._green, ._purple, ._gray {
@@ -1482,43 +1499,4 @@ body {
 .pop-user-set__theme p {
   color: var(--text-primary) !important;
   margin: 0;
-}
-
-.checkbox {
-  width: 50px;
-  height: 26px;
-  background: #ccc;
-  border-radius: 25px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  appearance: none;
-  -webkit-appearance: none;
-  border: 2px solid transparent;
-}
-
-.checkbox:checked {
-  background: #4CAF50;
-}
-
-.checkbox::before {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: white;
-  top: 2px;
-  left: 2px;
-  transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.checkbox:checked::before {
-  transform: translateX(24px);
-}
-
-.checkbox:focus {
-  outline: none;
-  border-color: #4CAF50;
 }

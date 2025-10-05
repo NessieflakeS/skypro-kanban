@@ -25,6 +25,11 @@
   transition: transform 0.2s ease;
 }
 
+.cards__item.dragging .card {
+  border: 2px solid #565EEF;
+  box-shadow: 0 8px 25px rgba(86, 94, 239, 0.3);
+}
+
 .cards__card {
   width: 220px;
   height: 130px;
