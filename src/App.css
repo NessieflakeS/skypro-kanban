@@ -794,21 +794,26 @@ body {
 
 .main {
   width: 100%;
-  background-color: #EAEEF6;
+   background-color: transparent;
 }
 .main__block {
-  width: 100%;
+   width: 100%;
   margin: 0 auto;
   padding: 25px 0 49px;
+  background-color: transparent;
 }
 .main__content {
   width: 100%;
   display: flex;
+  background-color: transparent;
 }
 .main__column {
   width: 20%;
   margin: 0 auto;
   display: block;
+  background-color: transparent; 
+  border: none; 
+  box-shadow: none;
 }
 
 .column__title {
@@ -915,14 +920,11 @@ body {
     margin: 0 auto;
     padding: 40px 0 64px;
   }
+  
   .main__content {
     display: block;
   }
-  .main__column {
-    width: 100%;
-    margin: 0 auto;
-    display: block;
-  }
+  
   .cards {
     width: 100%;
     display: flex;
@@ -1202,27 +1204,6 @@ body {
 }
 
 .header__user {
-  color: var(--text-primary) !important;
-}
-
-.main {
-  background-color: var(--bg-primary);
-}
-
-.main__block {
-  background-color: var(--bg-primary);
-}
-
-.main__content {
-  background-color: var(--bg-primary);
-}
-
-.main__column {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-}
-
-.column__title {
   color: var(--text-primary) !important;
 }
 

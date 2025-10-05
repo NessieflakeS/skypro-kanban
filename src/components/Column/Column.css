@@ -1,12 +1,16 @@
 .main__column {
   width: 20%;
-  margin: 0 auto;
+  margin: 0;
   display: block;
+  background-color: transparent; 
+  border: none; 
+  padding: 0; 
 }
 
 .column__title {
   padding: 0 10px;
   margin: 15px 0;
+  background-color: transparent; 
 }
 
 .column__title p {
@@ -23,5 +27,7 @@
     width: 100%;
     margin: 0 auto;
     display: block;
+    background-color: transparent;
+    border: none;
   }
 }
