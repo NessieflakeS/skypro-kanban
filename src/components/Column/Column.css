@@ -1,33 +1,39 @@
 .main__column {
-  width: 20%;
-  margin: 0;
-  display: block;
-  background-color: transparent; 
-  border: none; 
-  padding: 0; 
+  background-color: transparent;
+  border: none;
+  min-height: 200px;
+  transition: all 0.3s ease;
+  border: 2px dashed transparent;
+  border-radius: 12px;
+  padding: 10px;
+  min-width: 280px;
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.main__column.drag-over {
+  background-color: rgba(86, 94, 239, 0.05) !important;
+  border: 2px dashed #565EEF !important;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.main__column.drag-over .cards {
+  min-height: 100px;
 }
 
 .column__title {
-  padding: 0 10px;
-  margin: 15px 0;
-  background-color: transparent; 
-}
-
-.column__title p {
-  color: #94A6BE;
   font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 0 0 14px 0;
+  margin-bottom: 0;
+  background-color: transparent;
 }
 
-/* Медиа-запросы для Column */
-@media screen and (max-width: 1200px) {
-  .main__column {
-    width: 100%;
-    margin: 0 auto;
-    display: block;
-    background-color: transparent;
-    border: none;
-  }
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 50px;
 }
