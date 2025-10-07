@@ -45,7 +45,6 @@ body {
   align-items: center;
 }
 
-/* Темы */
 .light-theme {
   --bg-primary: #F1F1F1;
   --bg-secondary: #FFFFFF;
@@ -114,7 +113,6 @@ body {
   color: #B8C7D9;
 }
 
-/* Стили для hover эффектов */
 ._hover01:hover {
   background-color: #33399b;
 }
