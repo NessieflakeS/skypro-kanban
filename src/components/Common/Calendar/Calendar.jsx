@@ -1,74 +1,85 @@
-import './Calendar.css';
-import { useState } from 'react';
+import './Calendar.css'
+import { useState, useEffect } from 'react'
 
-function Calendar({ 
-  selectedDate,
-  onDateSelect,
-  className = ''
-}) {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  
+const Calendar = ({ selectedDate, onDateSelect, className = '' }) => {
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedDay, setSelectedDay] = useState(selectedDate ? new Date(selectedDate) : null)
+
   const months = [
     'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
     'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-  ];
+  ]
 
-  const daysOfWeek = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  const daysOfWeek = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
+
+  useEffect(() => {
+    if (selectedDate) {
+      setSelectedDay(new Date(selectedDate))
+    }
+  }, [selectedDate])
 
   const getDaysInMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+  }
 
   const getFirstDayOfMonth = (date) => {
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    return firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-  };
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
+    return firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1
+  }
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  };
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))
+  }
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-  };
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
+  }
 
   const handleDateClick = (day) => {
+    const selected = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+    setSelectedDay(selected)
     if (onDateSelect) {
-      const selected = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-      onDateSelect(selected);
+      onDateSelect(selected)
     }
-  };
+  }
+
+  const formatDate = (date) => {
+    if (!date) return ''
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const year = date.getFullYear().toString().slice(-2)
+    return `${day}.${month}.${year}`
+  }
 
   const renderCalendarDays = () => {
-    const daysInMonth = getDaysInMonth(currentDate);
-    const firstDayIndex = getFirstDayOfMonth(currentDate);
-    const days = [];
+    const daysInMonth = getDaysInMonth(currentDate)
+    const firstDayIndex = getFirstDayOfMonth(currentDate)
+    const days = []
 
-    // Previous month days
-    const prevMonthDays = getDaysInMonth(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    const prevMonthDays = getDaysInMonth(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))
     for (let i = prevMonthDays - firstDayIndex + 1; i <= prevMonthDays; i++) {
       days.push(
         <div key={`prev-${i}`} className="calendar__cell _other-month">
           {i}
         </div>
-      );
+      )
     }
 
-    // Current month days
-    const today = new Date();
+   
+    const today = new Date()
     for (let i = 1; i <= daysInMonth; i++) {
       const isToday = 
         today.getDate() === i && 
         today.getMonth() === currentDate.getMonth() && 
-        today.getFullYear() === currentDate.getFullYear();
+        today.getFullYear() === currentDate.getFullYear()
       
       const isSelected = 
-        selectedDate && 
-        selectedDate.getDate() === i && 
-        selectedDate.getMonth() === currentDate.getMonth() && 
-        selectedDate.getFullYear() === currentDate.getFullYear();
+        selectedDay && 
+        selectedDay.getDate() === i && 
+        selectedDay.getMonth() === currentDate.getMonth() && 
+        selectedDay.getFullYear() === currentDate.getFullYear()
 
-      const dayClass = `calendar__cell _cell-day ${isToday ? '_current' : ''} ${isSelected ? '_active-day' : ''}`;
+      const dayClass = `calendar__cell _cell-day ${isToday ? '_current' : ''} ${isSelected ? '_active-day' : ''}`
 
       days.push(
         <div 
@@ -78,22 +89,22 @@ function Calendar({
         >
           {i}
         </div>
-      );
+      )
     }
 
-    // Next month days
-    const totalCells = 42; // 6 weeks
-    const nextMonthDays = totalCells - days.length;
+
+    const totalCells = 42
+    const nextMonthDays = totalCells - days.length
     for (let i = 1; i <= nextMonthDays; i++) {
       days.push(
         <div key={`next-${i}`} className="calendar__cell _other-month">
           {i}
         </div>
-      );
+      )
     }
 
-    return days;
-  };
+    return days
+  }
 
   return (
     <div className={`calendar ${className}`}>
@@ -129,18 +140,18 @@ function Calendar({
           </div>
         </div>
         
-        {selectedDate && (
-          <div className="calendar__period">
-            <p className="calendar__p date-end">
-              Выбрана дата: <span className="date-control">
-                {selectedDate.toLocaleDateString('ru-RU')}
-              </span>
-            </p>
-          </div>
-        )}
+        <div className="calendar__period">
+          <p className="calendar__p date-end">
+            {selectedDay ? (
+              <>Срок исполнения: <span className="date-control">{formatDate(selectedDay)}</span></>
+            ) : (
+              <>Выберите срок исполнения <span className="date-control"></span>.</>
+            )}
+          </p>
+        </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Calendar;
+export default Calendar

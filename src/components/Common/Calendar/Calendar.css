@@ -71,6 +71,7 @@
   line-height: 1;
   letter-spacing: -0.2px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .calendar__nav {
@@ -99,6 +100,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.nav__action:hover {
+  opacity: 0.7;
 }
 
 .nav__action svg {
@@ -123,7 +129,6 @@
   font-weight: 700;
 }
 
-/* Медиа-запросы для Calendar */
 @media screen and (max-width: 660px) {
   .calendar {
     max-width: 340px;
@@ -134,11 +139,6 @@
   .calendar__nav,
   .calendar__period {
     padding: 0;
-  }
-
-  .calendar .date-create {
-    display: none;
-    margin-bottom: 7px;
   }
 
   .calendar__p {

@@ -15,16 +15,16 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       const initialCards = [
-        { id: 1, title: "Название задачи", category: "Web Design", date: "15.09.25", status: "Без статуса", description: "" },
-        { id: 2, title: "Название задачи", category: "Research", date: "20.09.25", status: "Без статуса", description: "" },
-        { id: 3, title: "Название задачи", category: "Copywriting", date: "25.09.25", status: "Нужно сделать", description: "" },
-        { id: 4, title: "Название задачи", category: "Copywriting", date: "10.09.25", status: "В работе", description: "" },
-        { id: 5, title: "Название задачи", category: "Research", date: "28.09.25", status: "Тестирование", description: "" },
-        { id: 6, title: "Название задачи", category: "Research", date: "05.09.25", status: "Готово", description: "" }
+        { id: 1, title: "Название задачи 1", category: "Web Design", date: "15.09.25", status: "Без статуса", description: "Описание задачи 1" },
+        { id: 2, title: "Название задачи 2", category: "Research", date: "20.09.25", status: "Без статуса", description: "Описание задачи 2" },
+        { id: 3, title: "Название задачи 3", category: "Copywriting", date: "25.09.25", status: "Нужно сделать", description: "Описание задачи 3" },
+        { id: 4, title: "Название задачи 4", category: "Copywriting", date: "10.09.25", status: "В работе", description: "Описание задачи 4" },
+        { id: 5, title: "Название задачи 5", category: "Research", date: "28.09.25", status: "Тестирование", description: "Описание задачи 5" },
+        { id: 6, title: "Название задачи 6", category: "Research", date: "05.09.25", status: "Готово", description: "Описание задачи 6" }
       ];
       setCards(initialCards);
       setIsLoading(false);
-    }, 2000); 
+    }, 2000); // 2 секунды задержки
 
     return () => clearTimeout(timer);
   }, []);

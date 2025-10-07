@@ -1,5 +1,6 @@
 import './PopupBrowseCard.css'
 import { useState, useEffect } from 'react'
+import Calendar from '../Common/Calendar/Calendar'
 
 const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -51,6 +52,28 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
     }))
   }
 
+  const handleDateSelect = (date) => {
+    const formattedDate = formatDate(date)
+    setEditData(prev => ({
+      ...prev,
+      date: formattedDate
+    }))
+  }
+
+  const formatDate = (date) => {
+    if (!date) return ''
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const year = date.getFullYear().toString().slice(-2)
+    return `${day}.${month}.${year}`
+  }
+
+  const parseDate = (dateString) => {
+    if (!dateString) return null
+    const [day, month, year] = dateString.split('.')
+    return new Date(`20${year}-${month}-${day}`)
+  }
+
   return (
     <div className="pop-browse" id="popBrowse">
       <div className="pop-browse__container">
@@ -62,7 +85,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                   <input
                     type="text"
                     name="title"
-                    value={editData.title}
+                    value={editData.title || ''}
                     onChange={handleInputChange}
                     className="edit-input"
                   />
@@ -110,7 +133,14 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                   ></textarea>
                 </div>
               </form>
-              {/* Здесь будет компонент Calendar */}
+              
+              <div className="pop-new-card__calendar calendar">
+                <p className="calendar__ttl subttl">Даты</p>
+                <Calendar 
+                  selectedDate={parseDate(editData.date)}
+                  onDateSelect={isEditing ? handleDateSelect : null}
+                />
+              </div>
             </div>
 
             <div className="theme-down__categories theme-down">

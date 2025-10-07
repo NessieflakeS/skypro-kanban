@@ -1,12 +1,13 @@
 import './PopupNewCard.css'
 import { useState } from 'react'
+import Calendar from '../Common/Calendar/Calendar'
 
 const PopupNewCard = ({ onCreateCard }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: 'Web Design',
-    date: new Date().toLocaleDateString('ru-RU')
+    date: ''
   })
 
   const handleInputChange = (e) => {
@@ -24,16 +25,35 @@ const PopupNewCard = ({ onCreateCard }) => {
     }))
   }
 
+  const handleDateSelect = (date) => {
+    const formattedDate = formatDate(date)
+    setFormData(prev => ({
+      ...prev,
+      date: formattedDate
+    }))
+  }
+
+  const formatDate = (date) => {
+    if (!date) return ''
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const year = date.getFullYear().toString().slice(-2)
+    return `${day}.${month}.${year}`
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (formData.title.trim()) {
-      onCreateCard(formData)
+      onCreateCard({
+        ...formData,
+        date: formData.date || formatDate(new Date()) // Если дата не выбрана, используем текущую
+      })
       window.location.hash = ''
       setFormData({
         title: '',
         description: '',
         category: 'Web Design',
-        date: new Date().toLocaleDateString('ru-RU')
+        date: ''
       })
     }
   }
@@ -77,7 +97,11 @@ const PopupNewCard = ({ onCreateCard }) => {
                   ></textarea>
                 </div>
               </form>
-              {/* Здесь будет компонент Calendar */}
+              
+              <Calendar 
+                selectedDate={formData.date ? new Date(formData.date.split('.').reverse().join('-')) : null}
+                onDateSelect={handleDateSelect}
+              />
             </div>
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
