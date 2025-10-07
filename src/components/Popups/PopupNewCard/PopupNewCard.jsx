@@ -1,4 +1,4 @@
-// import './PopupNewCard.css'
+import './PopupNewCard.css'
 import { useState } from 'react'
 import Calendar from '../../Common/Calendar/Calendar'
 
@@ -46,7 +46,7 @@ const PopupNewCard = ({ onCreateCard }) => {
     if (formData.title.trim()) {
       onCreateCard({
         ...formData,
-        date: formData.date || formatDate(new Date()) // Если дата не выбрана, используем текущую
+        date: formData.date || formatDate(new Date()) 
       })
       window.location.hash = ''
       setFormData({

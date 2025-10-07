@@ -1,6 +1,6 @@
-// import './PopupBrowseCard.css'
+import './PopupBrowseCard.css'
 import { useState } from 'react'
-import Calendar from '../Common/Calendar/Calendar'
+import Calendar from '../../Common/Calendar/Calendar'
 
 const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   const [isEditing, setIsEditing] = useState(false)
