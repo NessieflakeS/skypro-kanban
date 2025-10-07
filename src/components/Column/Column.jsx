@@ -2,9 +2,9 @@ import './Column.css'
 import Card from '../Card/Card'
 import { useState } from 'react'
 
-const Column = ({ title, status, cards, moveCard, onCardClick }) => {
+const Column = ({ title, status, cards, moveCard }) => {
   const [isDragOver, setIsDragOver] = useState(false)
-  const [setDropPosition] = useState(null)
+  const [dropPosition, setDropPosition] = useState(null)
 
   const handleDragOver = (e) => {
     e.preventDefault()
@@ -12,7 +12,7 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
     
     const rect = e.currentTarget.getBoundingClientRect()
     const y = e.clientY - rect.top
-    const cardHeight = 120
+    const cardHeight = 120 // Примерная высота карточки
     const position = Math.floor(y / cardHeight)
     
     setDropPosition(position)
@@ -32,6 +32,41 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
     moveCard(cardId, status)
   }
 
+  const renderCards = () => {
+    const result = []
+    let currentIndex = 0
+    
+    cards.forEach((card, index) => {
+      if (isDragOver && dropPosition === currentIndex) {
+        result.push(
+          <div key={`placeholder-${index}`} className="drop-placeholder">
+            <div className="drop-placeholder-line"></div>
+          </div>
+        )
+      }
+      
+      result.push(
+        <Card 
+          key={card.id} 
+          card={card}
+          moveCard={moveCard}
+        />
+      )
+      
+      currentIndex++
+    })
+    
+    if (isDragOver && dropPosition >= currentIndex) {
+      result.push(
+        <div key="placeholder-end" className="drop-placeholder">
+          <div className="drop-placeholder-line"></div>
+        </div>
+      )
+    }
+    
+    return result
+  }
+
   return (
     <div 
       className={`main__column ${isDragOver ? 'drag-over' : ''}`}
@@ -43,14 +78,7 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
         <p>{title}</p>
       </div>
       <div className="cards">
-        {cards.map(card => (
-          <Card 
-            key={card.id} 
-            card={card}
-            moveCard={moveCard}
-            onCardClick={onCardClick}
-          />
-        ))}
+        {renderCards()}
       </div>
     </div>
   )
