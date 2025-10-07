@@ -2,7 +2,7 @@ import './Column.css'
 import Card from '../Card/Card'
 import { useState } from 'react'
 
-const Column = ({ title, status, cards, moveCard }) => {
+const Column = ({ title, status, cards, moveCard, onCardClick }) => {
   const [isDragOver, setIsDragOver] = useState(false)
   const [dropPosition, setDropPosition] = useState(null)
 
@@ -50,6 +50,7 @@ const Column = ({ title, status, cards, moveCard }) => {
           key={card.id} 
           card={card}
           moveCard={moveCard}
+          onCardClick={onCardClick}
         />
       )
       

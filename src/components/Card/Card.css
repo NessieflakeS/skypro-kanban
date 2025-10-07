@@ -114,3 +114,9 @@
     opacity: 1;
   }
 }
+
+.card__btn-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -224,3 +224,39 @@
     height: 37px;
   }
 }
+
+.edit-input {
+  border: 1px solid #D4DBE5;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  width: 100%;
+}
+
+.status__theme._active-status {
+  opacity: 1 !important;
+  background-color: #565EEF;
+  color: white;
+}
+
+.status__theme._active-status p {
+  color: white;
+}
+
+.pop-browse__btn-edit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.pop-browse__btn-edit button {
+  height: 30px;
+  margin-bottom: 10px;
+  padding: 0 14px;
+}
+
+.pop-browse__btn-edit .btn-group button {
+  margin-right: 8px;
+}

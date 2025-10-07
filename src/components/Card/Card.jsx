@@ -1,7 +1,7 @@
 import './Card.css'
 import { useState } from 'react'
 
-const Card = ({ card }) => {
+const Card = ({ card, onCardClick }) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = (e) => {
@@ -12,6 +12,17 @@ const Card = ({ card }) => {
 
   const handleDragEnd = () => {
     setIsDragging(false)
+  }
+
+  const handleCardClick = (e) => {
+    if (!e.target.closest('.card__btn')) {
+      onCardClick(card)
+    }
+  }
+
+  const handleMenuClick = (e) => {
+    e.preventDefault()
+    onCardClick(card)
   }
 
   const themeClass = `_${getThemeClass(card.category)}`
@@ -41,13 +52,18 @@ const Card = ({ card }) => {
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onClick={handleCardClick}
     >
       <div className="cards__card card">
         <div className="card__group">
           <div className={`card__theme ${themeClass}`}>
             <p className={themeClass}>{themeText}</p>
           </div>
-          <a href="#popBrowse" target="_self" rel="noopener noreferrer">
+          <a 
+            href="#popBrowse" 
+            className="card__btn-link"
+            onClick={handleMenuClick}
+          >
             <div className="card__btn">
               <div></div>
               <div></div>
@@ -56,9 +72,7 @@ const Card = ({ card }) => {
           </a>
         </div>
         <div className="card__content">
-          <a href="" target="_blank" rel="noopener noreferrer">
-            <h3 className="card__title">{card.title}</h3>
-          </a>
+          <h3 className="card__title">{card.title}</h3>
           <div className="card__date">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
               <g clipPath="url(#clip0_1_415)">

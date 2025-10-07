@@ -1,7 +1,7 @@
 import './Main.css'
 import Column from '../Column/Column'
 
-const Main = ({ cards, moveCard }) => {
+const Main = ({ cards, moveCard, onCardClick }) => {
   const columns = [
     { id: 1, title: "Без статуса", status: "Без статуса" },
     { id: 2, title: "Нужно сделать", status: "Нужно сделать" },
@@ -21,6 +21,7 @@ const Main = ({ cards, moveCard }) => {
               status={column.status}
               cards={cards.filter(card => card.status === column.status)}
               moveCard={moveCard}
+              onCardClick={onCardClick}
             />
           ))}
         </div>
