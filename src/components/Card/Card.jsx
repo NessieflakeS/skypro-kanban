@@ -14,13 +14,13 @@ const Card = ({ card, onCardClick }) => {
     setIsDragging(false)
   }
 
-  const handleCardClick = (e) => {
+  const handleCardClick = () => {
     onCardClick(card)
   }
 
   const handleMenuClick = (e) => {
     e.preventDefault()
-    e.stopPropagation() 
+    e.stopPropagation()
     onCardClick(card)
   }
 

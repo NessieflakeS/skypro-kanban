@@ -1,5 +1,5 @@
 import './PopupBrowseCard.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Calendar from '../../Common/Calendar/Calendar'
 
 const PopupNewCard = ({ onCreateCard }) => {

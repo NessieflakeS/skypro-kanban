@@ -11,7 +11,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [activePopup, setActivePopup] = useState(null); 
+  const [activePopup, setActivePopup] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -117,12 +117,11 @@ function App() {
         />
       )}
 
-      <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
+      <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} onNewCardClick={openNewCardPopup} />
       <Main 
         cards={cards} 
         moveCard={moveCard}
         onCardClick={selectCard}
-        onNewCardClick={openNewCardPopup}
       />
     </div>
   )

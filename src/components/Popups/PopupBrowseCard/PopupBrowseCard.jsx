@@ -1,18 +1,10 @@
 import './PopupBrowseCard.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Calendar from '../Common/Calendar/Calendar'
 
 const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({})
-
-  useEffect(() => {
-    if (card) {
-      setEditData(card)
-    }
-  }, [card])
-
-  if (!card) return null
 
   const handleDelete = () => {
     if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
