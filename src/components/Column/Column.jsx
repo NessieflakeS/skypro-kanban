@@ -12,7 +12,7 @@ const Column = ({ title, status, cards, moveCard }) => {
     
     const rect = e.currentTarget.getBoundingClientRect()
     const y = e.clientY - rect.top
-    const cardHeight = 120 // Примерная высота карточки
+    const cardHeight = 120
     const position = Math.floor(y / cardHeight)
     
     setDropPosition(position)

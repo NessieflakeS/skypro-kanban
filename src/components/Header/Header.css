@@ -1,51 +1,52 @@
-/* Стили для header */
 .header {
+  width: 100%;
+  height: 70px;
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
-  padding: 15px 0;
+  display: flex;
+  align-items: center;
 }
 
 .header__block {
+  width: 100%;
+  max-width: 1440px;
+  height: 70px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 135px;
+  box-sizing: border-box;
 }
 
 .header__logo {
-  display: none;
-}
-
-.header__logo._show {
   display: block;
 }
 
-.header__logo._hide {
-  display: none;
+.header__logo img {
+  width: 85px;
 }
 
 .header__nav {
   display: flex;
   align-items: center;
-  gap: 20px;
-  position: relative;
+  gap: 103px;
 }
 
 .header__btn-main-new {
+  width: 178px;
+  height: 30px;
   background-color: #565EEF;
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 180px;
-  height: 40px;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .header__btn-main-new:hover {
@@ -60,80 +61,143 @@
 }
 
 .header__user {
-  color: var(--text-primary);
-  text-decoration: none;
+  color: #565EEF;
+  font-size: 14px;
   cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.header__user::after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  border-left: 1.9px solid #565EEF;
+  border-bottom: 1.9px solid #565EEF;
+  transform: rotate(-45deg);
+  margin: -2px 0 0 8px;
 }
 
 .header__user:hover {
-  background-color: var(--bg-secondary);
+  color: #33399b;
+}
+
+.header__user:hover::after {
+  border-left-color: #33399b;
+  border-bottom-color: #33399b;
 }
 
 .header__pop-user-set {
   position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 15px;
-  min-width: 200px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  top: 61px;
+  right: 129px;
+  width: 213px;
+  height: 205px;
+  border-radius: 10px;
+  border: 0.7px solid rgba(148, 166, 190, 0.4);
+  background: var(--bg-secondary);
+  box-shadow: 0px 10px 39px 0px rgba(26, 56, 101, 0.21);
+  padding: 34px;
+  text-align: center;
+  z-index: 2;
   display: none;
 }
 
-.header__pop-user-set:target {
+.header__pop-user-set.active {
   display: block;
 }
 
 .pop-user-set__name {
-  font-weight: 600;
-  margin-bottom: 5px;
   color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.14px;
+  margin-bottom: 4px;
 }
 
 .pop-user-set__mail {
+  color: var(--text-tertiary);
   font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 15px;
+  line-height: 21px;
+  letter-spacing: -0.14px;
+  margin-bottom: 10px;
 }
 
 .pop-user-set__theme {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
-  padding: 8px 0;
+  margin-bottom: 30px;
   color: var(--text-primary);
 }
 
 .pop-user-set__theme p {
   margin: 0;
-  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.14px;
+}
+
+.pop-user-set__theme input[type="checkbox"] {
+  position: relative;
+  width: 24px;
+  height: 13px;
+  border-radius: 100px;
+  background: #EAEEF6;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.pop-user-set__theme input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: #94A6BE;
+  transition: 0.3s;
+}
+
+.pop-user-set__theme input:checked[type="checkbox"]::before {
+  left: 12px;
+  background-color: #FFFFFF;
+}
+
+.pop-user-set__theme input:checked[type="checkbox"] {
+  background: #4CAF50;
 }
 
 .pop-user-set button {
-  width: 100%;
-  padding: 8px 12px;
-  background: none;
-  border: 1px solid var(--border-color);
+  width: 72px;
+  height: 30px;
+  background: transparent;
+  color: #565EEF;
   border-radius: 4px;
-  color: var(--text-primary);
+  border: 1px solid #565EEF;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pop-user-set button:hover {
-  background-color: var(--bg-tertiary);
 }
 
 .pop-user-set button a {
-  color: inherit;
+  color: #565EEF;
   text-decoration: none;
-  display: block;
-  width: 100%;
+}
+
+._hover01:hover {
+  background-color: #33399b;
+}
+
+._hover03:hover {
+  background-color: #33399b;
+  color: #FFFFFF;
+}
+
+._hover03:hover a {
+  color: #FFFFFF;
 }

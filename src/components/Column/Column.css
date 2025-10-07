@@ -1,24 +1,23 @@
-/* Стили для колонок */
 .main__column {
+  min-width: 220px;
   background-color: transparent;
-  border: none;
   min-height: 200px;
   transition: all 0.3s ease;
-  padding: 10px;
-}
-
-.main__column.drag-over {
-  background-color: transparent;
-  border: none;
+  border: 2px dashed transparent;
 }
 
 .column__title {
+  padding: 0 10px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.column__title p {
+  color: var(--text-tertiary);
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-  padding: 0 0 14px 0;
-  margin-bottom: 0;
-  background-color: transparent;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .cards {
@@ -26,6 +25,16 @@
   flex-direction: column;
   gap: 20px;
   min-height: 50px;
+}
+
+.main__column.drag-over {
+  background-color: rgba(86, 94, 239, 0.1);
+  border: 2px dashed #565EEF;
+  border-radius: 10px;
+}
+
+.main__column.drag-over .column__title {
+  color: #565EEF;
 }
 
 .drop-placeholder {

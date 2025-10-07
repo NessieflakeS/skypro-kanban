@@ -1,46 +1,37 @@
-/* Основные стили для main контейнера */
 .main {
-  flex: 1;
-  padding: 0;
-  overflow-x: auto;
+  width: 100%;
+  background-color: var(--bg-primary);
 }
 
 .main__block {
   width: 100%;
-  min-width: fit-content;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 40px 135px 49px 135px;
+  box-sizing: border-box;
 }
 
 .main__content {
-  display: flex;
-  gap: 30px;
-  padding: 30px 0;
-  min-width: max-content;
   width: 100%;
+  display: flex;
+  gap: 19px;
+  overflow-x: auto;
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-  .main__content {
-    gap: 20px;
-    padding: 20px 0;
-  }
+.main__content::-webkit-scrollbar {
+  height: 6px;
 }
 
-/* Стили для скроллбара */
-.main::-webkit-scrollbar {
-  height: 8px;
-}
-
-.main::-webkit-scrollbar-track {
+.main__content::-webkit-scrollbar-track {
   background: var(--bg-secondary);
   border-radius: 4px;
 }
 
-.main::-webkit-scrollbar-thumb {
+.main__content::-webkit-scrollbar-thumb {
   background: #565EEF;
   border-radius: 4px;
 }
 
-.main::-webkit-scrollbar-thumb:hover {
+.main__content::-webkit-scrollbar-thumb:hover {
   background: #454ed0;
 }

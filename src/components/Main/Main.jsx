@@ -12,19 +12,17 @@ const Main = ({ cards, moveCard }) => {
 
   return (
     <main className="main">
-      <div className="container">
-        <div className="main__block">
-          <div className="main__content">
-            {columns.map(column => (
-              <Column 
-                key={column.id} 
-                title={column.title} 
-                status={column.status}
-                cards={cards.filter(card => card.status === column.status)}
-                moveCard={moveCard}
-              />
-            ))}
-          </div>
+      <div className="main__block">
+        <div className="main__content">
+          {columns.map(column => (
+            <Column 
+              key={column.id} 
+              title={column.title} 
+              status={column.status}
+              cards={cards.filter(card => card.status === column.status)}
+              moveCard={moveCard}
+            />
+          ))}
         </div>
       </div>
     </main>
