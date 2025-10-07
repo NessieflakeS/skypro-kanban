@@ -1,7 +1,7 @@
 import './Card.css'
 import { useState } from 'react'
 
-const Card = ({ card, moveCard }) => {
+const Card = ({ card }) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = (e) => {
