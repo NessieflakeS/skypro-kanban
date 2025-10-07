@@ -1,12 +1,13 @@
 .main {
   width: 100%;
   background-color: var(--bg-primary);
+  display: flex;
+  justify-content: center;
 }
 
 .main__block {
   width: 100%;
   max-width: 1440px;
-  margin: 0 auto;
   padding: 40px 135px 49px 135px;
   box-sizing: border-box;
 }
@@ -15,23 +16,24 @@
   width: 100%;
   display: flex;
   gap: 19px;
-  overflow-x: auto;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
-.main__content::-webkit-scrollbar {
-  height: 6px;
+@media (max-width: 1200px) {
+  .main__block {
+    padding: 40px 20px 64px;
+  }
+  
+  .main__content {
+    gap: 15px;
+    justify-content: center;
+  }
 }
 
-.main__content::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 4px;
-}
-
-.main__content::-webkit-scrollbar-thumb {
-  background: #565EEF;
-  border-radius: 4px;
-}
-
-.main__content::-webkit-scrollbar-thumb:hover {
-  background: #454ed0;
+@media (max-width: 768px) {
+  .main__content {
+    flex-direction: column;
+    align-items: center;
+  }
 }

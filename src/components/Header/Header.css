@@ -5,13 +5,13 @@
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .header__block {
   width: 100%;
   max-width: 1440px;
   height: 70px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,6 +31,11 @@
   display: flex;
   align-items: center;
   gap: 103px;
+  position: relative;
+}
+
+.header__user-container {
+  position: relative;
 }
 
 .header__btn-main-new {
@@ -67,6 +72,9 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .header__user::after {
@@ -83,6 +91,7 @@
 
 .header__user:hover {
   color: #33399b;
+  background-color: var(--bg-secondary);
 }
 
 .header__user:hover::after {
@@ -92,8 +101,8 @@
 
 .header__pop-user-set {
   position: absolute;
-  top: 61px;
-  right: 129px;
+  top: 100%;
+  right: 0;
   width: 213px;
   height: 205px;
   border-radius: 10px;
@@ -104,6 +113,7 @@
   text-align: center;
   z-index: 2;
   display: none;
+  margin-top: 5px;
 }
 
 .header__pop-user-set.active {
@@ -200,4 +210,14 @@
 
 ._hover03:hover a {
   color: #FFFFFF;
+}
+
+@media (max-width: 1200px) {
+  .header__block {
+    padding: 0 20px;
+  }
+  
+  .header__nav {
+    gap: 20px;
+  }
 }

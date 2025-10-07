@@ -4,6 +4,8 @@
   min-height: 200px;
   transition: all 0.3s ease;
   border: 2px dashed transparent;
+  flex: 1;
+  max-width: 300px;
 }
 
 .column__title {
@@ -57,4 +59,11 @@
   0% { opacity: 0.3; }
   50% { opacity: 1; }
   100% { opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+  .main__column {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }

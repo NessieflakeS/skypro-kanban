@@ -2,7 +2,6 @@ import './App.css'
 import { useState, useEffect } from 'react'
 import Header from './components/Header/Header'
 import Main from './components/Main/Main'
-import PopupExit from './components/Popups/PopupExit/PopupExit'
 import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard'
 import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard'
 
@@ -41,7 +40,6 @@ function App() {
 
   return (
     <div className={`wrapper ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
-      <PopupExit />
       <PopupNewCard />
       <PopupBrowseCard />
 
