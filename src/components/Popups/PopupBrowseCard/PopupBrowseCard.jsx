@@ -1,4 +1,4 @@
-import './PopupBrowseCard.css'
+// import './PopupBrowseCard.css'
 import { useState } from 'react'
 import Calendar from '../Common/Calendar/Calendar'
 
