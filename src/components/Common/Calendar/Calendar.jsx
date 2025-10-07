@@ -65,7 +65,7 @@ const Calendar = ({ selectedDate, onDateSelect, className = '' }) => {
       )
     }
 
-   
+    // Current month days
     const today = new Date()
     for (let i = 1; i <= daysInMonth; i++) {
       const isToday = 
@@ -91,7 +91,6 @@ const Calendar = ({ selectedDate, onDateSelect, className = '' }) => {
         </div>
       )
     }
-
 
     const totalCells = 42
     const nextMonthDays = totalCells - days.length

@@ -1,6 +1,6 @@
-import './PopupNewCard.css'
-import { useState } from 'react'
-import Calendar from '../Common/Calendar/Calendar'
+import './PopupBrowseCard.css'
+import { useState, useEffect } from 'react'
+import Calendar from '../../Common/Calendar/Calendar'
 
 const PopupNewCard = ({ onCreateCard }) => {
   const [formData, setFormData] = useState({

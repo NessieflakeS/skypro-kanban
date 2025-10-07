@@ -1,7 +1,7 @@
 import './Header.css'
 import { useState, useRef, useEffect } from 'react'
 
-const Header = ({ isDarkTheme, toggleTheme }) => {
+const Header = ({ isDarkTheme, toggleTheme, onNewCardClick }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const userButtonRef = useRef(null)
@@ -24,6 +24,11 @@ const Header = ({ isDarkTheme, toggleTheme }) => {
     setIsUserMenuOpen(!isUserMenuOpen)
   }
 
+  const handleNewCardClick = (e) => {
+    e.preventDefault()
+    onNewCardClick()
+  }
+
   return (
     <header className="header">
       <div className="header__block">
@@ -39,8 +44,8 @@ const Header = ({ isDarkTheme, toggleTheme }) => {
           )}
         </div>
         <nav className="header__nav">
-          <button className="header__btn-main-new _hover01" id="btnMainNew">
-            <a href="#popNewCard">Создать новую задачу</a>
+          <button className="header__btn-main-new _hover01" onClick={handleNewCardClick}>
+            Создать новую задачу
           </button>
           <div className="header__user-container">
             <a 

@@ -15,13 +15,12 @@ const Card = ({ card, onCardClick }) => {
   }
 
   const handleCardClick = (e) => {
-    if (!e.target.closest('.card__btn')) {
-      onCardClick(card)
-    }
+    onCardClick(card)
   }
 
   const handleMenuClick = (e) => {
     e.preventDefault()
+    e.stopPropagation() 
     onCardClick(card)
   }
 
@@ -59,17 +58,14 @@ const Card = ({ card, onCardClick }) => {
           <div className={`card__theme ${themeClass}`}>
             <p className={themeClass}>{themeText}</p>
           </div>
-          <a 
-            href="#popBrowse" 
-            className="card__btn-link"
+          <div 
+            className="card__btn"
             onClick={handleMenuClick}
           >
-            <div className="card__btn">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </a>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
         <div className="card__content">
           <h3 className="card__title">{card.title}</h3>

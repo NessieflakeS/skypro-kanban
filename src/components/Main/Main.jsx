@@ -1,7 +1,7 @@
 import './Main.css'
 import Column from '../Column/Column'
 
-const Main = ({ cards, moveCard, onCardClick }) => {
+const Main = ({ cards, moveCard, onCardClick, onNewCardClick }) => {
   const columns = [
     { id: 1, title: "Без статуса", status: "Без статуса" },
     { id: 2, title: "Нужно сделать", status: "Нужно сделать" },
