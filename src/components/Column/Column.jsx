@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 const Column = ({ title, status, cards, moveCard, onCardClick }) => {
   const [isDragOver, setIsDragOver] = useState(false)
-  const [dropPosition, setDropPosition] = useState(null)
+  const [setDropPosition] = useState(null)
 
   const handleDragOver = (e) => {
     e.preventDefault()
