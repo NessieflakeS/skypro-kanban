@@ -260,3 +260,46 @@
 .pop-browse__btn-edit .btn-group button {
   margin-right: 8px;
 }
+
+.status__theme {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status__theme._active-status {
+  background-color: #565EEF !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.status__theme._active-status p {
+  color: white !important;
+}
+
+.edit-input {
+  border: 1px solid #D4DBE5;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 20px;
+  font-weight: 600;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pop-browse__btn-edit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.pop-browse__btn-edit button {
+  height: 30px;
+  margin-bottom: 10px;
+  padding: 0 14px;
+}
+
+.pop-browse__btn-edit .btn-group button {
+  margin-right: 8px;
+}

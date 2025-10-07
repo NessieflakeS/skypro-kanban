@@ -1,32 +1,41 @@
 import './PopupBrowseCard.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Calendar from '../../Common/Calendar/Calendar'
 
 const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({})
 
+  // Обновляем editData при изменении card
+  useEffect(() => {
+    if (card) {
+      setEditData(card)
+    }
+  }, [card])
+
+  if (!card) {
+    console.log('No card provided to PopupBrowseCard');
+    return null;
+  }
+
   const handleDelete = () => {
+    console.log('Delete button clicked for card:', card.id);
     if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
-      onDeleteCard(card.id)
-      window.location.hash = ''
+      onDeleteCard(card.id);
+      onClose();
     }
   }
 
   const handleSave = () => {
-    onUpdateCard(card.id, editData)
-    setIsEditing(false)
-    window.location.hash = ''
+    console.log('Save button clicked with data:', editData);
+    onUpdateCard(card.id, editData);
+    setIsEditing(false);
   }
 
   const handleCancel = () => {
-    setEditData(card)
-    setIsEditing(false)
-  }
-
-  const handleClose = () => {
-    onClose()
-    window.location.hash = ''
+    console.log('Cancel button clicked');
+    setEditData(card);
+    setIsEditing(false);
   }
 
   const handleInputChange = (e) => {
@@ -38,6 +47,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   }
 
   const handleStatusChange = (status) => {
+    console.log('Status changed to:', status);
     setEditData(prev => ({
       ...prev,
       status
@@ -67,7 +77,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   }
 
   return (
-    <div className="pop-browse" id="popBrowse">
+    <div className="pop-browse" id="popBrowse" style={{ display: 'block' }}>
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
@@ -145,32 +155,53 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
             {!isEditing ? (
               <div className="pop-browse__btn-browse">
                 <div className="btn-group">
-                  <button className="btn-browse__edit _btn-bor _hover03" onClick={() => setIsEditing(true)}>
-                    <a href="#/">Редактировать задачу</a>
+                  <button 
+                    className="btn-browse__edit _btn-bor _hover03" 
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Редактировать задачу
                   </button>
-                  <button className="btn-browse__delete _btn-bor _hover03" onClick={handleDelete}>
-                    <a href="#/">Удалить задачу</a>
+                  <button 
+                    className="btn-browse__delete _btn-bor _hover03" 
+                    onClick={handleDelete}
+                  >
+                    Удалить задачу
                   </button>
                 </div>
-                <button className="btn-browse__close _btn-bg _hover01" onClick={handleClose}>
-                  <a href="#/">Закрыть</a>
+                <button 
+                  className="btn-browse__close _btn-bg _hover01" 
+                  onClick={onClose}
+                >
+                  Закрыть
                 </button>
               </div>
             ) : (
               <div className="pop-browse__btn-edit">
                 <div className="btn-group">
-                  <button className="btn-edit__edit _btn-bg _hover01" onClick={handleSave}>
-                    <a href="#/">Сохранить</a>
+                  <button 
+                    className="btn-edit__edit _btn-bg _hover01" 
+                    onClick={handleSave}
+                  >
+                    Сохранить
                   </button>
-                  <button className="btn-edit__edit _btn-bor _hover03" onClick={handleCancel}>
-                    <a href="#/">Отменить</a>
+                  <button 
+                    className="btn-edit__edit _btn-bor _hover03" 
+                    onClick={handleCancel}
+                  >
+                    Отменить
                   </button>
-                  <button className="btn-edit__delete _btn-bor _hover03" onClick={handleDelete}>
-                    <a href="#/">Удалить задачу</a>
+                  <button 
+                    className="btn-edit__delete _btn-bor _hover03" 
+                    onClick={handleDelete}
+                  >
+                    Удалить задачу
                   </button>
                 </div>
-                <button className="btn-edit__close _btn-bg _hover01" onClick={handleClose}>
-                  <a href="#/">Закрыть</a>
+                <button 
+                  className="btn-edit__close _btn-bg _hover01" 
+                  onClick={onClose}
+                >
+                  Закрыть
                 </button>
               </div>
             )}

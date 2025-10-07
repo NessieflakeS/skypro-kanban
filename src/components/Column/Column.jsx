@@ -32,42 +32,6 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
     moveCard(cardId, status)
   }
 
-  const renderCards = () => {
-    const result = []
-    let currentIndex = 0
-    
-    cards.forEach((card, index) => {
-      if (isDragOver && dropPosition === currentIndex) {
-        result.push(
-          <div key={`placeholder-${index}`} className="drop-placeholder">
-            <div className="drop-placeholder-line"></div>
-          </div>
-        )
-      }
-      
-      result.push(
-        <Card 
-          key={card.id} 
-          card={card}
-          moveCard={moveCard}
-          onCardClick={onCardClick}
-        />
-      )
-      
-      currentIndex++
-    })
-    
-    if (isDragOver && dropPosition >= currentIndex) {
-      result.push(
-        <div key="placeholder-end" className="drop-placeholder">
-          <div className="drop-placeholder-line"></div>
-        </div>
-      )
-    }
-    
-    return result
-  }
-
   return (
     <div 
       className={`main__column ${isDragOver ? 'drag-over' : ''}`}
@@ -79,7 +43,14 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
         <p>{title}</p>
       </div>
       <div className="cards">
-        {renderCards()}
+        {cards.map(card => (
+          <Card 
+            key={card.id} 
+            card={card}
+            moveCard={moveCard}
+            onCardClick={onCardClick}
+          />
+        ))}
       </div>
     </div>
   )

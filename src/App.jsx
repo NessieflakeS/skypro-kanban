@@ -11,8 +11,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [activePopup, setActivePopup] = useState(null);
 
+  // Имитация загрузки данных
   useEffect(() => {
     const timer = setTimeout(() => {
       const initialCards = [
@@ -44,7 +44,9 @@ function App() {
     }
   }, [isDarkTheme]);
 
+  // Функция для перемещения карточки
   const moveCard = (cardId, newStatus) => {
+    console.log('Moving card:', cardId, 'to status:', newStatus);
     setCards(prevCards => 
       prevCards.map(card => 
         card.id === cardId ? { ...card, status: newStatus } : card
@@ -52,7 +54,9 @@ function App() {
     );
   };
 
+  // Функция для создания новой задачи
   const createCard = (newCardData) => {
+    console.log('Creating new card:', newCardData);
     const newCard = {
       id: Date.now(),
       title: newCardData.title || "Новая задача",
@@ -62,36 +66,29 @@ function App() {
       description: newCardData.description || ""
     };
     setCards(prevCards => [...prevCards, newCard]);
-    setActivePopup(null);
   };
 
+  // Функция для удаления задачи
   const deleteCard = (cardId) => {
+    console.log('Deleting card:', cardId);
     setCards(prevCards => prevCards.filter(card => card.id !== cardId));
     setSelectedCard(null);
-    setActivePopup(null);
   };
 
+  // Функция для выбора карточки для просмотра/редактирования
   const selectCard = (card) => {
+    console.log('Selecting card:', card);
     setSelectedCard(card);
-    setActivePopup('browseCard');
   };
 
+  // Функция для обновления карточки
   const updateCard = (cardId, updatedData) => {
+    console.log('Updating card:', cardId, 'with data:', updatedData);
     setCards(prevCards => 
       prevCards.map(card => 
         card.id === cardId ? { ...card, ...updatedData } : card
       )
     );
-    setSelectedCard(null);
-    setActivePopup(null);
-  };
-
-  const openNewCardPopup = () => {
-    setActivePopup('newCard');
-  };
-
-  const closePopups = () => {
-    setActivePopup(null);
     setSelectedCard(null);
   };
 
@@ -101,23 +98,15 @@ function App() {
 
   return (
     <div className={`wrapper ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
-      {activePopup === 'newCard' && (
-        <PopupNewCard 
-          onCreateCard={createCard}
-          onClose={closePopups}
-        />
-      )}
-      
-      {activePopup === 'browseCard' && selectedCard && (
-        <PopupBrowseCard 
-          card={selectedCard} 
-          onDeleteCard={deleteCard}
-          onUpdateCard={updateCard}
-          onClose={closePopups}
-        />
-      )}
+      <PopupNewCard onCreateCard={createCard} />
+      <PopupBrowseCard 
+        card={selectedCard} 
+        onDeleteCard={deleteCard}
+        onUpdateCard={updateCard}
+        onClose={() => setSelectedCard(null)}
+      />
 
-      <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} onNewCardClick={openNewCardPopup} />
+      <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
       <Main 
         cards={cards} 
         moveCard={moveCard}

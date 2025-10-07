@@ -15,13 +15,15 @@ const Card = ({ card, onCardClick }) => {
   }
 
   const handleCardClick = () => {
-    onCardClick(card)
+    console.log('Card clicked:', card);
+    onCardClick(card);
   }
 
   const handleMenuClick = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onCardClick(card)
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Menu clicked for card:', card);
+    onCardClick(card);
   }
 
   const themeClass = `_${getThemeClass(card.category)}`
@@ -51,9 +53,8 @@ const Card = ({ card, onCardClick }) => {
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      onClick={handleCardClick}
     >
-      <div className="cards__card card">
+      <div className="cards__card card" onClick={handleCardClick}>
         <div className="card__group">
           <div className={`card__theme ${themeClass}`}>
             <p className={themeClass}>{themeText}</p>
