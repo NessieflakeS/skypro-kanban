@@ -42,3 +42,5 @@ const Main = ({ cards, moveCard, onCardClick, isLoading }) => {
     </main>
   )
 }
+
+export default Main
