@@ -1,34 +1,118 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useState, useEffect } from 'react'
+import Header from './components/Header/Header'
+import Main from './components/Main/Main'
+import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard'
+import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard'
+import Loader from './components/Loader/Loader'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cards, setCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  // Имитация загрузки данных
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const initialCards = [
+        { id: 1, title: "Название задачи 1", category: "Web Design", date: "15.09.25", status: "Без статуса", description: "Описание задачи 1" },
+        { id: 2, title: "Название задачи 2", category: "Research", date: "20.09.25", status: "Без статуса", description: "Описание задачи 2" },
+        { id: 3, title: "Название задачи 3", category: "Copywriting", date: "25.09.25", status: "Нужно сделать", description: "Описание задачи 3" },
+        { id: 4, title: "Название задачи 4", category: "Copywriting", date: "10.09.25", status: "В работе", description: "Описание задачи 4" },
+        { id: 5, title: "Название задачи 5", category: "Research", date: "28.09.25", status: "Тестирование", description: "Описание задачи 5" },
+        { id: 6, title: "Название задачи 6", category: "Research", date: "05.09.25", status: "Готово", description: "Описание задачи 6" }
+      ];
+      setCards(initialCards);
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
+
+  useEffect(() => {
+    if (isDarkTheme) {
+      document.body.classList.add('dark-theme');
+      document.body.classList.remove('light-theme');
+    } else {
+      document.body.classList.add('light-theme');
+      document.body.classList.remove('dark-theme');
+    }
+  }, [isDarkTheme]);
+
+  // Функция для перемещения карточки
+  const moveCard = (cardId, newStatus) => {
+    console.log('Moving card:', cardId, 'to status:', newStatus);
+    setCards(prevCards => 
+      prevCards.map(card => 
+        card.id === cardId ? { ...card, status: newStatus } : card
+      )
+    );
+  };
+
+  // Функция для создания новой задачи
+  const createCard = (newCardData) => {
+    console.log('Creating new card:', newCardData);
+    const newCard = {
+      id: Date.now(),
+      title: newCardData.title || "Новая задача",
+      category: newCardData.category || "Web Design",
+      date: newCardData.date || new Date().toLocaleDateString('ru-RU'),
+      status: "Без статуса",
+      description: newCardData.description || ""
+    };
+    setCards(prevCards => [...prevCards, newCard]);
+  };
+
+  // Функция для удаления задачи
+  const deleteCard = (cardId) => {
+    console.log('Deleting card:', cardId);
+    setCards(prevCards => prevCards.filter(card => card.id !== cardId));
+    setSelectedCard(null);
+  };
+
+  // Функция для выбора карточки для просмотра/редактирования
+  const selectCard = (card) => {
+    console.log('Selecting card:', card);
+    setSelectedCard(card);
+  };
+
+  // Функция для обновления карточки
+  const updateCard = (cardId, updatedData) => {
+    console.log('Updating card:', cardId, 'with data:', updatedData);
+    setCards(prevCards => 
+      prevCards.map(card => 
+        card.id === cardId ? { ...card, ...updatedData } : card
+      )
+    );
+    setSelectedCard(null);
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className={`wrapper ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
+      <PopupNewCard onCreateCard={createCard} />
+      <PopupBrowseCard 
+        card={selectedCard} 
+        onDeleteCard={deleteCard}
+        onUpdateCard={updateCard}
+        onClose={() => setSelectedCard(null)}
+      />
+
+      <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
+      <Main 
+        cards={cards} 
+        moveCard={moveCard}
+        onCardClick={selectCard}
+      />
+    </div>
   )
 }
 

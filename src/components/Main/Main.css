@@ -1,0 +1,38 @@
+.main {
+  width: 100%;
+  background-color: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+}
+
+.main__block {
+  width: 100%;
+  max-width: 1440px;
+  padding: 40px 135px 49px 135px;
+  box-sizing: border-box;
+}
+
+.main__content {
+  width: 100%;
+  display: flex;
+  gap: 19px;
+  justify-content: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .main__block {
+    padding: 40px 20px 64px;
+  }
+  
+  .main__content {
+    gap: 15px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .main__content {
+    flex-direction: column;
+    align-items: center;
+  }
+}

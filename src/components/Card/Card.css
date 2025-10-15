@@ -1,0 +1,140 @@
+.cards__item {
+  padding: 0;
+  animation-name: card-animation;
+  animation-duration: 500ms;
+  animation-timing-function: linear;
+  cursor: grab;
+  position: relative;
+}
+
+.cards__item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  cursor: grabbing;
+}
+
+.cards__item:active {
+  cursor: grabbing;
+}
+
+.cards__item.dragging .cards__card {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: rotate(3deg);
+}
+
+.cards__card {
+  width: 220px;
+  height: 130px;
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: stretch;
+  padding: 15px 13px 19px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card__group {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card__theme {
+  border-radius: 24px;
+  padding: 6px 20px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 10px;
+}
+
+.card__btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.card__btn div {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--text-tertiary);
+}
+
+.card__title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.card__content {
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.card__date {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.card__date svg {
+  width: 13px;
+}
+
+.card__date p {
+  margin-left: 6px;
+  font-size: 10px;
+  line-height: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.2px;
+}
+
+@keyframes card-animation {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+  100% {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+.card__btn-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2px;
+  cursor: pointer;
+  flex-direction: column;
+}
+
+.card__btn div {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--text-tertiary);
+}
