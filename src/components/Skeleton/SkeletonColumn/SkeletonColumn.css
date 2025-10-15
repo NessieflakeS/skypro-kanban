@@ -1,0 +1,33 @@
+.skeleton-column {
+  min-width: 220px;
+  flex: 1;
+  max-width: 300px;
+}
+
+.skeleton-column__title {
+  width: 120px;
+  height: 16px;
+  margin: 20px 10px;
+}
+
+.skeleton-column__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.skeleton--text {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border-color) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

@@ -192,8 +192,6 @@
 }
 
 .pop-user-set button {
-  width: 72px;
-  height: 30px;
   background: transparent;
   color: #565EEF;
   border-radius: 4px;
@@ -236,4 +234,43 @@
     padding: 0 8px;
     font-size: 13px;
   }
+}
+
+/* Стили для состояния загрузки */
+.header__btn--loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: white;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 
+  40% { 
+    transform: scale(1);
+  }
+}
+
+.header__user-skeleton {
+  width: 120px;
+  height: 30px;
+  border-radius: 4px;
 }

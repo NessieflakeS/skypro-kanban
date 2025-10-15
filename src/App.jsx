@@ -4,7 +4,6 @@ import Header from './components/Header/Header'
 import Main from './components/Main/Main'
 import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard'
 import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard'
-import Loader from './components/Loader/Loader'
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -46,7 +45,6 @@ function App() {
 
   // Функция для перемещения карточки
   const moveCard = (cardId, newStatus) => {
-    console.log('Moving card:', cardId, 'to status:', newStatus);
     setCards(prevCards => 
       prevCards.map(card => 
         card.id === cardId ? { ...card, status: newStatus } : card
@@ -56,7 +54,6 @@ function App() {
 
   // Функция для создания новой задачи
   const createCard = (newCardData) => {
-    console.log('Creating new card:', newCardData);
     const newCard = {
       id: Date.now(),
       title: newCardData.title || "Новая задача",
@@ -70,20 +67,17 @@ function App() {
 
   // Функция для удаления задачи
   const deleteCard = (cardId) => {
-    console.log('Deleting card:', cardId);
     setCards(prevCards => prevCards.filter(card => card.id !== cardId));
     setSelectedCard(null);
   };
 
   // Функция для выбора карточки для просмотра/редактирования
   const selectCard = (card) => {
-    console.log('Selecting card:', card);
     setSelectedCard(card);
   };
 
   // Функция для обновления карточки
   const updateCard = (cardId, updatedData) => {
-    console.log('Updating card:', cardId, 'with data:', updatedData);
     setCards(prevCards => 
       prevCards.map(card => 
         card.id === cardId ? { ...card, ...updatedData } : card
@@ -91,10 +85,6 @@ function App() {
     );
     setSelectedCard(null);
   };
-
-  if (isLoading) {
-    return <Loader />;
-  }
 
   return (
     <div className={`wrapper ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
@@ -106,11 +96,16 @@ function App() {
         onClose={() => setSelectedCard(null)}
       />
 
-      <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
+      <Header 
+        isDarkTheme={isDarkTheme} 
+        toggleTheme={toggleTheme} 
+        isLoading={isLoading}
+      />
       <Main 
         cards={cards} 
         moveCard={moveCard}
         onCardClick={selectCard}
+        isLoading={isLoading}
       />
     </div>
   )
