@@ -6,7 +6,6 @@ import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard';
 import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard';
 import { GlobalStyles } from './GlobalStyles.styled';
 import { lightTheme, darkTheme } from './theme';
-import './App.css'; // Только базовые сбросы стилей
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
