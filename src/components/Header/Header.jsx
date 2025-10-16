@@ -1,7 +1,7 @@
 import './Header.css'
 import { useState, useRef, useEffect } from 'react'
 
-const Header = ({ isDarkTheme, toggleTheme, onNewCardClick }) => {
+const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const userButtonRef = useRef(null)
@@ -26,7 +26,9 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick }) => {
 
   const handleNewCardClick = (e) => {
     e.preventDefault()
-    onNewCardClick()
+    if (onNewCardClick) {
+      onNewCardClick()
+    }
   }
 
   return (
@@ -44,21 +46,37 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick }) => {
           )}
         </div>
         <nav className="header__nav">
-          <button className="header__btn-main-new _hover01" onClick={handleNewCardClick}>
-            Создать новую задачу
+          <button 
+            className={`header__btn-main-new _hover01 ${isLoading ? 'header__btn--loading' : ''}`} 
+            onClick={handleNewCardClick}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            ) : (
+              "Создать новую задачу"
+            )}
           </button>
           <div className="header__user-container">
-            <a 
-              ref={userButtonRef}
-              href="#user-set-target" 
-              className="header__user _hover02"
-              onClick={(e) => {
-                e.preventDefault()
-                toggleUserMenu()
-              }}
-            >
-              Ivan Ivanov
-            </a>
+            {isLoading ? (
+              <div className="header__user-skeleton skeleton"></div>
+            ) : (
+              <a 
+                ref={userButtonRef}
+                href="#user-set-target" 
+                className="header__user _hover02"
+                onClick={(e) => {
+                  e.preventDefault()
+                  toggleUserMenu()
+                }}
+              >
+                Ivan Ivanov
+              </a>
+            )}
             <div 
               ref={menuRef}
               className={`header__pop-user-set pop-user-set ${isUserMenuOpen ? 'active' : ''}`} 
