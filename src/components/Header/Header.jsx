@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import Button from '../../Common/Button/Button';
+import Button from '../Button/Button';
 import {
   HeaderContainer,
   HeaderBlock,
