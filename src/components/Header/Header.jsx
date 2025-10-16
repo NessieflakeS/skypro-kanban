@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import Button from '../Button/Button';
 import {
   HeaderContainer,
   HeaderBlock,
   HeaderLogo,
   HeaderNav,
   UserContainer,
-  NewTaskButton,
   UserButton,
   UserMenu,
   UserName,
@@ -64,10 +64,12 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
           )}
         </HeaderLogo>
         <HeaderNav>
-          <NewTaskButton 
+          <Button 
+            variant="primary"
+            size="small"
             onClick={handleNewCardClick}
-            loading={isLoading}
             disabled={isLoading}
+            style={{ width: '178px' }}
           >
             {isLoading ? (
               <LoadingDots>
@@ -78,7 +80,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
             ) : (
               "Создать новую задачу"
             )}
-          </NewTaskButton>
+          </Button>
           <UserContainer>
             {isLoading ? (
               <UserSkeleton variant="text" />
@@ -109,9 +111,9 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
                   onChange={toggleTheme}
                 />
               </ThemeToggle>
-              <LogoutButton type="button">
+              <Button variant="outline" size="small">
                 <a href="#popExit">Выйти</a>
-              </LogoutButton>
+              </Button>
             </UserMenu>
           </UserContainer>
         </HeaderNav>					

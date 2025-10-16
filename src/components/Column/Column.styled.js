@@ -1,10 +1,4 @@
-import styled, { keyframes } from 'styled-components';
-
-const pulse = keyframes`
-  0% { opacity: 0.3; }
-  50% { opacity: 1; }
-  100% { opacity: 0.3; }
-`;
+import styled from 'styled-components';
 
 export const ColumnContainer = styled.div`
   min-width: 220px;
@@ -44,20 +38,4 @@ export const CardsContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   min-height: 50px;
-`;
-
-export const DropPlaceholder = styled.div`
-  height: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 8px 0;
-`;
-
-export const DropPlaceholderLine = styled.div`
-  height: 2px;
-  background-color: #565EEF;
-  border-radius: 2px;
-  width: 100%;
-  animation: ${pulse} 1.5s infinite;
 `;

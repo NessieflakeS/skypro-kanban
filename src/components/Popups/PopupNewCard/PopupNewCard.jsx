@@ -1,6 +1,7 @@
 import './PopupNewCard.css'
 import { useState } from 'react'
 import Calendar from '../../Common/Calendar/Calendar'
+import Button from '../../Common/Button/Button'
 
 const PopupNewCard = ({ onCreateCard }) => {
   const [formData, setFormData] = useState({
@@ -126,14 +127,15 @@ const PopupNewCard = ({ onCreateCard }) => {
                 </div>
               </div>
             </div>
-            <button 
-              className="form-new__create _hover01" 
-              id="btnCreate"
+            <Button 
+              variant="primary"
+              size="small"
               onClick={handleSubmit}
               disabled={!formData.title.trim()}
+              style={{ float: 'right' }}
             >
               Создать задачу
-            </button>
+            </Button>
           </div>
         </div>
       </div>
