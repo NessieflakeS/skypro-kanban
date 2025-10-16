@@ -4,8 +4,9 @@ import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard';
 import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard';
+import { GlobalStyles } from './GlobalStyles.styled';
 import { lightTheme, darkTheme } from './theme';
-import './App.css'; // Оставляем только глобальные стили
+import './App.css'; // Только базовые сбросы стилей
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -77,6 +78,7 @@ function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
+      <GlobalStyles />
       <div className="wrapper">
         <PopupNewCard onCreateCard={createCard} />
         <PopupBrowseCard 

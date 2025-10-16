@@ -201,8 +201,6 @@ export const ThemeCheckbox = styled.input`
 `;
 
 export const LogoutButton = styled.button`
-  width: 72px;
-  height: 30px;
   background: transparent;
   color: #565EEF;
   border-radius: 4px;

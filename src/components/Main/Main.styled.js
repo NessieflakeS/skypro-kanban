@@ -5,6 +5,7 @@ export const MainContainer = styled.main`
   background-color: ${props => props.theme.bgPrimary};
   display: flex;
   justify-content: center;
+  flex: 1; 
 `;
 
 export const MainBlock = styled.div`
@@ -12,6 +13,7 @@ export const MainBlock = styled.div`
   max-width: 1440px;
   padding: 40px 135px 49px 135px;
   box-sizing: border-box;
+  background-color: ${props => props.theme.bgPrimary}; 
 
   @media (max-width: 1200px) {
     padding: 40px 20px 64px;

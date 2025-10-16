@@ -33,6 +33,7 @@ body {
   transition: all 0.3s ease;
 }
 
+/* Убираем классы для body, используем ThemeProvider */
 .wrapper {
   width: 100%;
   min-height: 100vh;
@@ -42,10 +43,3 @@ body {
   align-items: center;
 }
 
-.light-theme {
-  background-color: #F1F1F1;
-}
-
-.dark-theme {
-  background-color: #0F0F0F;
-}
