@@ -1,6 +1,10 @@
-import './Main.css'
-import Column from '../Column/Column'
-import SkeletonColumn from '../SkeletonColumn/SkeletonColumn'
+import Column from '../Column/Column';
+import SkeletonColumn from '../SkeletonColumn/SkeletonColumn';
+import {
+  MainContainer,
+  MainBlock,
+  MainContent
+} from './Main.styled';
 
 const Main = ({ cards, moveCard, onCardClick, isLoading }) => {
   const columns = [
@@ -9,12 +13,12 @@ const Main = ({ cards, moveCard, onCardClick, isLoading }) => {
     { id: 3, title: "В работе", status: "В работе" },
     { id: 4, title: "Тестирование", status: "Тестирование" },
     { id: 5, title: "Готово", status: "Готово" }
-  ]
+  ];
 
   return (
-    <main className="main">
-      <div className="main__block">
-        <div className="main__content">
+    <MainContainer>
+      <MainBlock>
+        <MainContent>
           {isLoading ? (
             // Показываем скелетоны во время загрузки
             <>
@@ -37,10 +41,10 @@ const Main = ({ cards, moveCard, onCardClick, isLoading }) => {
               />
             ))
           )}
-        </div>
-      </div>
-    </main>
-  )
-}
+        </MainContent>
+      </MainBlock>
+    </MainContainer>
+  );
+};
 
-export default Main
+export default Main;

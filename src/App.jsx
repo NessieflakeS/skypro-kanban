@@ -1,15 +1,19 @@
-import './App.css'
-import { useState, useEffect } from 'react'
-import Header from './components/Header/Header'
-import Main from './components/Main/Main'
-import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard'
-import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard'
+import { useState, useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard';
+import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard';
+import { lightTheme, darkTheme } from './theme';
+import './App.css'; // Оставляем только глобальные стили
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
+
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
   // Имитация загрузки данных
   useEffect(() => {
@@ -33,17 +37,6 @@ function App() {
     setIsDarkTheme(!isDarkTheme);
   };
 
-  useEffect(() => {
-    if (isDarkTheme) {
-      document.body.classList.add('dark-theme');
-      document.body.classList.remove('light-theme');
-    } else {
-      document.body.classList.add('light-theme');
-      document.body.classList.remove('dark-theme');
-    }
-  }, [isDarkTheme]);
-
-  // Функция для перемещения карточки
   const moveCard = (cardId, newStatus) => {
     setCards(prevCards => 
       prevCards.map(card => 
@@ -52,7 +45,6 @@ function App() {
     );
   };
 
-  // Функция для создания новой задачи
   const createCard = (newCardData) => {
     const newCard = {
       id: Date.now(),
@@ -65,18 +57,15 @@ function App() {
     setCards(prevCards => [...prevCards, newCard]);
   };
 
-  // Функция для удаления задачи
   const deleteCard = (cardId) => {
     setCards(prevCards => prevCards.filter(card => card.id !== cardId));
     setSelectedCard(null);
   };
 
-  // Функция для выбора карточки для просмотра/редактирования
   const selectCard = (card) => {
     setSelectedCard(card);
   };
 
-  // Функция для обновления карточки
   const updateCard = (cardId, updatedData) => {
     setCards(prevCards => 
       prevCards.map(card => 
@@ -87,28 +76,30 @@ function App() {
   };
 
   return (
-    <div className={`wrapper ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
-      <PopupNewCard onCreateCard={createCard} />
-      <PopupBrowseCard 
-        card={selectedCard} 
-        onDeleteCard={deleteCard}
-        onUpdateCard={updateCard}
-        onClose={() => setSelectedCard(null)}
-      />
+    <ThemeProvider theme={currentTheme}>
+      <div className="wrapper">
+        <PopupNewCard onCreateCard={createCard} />
+        <PopupBrowseCard 
+          card={selectedCard} 
+          onDeleteCard={deleteCard}
+          onUpdateCard={updateCard}
+          onClose={() => setSelectedCard(null)}
+        />
 
-      <Header 
-        isDarkTheme={isDarkTheme} 
-        toggleTheme={toggleTheme} 
-        isLoading={isLoading}
-      />
-      <Main 
-        cards={cards} 
-        moveCard={moveCard}
-        onCardClick={selectCard}
-        isLoading={isLoading}
-      />
-    </div>
-  )
+        <Header 
+          isDarkTheme={isDarkTheme} 
+          toggleTheme={toggleTheme}
+          isLoading={isLoading}
+        />
+        <Main 
+          cards={cards} 
+          moveCard={moveCard}
+          onCardClick={selectCard}
+          isLoading={isLoading}
+        />
+      </div>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

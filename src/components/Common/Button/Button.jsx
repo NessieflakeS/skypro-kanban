@@ -1,4 +1,4 @@
-import './Button.css';
+import { StyledButton } from './Button.styled';
 
 function Button({ 
   children, 
@@ -8,20 +8,22 @@ function Button({
   disabled = false,
   type = 'button',
   className = '',
+  full = false,
   ...props 
 }) {
-  const buttonClass = `btn btn--${variant} btn--${size} ${className}`.trim();
-  
   return (
-    <button 
-      className={buttonClass}
+    <StyledButton 
+      variant={variant}
+      size={size}
       onClick={onClick}
       disabled={disabled}
       type={type}
+      className={className}
+      full={full}
       {...props}
     >
       {children}
-    </button>
+    </StyledButton>
   );
 }
 

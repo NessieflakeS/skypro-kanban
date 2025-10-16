@@ -1,17 +1,22 @@
-import './SkeletonCard.css';
+import {
+  SkeletonCardContainer,
+  SkeletonCardHeader,
+  SkeletonCardContent,
+  SkeletonElement
+} from './SkeletonCard.styled';
 
 const SkeletonCard = () => {
   return (
-    <div className="skeleton-card">
-      <div className="skeleton-card__header">
-        <div className="skeleton skeleton--theme"></div>
-        <div className="skeleton skeleton--button"></div>
-      </div>
-      <div className="skeleton-card__content">
-        <div className="skeleton skeleton--title"></div>
-        <div className="skeleton skeleton--date"></div>
-      </div>
-    </div>
+    <SkeletonCardContainer>
+      <SkeletonCardHeader>
+        <SkeletonElement variant="theme" />
+        <SkeletonElement variant="button" />
+      </SkeletonCardHeader>
+      <SkeletonCardContent>
+        <SkeletonElement variant="title" />
+        <SkeletonElement variant="date" />
+      </SkeletonCardContent>
+    </SkeletonCardContainer>
   );
 };
 

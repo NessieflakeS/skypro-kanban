@@ -15,8 +15,7 @@ a:visited {
   cursor: pointer;
 }
 
-button,
-._btn {
+button {
   cursor: pointer;
   outline: none;
 }
@@ -31,7 +30,6 @@ body {
   height: 100%;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   color: #000000;
-  background-color: var(--bg-primary);
   transition: all 0.3s ease;
 }
 
@@ -39,100 +37,15 @@ body {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden; 
-  background-color: var(--bg-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .light-theme {
-  --bg-primary: #F1F1F1;
-  --bg-secondary: #FFFFFF;
-  --bg-tertiary: #EAEEF6;
-  --text-primary: #000000;
-  --text-secondary: #565EEF;
-  --text-tertiary: #94A6BE;
-  --card-bg: #FFFFFF;
-  --header-bg: #FFFFFF;
-  --border-color: #D4DBE5;
+  background-color: #F1F1F1;
 }
 
 .dark-theme {
-  --bg-primary: #0F0F0F;
-  --bg-secondary: #1A1A1A;
-  --bg-tertiary: #2D2D2D;
-  --text-primary: #FFFFFF;
-  --text-secondary: #565EEF;
-  --text-tertiary: #A0A0A0;
-  --card-bg: #1A1A1A;
-  --header-bg: #1A1A1A;
-  --border-color: #404040;
-}
-
-._orange {
-  background-color: #FFE4C2;
-  color: #FF6D00;
-}
-
-._green {
-  background-color: #B4FDD1;
-  color: #06B16E;
-}
-
-._purple {
-  background-color: #E9D4FF;
-  color: #9A48F1;
-}
-
-._gray {
-  background: #94A6BE;
-  color: #FFFFFF;
-}
-
-._active-category {
-  opacity: 1 !important;
-}
-
-.dark-theme ._orange {
-  background-color: rgba(255, 143, 10, 0.2);
-  color: #FFB366;
-}
-
-.dark-theme ._green {
-  background-color: rgba(0, 204, 20, 0.2);
-  color: #66FF7A;
-}
-
-.dark-theme ._purple {
-  background-color: rgba(158, 85, 255, 0.2);
-  color: #C29FFF;
-}
-
-.dark-theme ._gray {
-  background-color: rgba(148, 166, 190, 0.2);
-  color: #B8C7D9;
-}
-
-._hover01:hover {
-  background-color: #33399b;
-}
-
-._hover02:hover, 
-.header__user:hover {
-  color: #33399b;
-}
-
-._hover02:hover::after, 
-.header__user:hover::after {
-  border-left-color: #33399b;
-  border-bottom-color: #33399b;
-}
-
-._hover03:hover {
-  background-color: #33399b;
-  color: #FFFFFF;
-}
-
-._hover03:hover a {
-  color: #FFFFFF;
+  background-color: #0F0F0F;
 }
