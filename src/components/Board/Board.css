@@ -1,0 +1,31 @@
+.main {
+  width: 100%;
+  background-color: transparent; 
+}
+
+.main__block {
+  width: 100%;
+  margin: 0 auto;
+  padding: 25px 0 49px;
+  background-color: transparent; 
+}
+
+.main__content {
+  width: 100%;
+  display: flex;
+  background-color: transparent; 
+  gap: 20px; 
+}
+
+/* Медиа-запросы для Board */
+@media screen and (max-width: 1200px) {
+  .main__block {
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 0 64px;
+  }
+
+  .main__content {
+    display: block;
+  }
+}
