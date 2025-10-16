@@ -49,6 +49,40 @@ export const UserContainer = styled.div`
   position: relative;
 `;
 
+export const NewTaskButton = styled.button`
+  width: 178px;
+  height: 30px;
+  background-color: #565EEF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 10px;
+  transition: background-color 0.3s ease;
+  opacity: ${props => props.loading ? 0.7 : 1};
+  cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
+
+  &:hover {
+    background-color: ${props => props.loading ? '#565EEF' : '#454ed0'};
+  }
+
+  @media (max-width: 768px) {
+    width: auto;
+    min-width: 160px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+`;
+
 export const UserButton = styled.a`
   color: #565EEF;
   font-size: 14px;

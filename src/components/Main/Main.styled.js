@@ -5,7 +5,7 @@ export const MainContainer = styled.main`
   background-color: ${props => props.theme.bgPrimary};
   display: flex;
   justify-content: center;
-  flex: 1; 
+  flex: 1;
 `;
 
 export const MainBlock = styled.div`
