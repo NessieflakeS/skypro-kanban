@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   HeaderContainer,
   HeaderBlock,
@@ -17,10 +18,11 @@ import {
   UserSkeleton
 } from './Header.styled';
 
-const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
+const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading, onLogout }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const userButtonRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -51,7 +53,8 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
 
   const handleLogoutClick = (e) => {
     e.preventDefault();
-    window.location.hash = '#popExit';
+    onLogout();
+    navigate('/exit');
     setIsUserMenuOpen(false);
   };
 
@@ -59,7 +62,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
     <HeaderContainer>
       <HeaderBlock>
         <HeaderLogo>
-          <a href="" target="_self" rel="noopener noreferrer">
+          <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
             <img 
               src={isDarkTheme ? "/images/logo_dark.png" : "/images/logo.png"} 
               alt="logo" 
@@ -113,7 +116,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
                 />
               </ThemeToggle>
               <LogoutButton type="button" onClick={handleLogoutClick}>
-                <a href="#popExit">Выйти</a>
+                Выйти
               </LogoutButton>
             </UserMenu>
           </UserContainer>
