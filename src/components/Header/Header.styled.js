@@ -14,9 +14,10 @@ export const HeaderContainer = styled.header`
   width: 100%;
   margin: 0 auto;
   background-color: ${props => props.theme.headerBg};
-  padding: 0 20px;
-  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid ${props => props.theme.borderColor};
+  padding: 0 16px;
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
 `;
 
 export const HeaderBlock = styled.div`
@@ -25,19 +26,24 @@ export const HeaderBlock = styled.div`
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0;
+  max-width: 1440px;
+  margin: 0 auto;
 `;
 
 export const HeaderLogo = styled.div`
+  a {
+    display: block;
+  }
+  
   img {
     width: 85px;
     height: 20px;
+    display: block;
   }
 `;
 
 export const HeaderNav = styled.nav`
-  max-width: 500px;
-  padding: 0;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -51,12 +57,18 @@ export const NewTaskButton = styled.button`
   color: #FFFFFF;
   border: none;
   font-size: 14px;
-  line-height: 1;
   font-weight: 500;
-  margin-right: 20px;
+  line-height: 1;
   cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
   opacity: ${props => props.loading ? 0.7 : 1};
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px;
 
   &:hover:not(:disabled) {
     background-color: #33399b;
@@ -82,6 +94,7 @@ export const LoadingDots = styled.div`
 
     &:nth-child(1) { animation-delay: -0.32s; }
     &:nth-child(2) { animation-delay: -0.16s; }
+    &:nth-child(3) { animation-delay: 0s; }
   }
 `;
 
@@ -101,6 +114,7 @@ export const UserButton = styled.a`
   cursor: pointer;
   text-decoration: none;
   transition: color 0.3s ease;
+  white-space: nowrap;
 
   &:hover {
     color: ${props => props.theme.textSecondary};
@@ -113,36 +127,44 @@ export const UserMenu = styled.div`
   top: 50px;
   right: 0;
   background: ${props => props.theme.cardBg};
-  border: 1px solid ${props => props.theme.borderColor};
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0px 10px 39px rgba(26, 56, 101, 0.21);
-  min-width: 200px;
+  border: 0.7px solid ${props => props.theme.borderColor};
+  border-radius: 10px;
+  padding: 34px;
+  box-shadow: 0px 10px 39px 0px rgba(26, 56, 101, 0.21);
+  min-width: 213px;
+  height: 205px;
   z-index: 100;
+  text-align: center;
 `;
 
 export const UserName = styled.p`
+  color: ${props => props.theme.textPrimary};
   font-size: 14px;
   font-weight: 500;
-  color: ${props => props.theme.textPrimary};
+  line-height: 21px;
+  letter-spacing: -0.14px;
   margin-bottom: 4px;
 `;
 
 export const UserEmail = styled.p`
-  font-size: 14px;
   color: ${props => props.theme.textTertiary};
-  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.14px;
+  margin-bottom: 10px;
 `;
 
 export const ThemeToggle = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   p {
-    font-size: 14px;
     color: ${props => props.theme.textPrimary};
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: -0.14px;
   }
 `;
 
@@ -187,10 +209,13 @@ export const LogoutButton = styled.button`
   padding: 8px 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 14px;
 
   a {
     color: ${props => props.theme.textSecondary};
     text-decoration: none;
+    display: block;
+    width: 100%;
   }
 
   &:hover {

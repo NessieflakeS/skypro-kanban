@@ -81,14 +81,23 @@ export const ExitButton = styled.button`
   line-height: 1;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px;
 
   a {
     color: ${props => props.variant === 'yes' ? '#FFFFFF' : props.theme.textSecondary};
     text-decoration: none;
     display: block;
     width: 100%;
-    height: 100%;
-    line-height: 30px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:hover {
@@ -103,9 +112,5 @@ export const ExitButton = styled.button`
   @media screen and (max-width: 495px) {
     width: 100%;
     height: 40px;
-
-    a {
-      line-height: 40px;
-    }
   }
 `;

@@ -59,15 +59,12 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
     <HeaderContainer>
       <HeaderBlock>
         <HeaderLogo>
-          {!isDarkTheme ? (
-            <a href="" target="_self" rel="noopener noreferrer">
-              <img src="/images/logo.png" alt="logo" />
-            </a>
-          ) : (
-            <a href="" target="_self" rel="noopener noreferrer">
-              <img src="/images/logo_dark.png" alt="logo" />
-            </a>
-          )}
+          <a href="" target="_self" rel="noopener noreferrer">
+            <img 
+              src={isDarkTheme ? "/images/logo_dark.png" : "/images/logo.png"} 
+              alt="logo" 
+            />
+          </a>
         </HeaderLogo>
         <HeaderNav>
           <NewTaskButton 
@@ -87,7 +84,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
           </NewTaskButton>
           <UserContainer>
             {isLoading ? (
-              <UserSkeleton variant="text" />
+              <UserSkeleton />
             ) : (
               <UserButton 
                 ref={userButtonRef}

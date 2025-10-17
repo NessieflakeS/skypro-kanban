@@ -3,7 +3,8 @@ import Card from '../Card/Card';
 import {
   ColumnContainer,
   ColumnTitle,
-  CardsContainer
+  CardsContainer,
+  AnimatedBorder
 } from './Column.styled';
 
 const Column = ({ title, status, cards, moveCard, onCardClick }) => {
@@ -16,7 +17,9 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
 
   const handleDragLeave = (e) => {
     e.preventDefault();
-    setIsDragOver(false);
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragOver(false);
+    }
   };
 
   const handleDrop = (e) => {
@@ -33,6 +36,14 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      {isDragOver && (
+        <AnimatedBorder>
+          <svg>
+            <rect />
+          </svg>
+        </AnimatedBorder>
+      )}
+      
       <ColumnTitle dragOver={isDragOver}>
         <p>{title}</p>
       </ColumnTitle>

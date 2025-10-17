@@ -231,6 +231,13 @@ export const SubmitButton = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
   float: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px;
 
   &:hover:not(:disabled) {
     background-color: #33399b;
@@ -244,5 +251,6 @@ export const SubmitButton = styled.button`
   @media screen and (max-width: 495px) {
     width: 100%;
     height: 40px;
+    float: none;
   }
 `;
