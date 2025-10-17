@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from '../../Common/Calendar/Calendar';
 import Button from '../../Common/Button/Button';
 import {
@@ -22,12 +22,26 @@ import {
 } from './PopupNewCard.styled';
 
 const PopupNewCard = ({ onCreateCard }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: 'Web Design',
     date: ''
   });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setIsOpen(window.location.hash === '#popNewCard');
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange();
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,8 +94,6 @@ const PopupNewCard = ({ onCreateCard }) => {
   const handleClose = () => {
     window.location.hash = '';
   };
-
-  const isOpen = window.location.hash === '#popNewCard';
 
   if (!isOpen) {
     return null;
