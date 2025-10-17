@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 import Header from '../../components/Header/Header';
 import Main from '../../components/Main/Main';
-import {
-  MainPageContainer
-} from './MainPage.styled';
+import PopupNewCard from '../../components/Popups/PopupNewCard/PopupNewCard';
+import PopupBrowseCard from '../../components/Popups/PopupBrowseCard/PopupBrowseCard';
+import PopupExit from '../../components/Popups/PopupExit/PopupExit';
+import { GlobalStyles } from '../../GlobalStyles.styled';
+import { lightTheme, darkTheme } from '../../theme';
+import { MainPage, MainContent } from './Main.styled';
 
-const MainPage = ({ isDarkTheme, toggleTheme, onLogout }) => {
+const MainPageComponent = () => {
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
-  const navigate = useNavigate();
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
   // Имитация загрузки данных
   useEffect(() => {
@@ -28,6 +34,10 @@ const MainPage = ({ isDarkTheme, toggleTheme, onLogout }) => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
 
   const moveCard = (cardId, newStatus) => {
     setCards(prevCards => 
@@ -51,10 +61,11 @@ const MainPage = ({ isDarkTheme, toggleTheme, onLogout }) => {
 
   const deleteCard = (cardId) => {
     setCards(prevCards => prevCards.filter(card => card.id !== cardId));
+    setSelectedCard(null);
   };
 
   const selectCard = (card) => {
-    navigate(`/card/${card.id}`);
+    setSelectedCard(card);
   };
 
   const updateCard = (cardId, updatedData) => {
@@ -63,29 +74,43 @@ const MainPage = ({ isDarkTheme, toggleTheme, onLogout }) => {
         card.id === cardId ? { ...card, ...updatedData } : card
       )
     );
+    setSelectedCard(null);
   };
 
   const handleNewCardClick = () => {
-    navigate('/add');
+    window.location.hash = '#popNewCard';
   };
 
   return (
-    <MainPageContainer>
-      <Header 
-        isDarkTheme={isDarkTheme}
-        toggleTheme={toggleTheme}
-        onNewCardClick={handleNewCardClick}
-        isLoading={isLoading}
-        onLogout={onLogout}
-      />
-      <Main 
-        cards={cards} 
-        moveCard={moveCard}
-        onCardClick={selectCard}
-        isLoading={isLoading}
-      />
-    </MainPageContainer>
+    <ThemeProvider theme={currentTheme}>
+      <GlobalStyles />
+      <MainPage>
+        <MainContent>
+          <PopupNewCard onCreateCard={createCard} />
+          <PopupBrowseCard 
+            card={selectedCard} 
+            onDeleteCard={deleteCard}
+            onUpdateCard={updateCard}
+            onClose={() => setSelectedCard(null)}
+          />
+          <PopupExit />
+
+          <Header 
+            isDarkTheme={isDarkTheme} 
+            toggleTheme={toggleTheme}
+            isLoading={isLoading}
+            onNewCardClick={handleNewCardClick}
+          />
+          <Main 
+            cards={cards} 
+            moveCard={moveCard}
+            onCardClick={selectCard}
+            isLoading={isLoading}
+          />
+        </MainContent>
+      </MainPage>
+    </ThemeProvider>
   );
 };
 
-export default MainPage;
+export default MainPageComponent;

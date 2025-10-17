@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import {
   PopupContainer,
   PopupOverlay,
@@ -11,6 +12,8 @@ import {
 
 const PopupExit = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -18,7 +21,6 @@ const PopupExit = () => {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    
     handleHashChange();
 
     return () => {
@@ -26,19 +28,16 @@ const PopupExit = () => {
     };
   }, []);
 
-  const handleClose = () => {
-    window.location.hash = '';
-  };
-
   const handleExitYes = (e) => {
     e.preventDefault();
-    console.log('Выход из аккаунта');
-    handleClose();
+    logout();
+    navigate('/login');
+    window.location.hash = '';
   };
 
   const handleExitNo = (e) => {
     e.preventDefault();
-    handleClose();
+    window.location.hash = '';
   };
 
   if (!isOpen) {
@@ -58,13 +57,13 @@ const PopupExit = () => {
                 variant="yes" 
                 onClick={handleExitYes}
               >
-                <a href="#/">Да, выйти</a>
+                Да, выйти
               </ExitButton>
               <ExitButton 
                 variant="no" 
                 onClick={handleExitNo}
               >
-                <a href="#/">Нет, остаться</a>
+                Нет, остаться
               </ExitButton>
             </ButtonGroup>
           </PopupForm>

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import {
   HeaderContainer,
   HeaderBlock,
@@ -18,11 +18,11 @@ import {
   UserSkeleton
 } from './Header.styled';
 
-const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading, onLogout }) => {
+const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const userButtonRef = useRef(null);
-  const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -53,8 +53,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading, onLogout 
 
   const handleLogoutClick = (e) => {
     e.preventDefault();
-    onLogout();
-    navigate('/exit');
+    window.location.hash = '#popExit';
     setIsUserMenuOpen(false);
   };
 
@@ -62,7 +61,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading, onLogout 
     <HeaderContainer>
       <HeaderBlock>
         <HeaderLogo>
-          <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
+          <a href="/" target="_self" rel="noopener noreferrer">
             <img 
               src={isDarkTheme ? "/images/logo_dark.png" : "/images/logo.png"} 
               alt="logo" 
@@ -97,7 +96,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading, onLogout 
                   toggleUserMenu();
                 }}
               >
-                Ivan Ivanov
+                {currentUser?.name || 'User'}
               </UserButton>
             )}
             <UserMenu 
@@ -105,8 +104,8 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading, onLogout 
               isOpen={isUserMenuOpen}
               id="user-set-target"
             >
-              <UserName>Ivan Ivanov</UserName>
-              <UserEmail>ivan.ivanov@gmail.com</UserEmail>
+              <UserName>{currentUser?.name || 'User'}</UserName>
+              <UserEmail>{currentUser?.email || 'user@example.com'}</UserEmail>
               <ThemeToggle>
                 <p>Темная тема</p>
                 <ThemeCheckbox 
