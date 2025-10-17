@@ -1,40 +1,58 @@
-import './Header.css'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react';
+import {
+  HeaderContainer,
+  HeaderBlock,
+  HeaderLogo,
+  HeaderNav,
+  UserContainer,
+  NewTaskButton,
+  UserButton,
+  UserMenu,
+  UserName,
+  UserEmail,
+  ThemeToggle,
+  ThemeCheckbox,
+  LogoutButton,
+  LoadingDots,
+  UserSkeleton
+} from './Header.styled';
 
 const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
-  const menuRef = useRef(null)
-  const userButtonRef = useRef(null)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const userButtonRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target) && 
           userButtonRef.current && !userButtonRef.current.contains(event.target)) {
-        setIsUserMenuOpen(false)
+        setIsUserMenuOpen(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const toggleUserMenu = () => {
-    setIsUserMenuOpen(!isUserMenuOpen)
-  }
+    if (!isLoading) {
+      setIsUserMenuOpen(!isUserMenuOpen);
+    }
+  };
 
   const handleNewCardClick = (e) => {
-    e.preventDefault()
-    if (onNewCardClick) {
-      onNewCardClick()
+    e.preventDefault();
+    if (onNewCardClick && !isLoading) {
+      onNewCardClick();
     }
-  }
+  };
 
   return (
-    <header className="header">
-      <div className="header__block">
-        <div className="header__logo">
+    <HeaderContainer>
+      <HeaderBlock>
+        <HeaderLogo>
           {!isDarkTheme ? (
             <a href="" target="_self" rel="noopener noreferrer">
               <img src="/images/logo.png" alt="logo" />
@@ -44,65 +62,62 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
               <img src="/images/logo_dark.png" alt="logo" />
             </a>
           )}
-        </div>
-        <nav className="header__nav">
-          <button 
-            className={`header__btn-main-new _hover01 ${isLoading ? 'header__btn--loading' : ''}`} 
+        </HeaderLogo>
+        <HeaderNav>
+          <NewTaskButton 
             onClick={handleNewCardClick}
+            loading={isLoading}
             disabled={isLoading}
           >
             {isLoading ? (
-              <div className="loading-dots">
+              <LoadingDots>
                 <span></span>
                 <span></span>
                 <span></span>
-              </div>
+              </LoadingDots>
             ) : (
               "Создать новую задачу"
             )}
-          </button>
-          <div className="header__user-container">
+          </NewTaskButton>
+          <UserContainer>
             {isLoading ? (
-              <div className="header__user-skeleton skeleton"></div>
+              <UserSkeleton variant="text" />
             ) : (
-              <a 
+              <UserButton 
                 ref={userButtonRef}
-                href="#user-set-target" 
-                className="header__user _hover02"
+                href="#user-set-target"
                 onClick={(e) => {
-                  e.preventDefault()
-                  toggleUserMenu()
+                  e.preventDefault();
+                  toggleUserMenu();
                 }}
               >
                 Ivan Ivanov
-              </a>
+              </UserButton>
             )}
-            <div 
+            <UserMenu 
               ref={menuRef}
-              className={`header__pop-user-set pop-user-set ${isUserMenuOpen ? 'active' : ''}`} 
+              isOpen={isUserMenuOpen}
               id="user-set-target"
             >
-              <p className="pop-user-set__name">Ivan Ivanov</p>
-              <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
-              <div className="pop-user-set__theme">
+              <UserName>Ivan Ivanov</UserName>
+              <UserEmail>ivan.ivanov@gmail.com</UserEmail>
+              <ThemeToggle>
                 <p>Темная тема</p>
-                <input 
+                <ThemeCheckbox 
                   type="checkbox" 
-                  className="checkbox" 
-                  name="checkbox" 
                   checked={isDarkTheme}
                   onChange={toggleTheme}
                 />
-              </div>
-              <button type="button" className="_hover03">
+              </ThemeToggle>
+              <LogoutButton type="button">
                 <a href="#popExit">Выйти</a>
-              </button>
-            </div>
-          </div>
-        </nav>					
-      </div>			
-    </header>
-  )
-}
+              </LogoutButton>
+            </UserMenu>
+          </UserContainer>
+        </HeaderNav>					
+      </HeaderBlock>			
+    </HeaderContainer>
+  );
+};
 
-export default Header
+export default Header;

@@ -1,12 +1,12 @@
 import './PopupBrowseCard.css'
 import { useState, useEffect } from 'react'
 import Calendar from '../../Common/Calendar/Calendar'
+import Button from '../../Common/Button/Button'
 
 const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({})
 
-  // Обновляем editData при изменении card
   useEffect(() => {
     if (card) {
       setEditData(card)
@@ -14,12 +14,10 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   }, [card])
 
   if (!card) {
-    console.log('No card provided to PopupBrowseCard');
     return null;
   }
 
   const handleDelete = () => {
-    console.log('Delete button clicked for card:', card.id);
     if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
       onDeleteCard(card.id);
       onClose();
@@ -27,13 +25,11 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   }
 
   const handleSave = () => {
-    console.log('Save button clicked with data:', editData);
     onUpdateCard(card.id, editData);
     setIsEditing(false);
   }
 
   const handleCancel = () => {
-    console.log('Cancel button clicked');
     setEditData(card);
     setIsEditing(false);
   }
@@ -47,7 +43,6 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   }
 
   const handleStatusChange = (status) => {
-    console.log('Status changed to:', status);
     setEditData(prev => ({
       ...prev,
       status
@@ -155,54 +150,61 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
             {!isEditing ? (
               <div className="pop-browse__btn-browse">
                 <div className="btn-group">
-                  <button 
-                    className="btn-browse__edit _btn-bor _hover03" 
+                  <Button 
+                    variant="outline"
+                    size="small"
                     onClick={() => setIsEditing(true)}
                   >
                     Редактировать задачу
-                  </button>
-                  <button 
-                    className="btn-browse__delete _btn-bor _hover03" 
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="small"
                     onClick={handleDelete}
                   >
                     Удалить задачу
-                  </button>
+                  </Button>
                 </div>
-                <button 
-                  className="btn-browse__close _btn-bg _hover01" 
+                <Button 
+                  variant="primary"
+                  size="small"
                   onClick={onClose}
                 >
                   Закрыть
-                </button>
+                </Button>
               </div>
             ) : (
               <div className="pop-browse__btn-edit">
                 <div className="btn-group">
-                  <button 
-                    className="btn-edit__edit _btn-bg _hover01" 
+                  <Button 
+                    variant="primary"
+                    size="small"
                     onClick={handleSave}
                   >
                     Сохранить
-                  </button>
-                  <button 
-                    className="btn-edit__edit _btn-bor _hover03" 
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="small"
                     onClick={handleCancel}
                   >
                     Отменить
-                  </button>
-                  <button 
-                    className="btn-edit__delete _btn-bor _hover03" 
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="small"
                     onClick={handleDelete}
                   >
                     Удалить задачу
-                  </button>
+                  </Button>
                 </div>
-                <button 
-                  className="btn-edit__close _btn-bg _hover01" 
+                <Button 
+                  variant="primary"
+                  size="small"
                   onClick={onClose}
                 >
                   Закрыть
-                </button>
+                </Button>
               </div>
             )}
           </div>
