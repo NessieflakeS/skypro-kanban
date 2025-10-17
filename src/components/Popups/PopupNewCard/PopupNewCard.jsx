@@ -74,6 +74,17 @@ const PopupNewCard = ({ onCreateCard }) => {
     return `${day}.${month}.${year}`;
   };
 
+  const parseDate = (dateString) => {
+    if (!dateString) return null;
+    try {
+      const [day, month, year] = dateString.split('.');
+      return new Date(`20${year}-${month}-${day}`);
+    } catch (error) {
+      console.error('Error parsing date:', error);
+      return null;
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.title.trim()) {
@@ -134,7 +145,7 @@ const PopupNewCard = ({ onCreateCard }) => {
               </PopupForm>
               
               <Calendar 
-                selectedDate={formData.date ? new Date(formData.date.split('.').reverse().join('-')) : null}
+                selectedDate={formData.date ? parseDate(formData.date) : null}
                 onDateSelect={handleDateSelect}
               />
             </PopupWrap>

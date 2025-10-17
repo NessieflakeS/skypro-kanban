@@ -87,10 +87,15 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   };
 
   const parseDate = (dateString) => {
-    if (!dateString) return null;
+  if (!dateString) return null;
+  try {
     const [day, month, year] = dateString.split('.');
     return new Date(`20${year}-${month}-${day}`);
-  };
+  } catch (error) {
+    console.error('Error parsing date:', error);
+    return null;
+  }
+};
 
   const getThemeClass = (category) => {
     const themes = {
