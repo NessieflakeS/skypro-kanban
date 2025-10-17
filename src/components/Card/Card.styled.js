@@ -18,11 +18,22 @@ export const CardItem = styled.div`
   animation-timing-function: linear;
   cursor: ${props => props.dragging ? 'grabbing' : 'grab'};
   position: relative;
-  opacity: ${props => props.dragging ? 0.5 : 1};
-  transform: ${props => props.dragging ? 'scale(0.95)' : 'scale(1)'};
+  opacity: ${props => props.dragging ? 0.8 : 1};
+  transform: ${props => props.dragging ? 'scale(0.95) rotate(2deg)' : 'scale(1) rotate(0)'};
+  transition: all 0.2s ease;
+  z-index: ${props => props.dragging ? 10 : 1};
+  box-shadow: ${props => props.dragging ? 
+    '0 8px 25px rgba(0, 0, 0, 0.15), 0 0 0 2px ' + props.theme.textSecondary : 
+    '0px 2px 10px rgba(0, 0, 0, 0.1)'};
 
   &:active {
     cursor: grabbing;
+  }
+
+  // Эффект поднятия при hover
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -38,8 +49,7 @@ export const CardContainer = styled.div`
   padding: 15px 13px 19px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  transform: ${props => props.dragging ? 'rotate(3deg)' : 'rotate(0)'};
-  box-shadow: ${props => props.dragging ? '0 8px 25px rgba(0, 0, 0, 0.15)' : '0px 2px 10px rgba(0, 0, 0, 0.1)'};
+  border: 1px solid ${props => props.theme.borderColor};
 `;
 
 export const CardGroup = styled.div`
