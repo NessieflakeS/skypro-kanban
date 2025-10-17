@@ -49,6 +49,12 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
     }
   };
 
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    window.location.hash = '#popExit';
+    setIsUserMenuOpen(false);
+  };
+
   return (
     <HeaderContainer>
       <HeaderBlock>
@@ -109,7 +115,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
                   onChange={toggleTheme}
                 />
               </ThemeToggle>
-              <LogoutButton type="button">
+              <LogoutButton type="button" onClick={handleLogoutClick}>
                 <a href="#popExit">Выйти</a>
               </LogoutButton>
             </UserMenu>

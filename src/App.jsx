@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import PopupNewCard from './components/Popups/PopupNewCard/PopupNewCard';
 import PopupBrowseCard from './components/Popups/PopupBrowseCard/PopupBrowseCard';
+import PopupExit from './components/Popups/PopupExit/PopupExit';
 import { GlobalStyles } from './GlobalStyles.styled';
 import { lightTheme, darkTheme } from './theme';
 
@@ -75,6 +76,10 @@ function App() {
     setSelectedCard(null);
   };
 
+  const handleNewCardClick = () => {
+    window.location.hash = '#popNewCard';
+  };
+
   return (
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
@@ -86,11 +91,13 @@ function App() {
           onUpdateCard={updateCard}
           onClose={() => setSelectedCard(null)}
         />
+        <PopupExit />
 
         <Header 
           isDarkTheme={isDarkTheme} 
           toggleTheme={toggleTheme}
           isLoading={isLoading}
+          onNewCardClick={handleNewCardClick}
         />
         <Main 
           cards={cards} 

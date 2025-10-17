@@ -1,16 +1,38 @@
-import './PopupBrowseCard.css'
-import { useState, useEffect } from 'react'
-import Button from '../../Common/Button/Button'
+import { useState, useEffect } from 'react';
+import Calendar from '../../Common/Calendar/Calendar';
+import Button from '../../Common/Button/Button';
+import {
+  PopupContainer,
+  PopupOverlay,
+  PopupBlock,
+  PopupContent,
+  PopupTopBlock,
+  PopupTitle,
+  CategoryBadge,
+  StatusSection,
+  StatusTitle,
+  StatusThemes,
+  StatusTheme,
+  PopupWrap,
+  PopupForm,
+  FormBlock,
+  FormLabel,
+  FormTextarea,
+  EditInput,
+  ButtonsContainer,
+  ButtonGroup,
+  CategoriesSection
+} from './PopupBrowseCard.styled';
 
 const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editData, setEditData] = useState({})
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({});
 
   useEffect(() => {
     if (card) {
-      setEditData(card)
+      setEditData(card);
     }
-  }, [card])
+  }, [card]);
 
   if (!card) {
     return null;
@@ -21,134 +43,139 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
       onDeleteCard(card.id);
       onClose();
     }
-  }
+  };
 
   const handleSave = () => {
     onUpdateCard(card.id, editData);
     setIsEditing(false);
-  }
+  };
 
   const handleCancel = () => {
     setEditData(card);
     setIsEditing(false);
-  }
+  };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setEditData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleStatusChange = (status) => {
     setEditData(prev => ({
       ...prev,
       status
-    }))
-  }
+    }));
+  };
 
   const handleDateSelect = (date) => {
-    const formattedDate = formatDate(date)
+    const formattedDate = formatDate(date);
     setEditData(prev => ({
       ...prev,
       date: formattedDate
-    }))
-  }
+    }));
+  };
 
   const formatDate = (date) => {
-    if (!date) return ''
-    const day = date.getDate().toString().padStart(2, '0')
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const year = date.getFullYear().toString().slice(-2)
-    return `${day}.${month}.${year}`
-  }
+    if (!date) return '';
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}.${month}.${year}`;
+  };
 
   const parseDate = (dateString) => {
-    if (!dateString) return null
-    const [day, month, year] = dateString.split('.')
-    return new Date(`20${year}-${month}-${day}`)
-  }
+    if (!dateString) return null;
+    const [day, month, year] = dateString.split('.');
+    return new Date(`20${year}-${month}-${day}`);
+  };
+
+  const getThemeClass = (category) => {
+    const themes = {
+      'Web Design': 'orange',
+      'Research': 'green',
+      'Copywriting': 'purple'
+    };
+    return themes[category] || 'green';
+  };
+
+  const themeClass = getThemeClass(card.category);
 
   return (
-    <div className="pop-browse" id="popBrowse" style={{ display: 'block' }}>
-      <div className="pop-browse__container">
-        <div className="pop-browse__block">
-          <div className="pop-browse__content">
-            <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="title"
-                    value={editData.title || ''}
-                    onChange={handleInputChange}
-                    className="edit-input"
-                  />
-                ) : (
-                  card.title
-                )}
-              </h3>
-              <div className={`categories__theme theme-top _${getThemeClass(card.category)} _active-category`}>
-                <p className={getThemeClass(card.category)}>{card.category}</p>
-              </div>
-            </div>
+    <PopupContainer isOpen={!!card}>
+      <PopupOverlay>
+        <PopupBlock>
+          <PopupContent>
+            <PopupTopBlock>
+              {isEditing ? (
+                <EditInput
+                  type="text"
+                  name="title"
+                  value={editData.title || ''}
+                  onChange={handleInputChange}
+                />
+              ) : (
+                <PopupTitle>{card.title}</PopupTitle>
+              )}
+              <CategoryBadge theme={themeClass}>
+                {card.category}
+              </CategoryBadge>
+            </PopupTopBlock>
             
-            <div className="pop-browse__status status">
-              <p className="status__p subttl">Статус</p>
-              <div className="status__themes">
+            <StatusSection>
+              <StatusTitle>Статус</StatusTitle>
+              <StatusThemes>
                 {['Без статуса', 'Нужно сделать', 'В работе', 'Тестирование', 'Готово'].map(status => (
-                  <div 
+                  <StatusTheme 
                     key={status}
-                    className={`status__theme ${isEditing ? '' : '_hide'} ${editData.status === status ? '_active-status' : ''}`}
+                    active={editData.status === status}
+                    clickable={isEditing}
                     onClick={() => isEditing && handleStatusChange(status)}
                   >
                     <p>{status}</p>
-                  </div>
+                  </StatusTheme>
                 ))}
                 {!isEditing && (
-                  <div className="status__theme _gray">
-                    <p className="_gray">{card.status}</p>
-                  </div>
+                  <StatusTheme>
+                    <p>{card.status}</p>
+                  </StatusTheme>
                 )}
-              </div>
-            </div>
+              </StatusThemes>
+            </StatusSection>
 
-            <div className="pop-browse__wrap">
-              <form className="pop-browse__form form-browse" id="formBrowseCard">
-                <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">Описание задачи</label>
-                  <textarea 
-                    className="form-browse__area" 
+            <PopupWrap>
+              <PopupForm id="formBrowseCard">
+                <FormBlock>
+                  <FormLabel htmlFor="textArea01">Описание задачи</FormLabel>
+                  <FormTextarea 
                     name="description" 
                     id="textArea01" 
                     readOnly={!isEditing}
                     placeholder="Введите описание задачи..."
                     value={editData.description || ''}
                     onChange={handleInputChange}
-                  ></textarea>
-                </div>
-              </form>
+                  />
+                </FormBlock>
+              </PopupForm>
               
-              <div className="pop-new-card__calendar calendar">
-                <p className="calendar__ttl subttl">Даты</p>
-                <Calendar 
-                  selectedDate={parseDate(editData.date)}
-                  onDateSelect={isEditing ? handleDateSelect : null}
-                />
-              </div>
-            </div>
+              <Calendar 
+                selectedDate={parseDate(editData.date)}
+                onDateSelect={isEditing ? handleDateSelect : null}
+              />
+            </PopupWrap>
 
-            <div className="theme-down__categories theme-down">
-              <p className="categories__p subttl">Категория</p>
-              <div className={`categories__theme _${getThemeClass(card.category)} _active-category`}>
-                <p className={getThemeClass(card.category)}>{card.category}</p>
-              </div>
-            </div>
+            <CategoriesSection>
+              <StatusTitle>Категория</StatusTitle>
+              <CategoryBadge theme={themeClass}>
+                {card.category}
+              </CategoryBadge>
+            </CategoriesSection>
 
             {!isEditing ? (
-              <div className="pop-browse__btn-browse">
-                <div className="btn-group">
+              <ButtonsContainer>
+                <ButtonGroup>
                   <Button 
                     variant="outline"
                     size="small"
@@ -163,7 +190,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                   >
                     Удалить задачу
                   </Button>
-                </div>
+                </ButtonGroup>
                 <Button 
                   variant="primary"
                   size="small"
@@ -171,10 +198,10 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                 >
                   Закрыть
                 </Button>
-              </div>
+              </ButtonsContainer>
             ) : (
-              <div className="pop-browse__btn-edit">
-                <div className="btn-group">
+              <ButtonsContainer>
+                <ButtonGroup>
                   <Button 
                     variant="primary"
                     size="small"
@@ -196,7 +223,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                   >
                     Удалить задачу
                   </Button>
-                </div>
+                </ButtonGroup>
                 <Button 
                   variant="primary"
                   size="small"
@@ -204,22 +231,13 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                 >
                   Закрыть
                 </Button>
-              </div>
+              </ButtonsContainer>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+          </PopupContent>
+        </PopupBlock>
+      </PopupOverlay>
+    </PopupContainer>
+  );
+};
 
-function getThemeClass(category) {
-  const themes = {
-    'Web Design': 'orange',
-    'Research': 'green',
-    'Copywriting': 'purple'
-  }
-  return themes[category] || 'green'
-}
-
-export default PopupBrowseCard
+export default PopupBrowseCard;

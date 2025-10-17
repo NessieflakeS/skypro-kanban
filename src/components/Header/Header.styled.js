@@ -5,6 +5,11 @@ const dotsAnimation = keyframes`
   40% { opacity: 1; }
 `;
 
+const skeletonPulse = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+`;
+
 export const HeaderContainer = styled.header`
   width: 100%;
   margin: 0 auto;
@@ -95,6 +100,7 @@ export const UserButton = styled.a`
   color: ${props => props.theme.textPrimary};
   cursor: pointer;
   text-decoration: none;
+  transition: color 0.3s ease;
 
   &:hover {
     color: ${props => props.theme.textSecondary};
@@ -148,6 +154,7 @@ export const ThemeCheckbox = styled.input`
   appearance: none;
   position: relative;
   cursor: pointer;
+  transition: background 0.3s ease;
 
   &::before {
     content: "";
@@ -158,12 +165,16 @@ export const ThemeCheckbox = styled.input`
     height: 11px;
     border-radius: 50%;
     background-color: ${props => props.theme.textTertiary};
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
   }
 
-  &:checked::before {
-    left: 12px;
-    background-color: ${props => props.theme.textSecondary};
+  &:checked {
+    background: ${props => props.theme.textSecondary};
+    
+    &::before {
+      left: 12px;
+      background-color: #FFFFFF;
+    }
   }
 `;
 
@@ -175,6 +186,7 @@ export const LogoutButton = styled.button`
   border-radius: 4px;
   padding: 8px 16px;
   cursor: pointer;
+  transition: all 0.3s ease;
 
   a {
     color: ${props => props.theme.textSecondary};
@@ -196,10 +208,5 @@ export const UserSkeleton = styled.div`
   height: 20px;
   background: ${props => props.theme.bgTertiary};
   border-radius: 4px;
-  animation: pulse 1.5s ease-in-out infinite;
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
+  animation: ${skeletonPulse} 1.5s ease-in-out infinite;
 `;

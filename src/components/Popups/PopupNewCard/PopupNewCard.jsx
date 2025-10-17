@@ -1,6 +1,25 @@
-import './PopupNewCard.css'
-import { useState } from 'react'
-import Button from '../../Common/Button/Button'
+import { useState } from 'react';
+import Calendar from '../../Common/Calendar/Calendar';
+import Button from '../../Common/Button/Button';
+import {
+  PopupContainer,
+  PopupOverlay,
+  PopupBlock,
+  PopupContent,
+  PopupTitle,
+  PopupClose,
+  PopupWrap,
+  PopupForm,
+  FormBlock,
+  FormLabel,
+  FormInput,
+  FormTextarea,
+  Categories,
+  CategoriesTitle,
+  CategoriesThemes,
+  CategoryTheme,
+  SubmitButton
+} from './PopupNewCard.styled';
 
 const PopupNewCard = ({ onCreateCard }) => {
   const [formData, setFormData] = useState({
@@ -8,73 +27,78 @@ const PopupNewCard = ({ onCreateCard }) => {
     description: '',
     category: 'Web Design',
     date: ''
-  })
+  });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleCategorySelect = (category) => {
     setFormData(prev => ({
       ...prev,
       category
-    }))
-  }
+    }));
+  };
 
   const handleDateSelect = (date) => {
-    const formattedDate = formatDate(date)
+    const formattedDate = formatDate(date);
     setFormData(prev => ({
       ...prev,
       date: formattedDate
-    }))
-  }
+    }));
+  };
 
   const formatDate = (date) => {
-    if (!date) return ''
-    const day = date.getDate().toString().padStart(2, '0')
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const year = date.getFullYear().toString().slice(-2)
-    return `${day}.${month}.${year}`
-  }
+    if (!date) return '';
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}.${month}.${year}`;
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (formData.title.trim()) {
       onCreateCard({
         ...formData,
-        date: formData.date || formatDate(new Date()) 
-      })
-      window.location.hash = ''
+        date: formData.date || formatDate(new Date())
+      });
+      window.location.hash = '';
       setFormData({
         title: '',
         description: '',
         category: 'Web Design',
         date: ''
-      })
+      });
     }
-  }
+  };
 
   const handleClose = () => {
-    window.location.hash = ''
+    window.location.hash = '';
+  };
+
+  const isOpen = window.location.hash === '#popNewCard';
+
+  if (!isOpen) {
+    return null;
   }
 
   return (
-    <div className="pop-new-card" id="popNewCard">
-      <div className="pop-new-card__container">
-        <div className="pop-new-card__block">
-          <div className="pop-new-card__content">
-            <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a href="#/" className="pop-new-card__close" onClick={handleClose}>&#10006;</a>
-            <div className="pop-new-card__wrap">
-              <form className="pop-new-card__form form-new" id="formNewCard" onSubmit={handleSubmit}>
-                <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">Название задачи</label>
-                  <input 
-                    className="form-new__input" 
+    <PopupContainer isOpen={isOpen}>
+      <PopupOverlay>
+        <PopupBlock>
+          <PopupContent>
+            <PopupTitle>Создание задачи</PopupTitle>
+            <PopupClose href="#/" onClick={handleClose}>&#10006;</PopupClose>
+            <PopupWrap>
+              <PopupForm id="formNewCard" onSubmit={handleSubmit}>
+                <FormBlock>
+                  <FormLabel htmlFor="formTitle">Название задачи</FormLabel>
+                  <FormInput 
                     type="text" 
                     name="title" 
                     id="formTitle" 
@@ -84,62 +108,61 @@ const PopupNewCard = ({ onCreateCard }) => {
                     onChange={handleInputChange}
                     required
                   />
-                </div>
-                <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">Описание задачи</label>
-                  <textarea 
-                    className="form-new__area" 
+                </FormBlock>
+                <FormBlock>
+                  <FormLabel htmlFor="textArea">Описание задачи</FormLabel>
+                  <FormTextarea 
                     name="description" 
                     id="textArea" 
                     placeholder="Введите описание задачи..."
                     value={formData.description}
                     onChange={handleInputChange}
-                  ></textarea>
-                </div>
-              </form>
+                  />
+                </FormBlock>
+              </PopupForm>
               
               <Calendar 
                 selectedDate={formData.date ? new Date(formData.date.split('.').reverse().join('-')) : null}
                 onDateSelect={handleDateSelect}
               />
-            </div>
-            <div className="pop-new-card__categories categories">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__themes">
-                <div 
-                  className={`categories__theme _orange ${formData.category === 'Web Design' ? '_active-category' : ''}`}
+            </PopupWrap>
+            <Categories>
+              <CategoriesTitle>Категория</CategoriesTitle>
+              <CategoriesThemes>
+                <CategoryTheme 
+                  theme="orange"
+                  active={formData.category === 'Web Design'}
                   onClick={() => handleCategorySelect('Web Design')}
                 >
-                  <p className="_orange">Web Design</p>
-                </div>
-                <div 
-                  className={`categories__theme _green ${formData.category === 'Research' ? '_active-category' : ''}`}
+                  Web Design
+                </CategoryTheme>
+                <CategoryTheme 
+                  theme="green"
+                  active={formData.category === 'Research'}
                   onClick={() => handleCategorySelect('Research')}
                 >
-                  <p className="_green">Research</p>
-                </div>
-                <div 
-                  className={`categories__theme _purple ${formData.category === 'Copywriting' ? '_active-category' : ''}`}
+                  Research
+                </CategoryTheme>
+                <CategoryTheme 
+                  theme="purple"
+                  active={formData.category === 'Copywriting'}
                   onClick={() => handleCategorySelect('Copywriting')}
                 >
-                  <p className="_purple">Copywriting</p>
-                </div>
-              </div>
-            </div>
-            <Button 
-              variant="primary"
-              size="small"
+                  Copywriting
+                </CategoryTheme>
+              </CategoriesThemes>
+            </Categories>
+            <SubmitButton 
               onClick={handleSubmit}
               disabled={!formData.title.trim()}
-              style={{ float: 'right' }}
             >
               Создать задачу
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+            </SubmitButton>
+          </PopupContent>
+        </PopupBlock>
+      </PopupOverlay>
+    </PopupContainer>
+  );
+};
 
-export default PopupNewCard
+export default PopupNewCard;
