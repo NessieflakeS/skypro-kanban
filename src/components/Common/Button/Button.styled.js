@@ -1,3 +1,4 @@
+// Обновленный Button.styled.js с использованием темы
 import styled from 'styled-components';
 
 export const StyledButton = styled.button`
@@ -14,36 +15,37 @@ export const StyledButton = styled.button`
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  gap: 8px;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
   
-  /* Варианты кнопок */
+  /* Варианты кнопок с использованием темы */
   ${props => props.variant === 'primary' && `
-    background-color: #565EEF;
+    background-color: ${props.theme.textSecondary};
     color: #FFFFFF;
     
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: #33399b;
     }
   `}
   
   ${props => props.variant === 'secondary' && `
     background-color: transparent;
-    color: #565EEF;
-    border: 0.7px solid #565EEF;
+    color: ${props.theme.textSecondary};
+    border: 0.7px solid ${props.theme.textSecondary};
     
-    &:hover {
-      background-color: #33399b;
+    &:hover:not(:disabled) {
+      background-color: ${props.theme.textSecondary};
       color: #FFFFFF;
-      border-color: #33399b;
     }
   `}
   
   ${props => props.variant === 'outline' && `
     background-color: transparent;
-    color: #565EEF;
-    border: 0.7px solid #565EEF;
+    color: ${props.theme.textSecondary};
+    border: 0.7px solid ${props.theme.textSecondary};
     
-    &:hover {
-      background-color: #565EEF;
+    &:hover:not(:disabled) {
+      background-color: ${props.theme.textSecondary};
       color: #FFFFFF;
     }
   `}
@@ -55,15 +57,15 @@ export const StyledButton = styled.button`
     font-size: 12px;
   `}
   
+  ${props => props.size === 'medium' && `
+    height: 35px;
+    padding: 0 16px;
+  `}
+  
   ${props => props.size === 'large' && `
     height: 40px;
     padding: 0 20px;
     font-size: 16px;
-  `}
-  
-  ${props => props.size === 'medium' && `
-    height: 35px;
-    padding: 0 16px;
   `}
   
   /* Полная ширина */
@@ -75,5 +77,11 @@ export const StyledButton = styled.button`
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none !important;
+  }
+  
+  /* Активное состояние */
+  &:active:not(:disabled) {
+    transform: translateY(1px);
   }
 `;

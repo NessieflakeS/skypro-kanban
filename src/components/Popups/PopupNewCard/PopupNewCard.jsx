@@ -1,6 +1,5 @@
 import './PopupNewCard.css'
 import { useState } from 'react'
-import Calendar from '../../Common/Calendar/Calendar'
 import Button from '../../Common/Button/Button'
 
 const PopupNewCard = ({ onCreateCard }) => {
