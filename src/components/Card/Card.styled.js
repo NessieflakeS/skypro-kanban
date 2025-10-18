@@ -64,9 +64,7 @@ export const CardGroup = styled.div`
   justify-content: space-between;
 `;
 
-export const CardTheme = styled.div.attrs(props => ({
-  themecolor: props.$themeColor,
-}))`
+export const CardTheme = styled.div`
   border-radius: 24px;
   padding: 6px 20px;
   font-size: 10px;

@@ -59,14 +59,14 @@ const Card = ({ card, dragging = false }) => {
 
   return (
     <CardItem 
-      dragging={isDragging || dragging}
+      $dragging={isDragging || dragging}
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <CardContainer dragging={isDragging} onClick={handleCardClick}>
+      <CardContainer $dragging={isDragging} onClick={handleCardClick}>
         <CardGroup>
-          <CardTheme themeColor={themeClass}>
+          <CardTheme $themeColor={themeClass}>
             <p>{themeText}</p>
           </CardTheme>
           <CardButton onClick={handleMenuClick}>
@@ -106,4 +106,4 @@ const Card = ({ card, dragging = false }) => {
   );
 };
 
-export default Card;;
+export default Card;

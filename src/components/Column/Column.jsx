@@ -28,12 +28,12 @@ const Column = ({ title, status, cards, moveCard }) => {
 
   return (
     <ColumnContainer 
-      dragOver={isDragOver}
+      $dragOver={isDragOver}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <ColumnTitle dragOver={isDragOver}>
+      <ColumnTitle $dragOver={isDragOver}>
         <p>{title}</p>
       </ColumnTitle>
       <CardsContainer>

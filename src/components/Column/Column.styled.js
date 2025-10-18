@@ -49,3 +49,19 @@ export const CardsContainer = styled.div`
   gap: 20px;
   min-height: 50px;
 `;
+
+export const DropPlaceholder = styled.div`
+  height: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+`;
+
+export const DropPlaceholderLine = styled.div`
+  height: 2px;
+  background-color: #565EEF;
+  border-radius: 2px;
+  width: 100%;
+  animation: ${pulse} 1.5s infinite;
+`;

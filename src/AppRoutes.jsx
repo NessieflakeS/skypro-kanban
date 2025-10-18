@@ -14,11 +14,11 @@ const AppRoutes = () => {
       {/* Публичные маршруты */}
       <Route 
         path="/login" 
-        element={isAuthenticated ? <Main /> : <Login />} 
+        element={!isAuthenticated ? <Login /> : <Main />}
       />
       <Route 
         path="/register" 
-        element={isAuthenticated ? <Main /> : <Register />} 
+        element={!isAuthenticated ? <Register /> : <Main />}
       />
       
       {/* Защищенные маршруты */}
@@ -31,7 +31,7 @@ const AppRoutes = () => {
         }
       />
       
-      {/* Отдельные маршруты для модалок */}
+      {/* Маршруты для модальных окон */}
       <Route
         path="/new-card"
         element={

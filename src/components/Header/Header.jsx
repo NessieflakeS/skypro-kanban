@@ -54,9 +54,9 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
   };
 
   const handleLogoutClick = (e) => {
-    e.preventDefault();
-    navigate('/exit'); 
-    setIsUserMenuOpen(false);
+  e.preventDefault();
+  navigate('/exit');
+  setIsUserMenuOpen(false);
   };
 
   const handleThemeToggle = () => {

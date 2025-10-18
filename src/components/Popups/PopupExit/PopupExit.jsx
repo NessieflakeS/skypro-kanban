@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import {
   PopupContainer,
@@ -15,32 +15,21 @@ const PopupExit = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setIsOpen(window.location.hash === '#popExit');
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
-  }, []);
+    setIsOpen(location.pathname === '/exit');
+  }, [location]);
 
   const handleExitYes = (e) => {
     e.preventDefault();
     logout();
     navigate('/login');
-    window.location.hash = '';
-    setIsOpen(false);
   };
 
   const handleExitNo = (e) => {
     e.preventDefault();
-    window.location.hash = '';
-    setIsOpen(false);
+    navigate('/');
   };
 
   if (!isOpen) {
@@ -49,8 +38,8 @@ const PopupExit = () => {
 
   return (
     <PopupContainer $isOpen={isOpen}>
-      <PopupOverlay>
-        <PopupBlock>
+      <PopupOverlay onClick={handleExitNo}>
+        <PopupBlock onClick={(e) => e.stopPropagation()}>
           <PopupTitle>
             <h2>Выйти из аккаунта?</h2>
           </PopupTitle>
