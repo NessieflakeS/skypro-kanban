@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   HeaderContainer,
@@ -23,6 +24,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
   const menuRef = useRef(null);
   const userButtonRef = useRef(null);
   const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,15 +48,19 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
 
   const handleNewCardClick = (e) => {
     e.preventDefault();
-    if (onNewCardClick && !isLoading) {
-      onNewCardClick();
+    if (!isLoading) {
+      navigate('/new-card'); 
     }
   };
 
   const handleLogoutClick = (e) => {
     e.preventDefault();
-    window.location.hash = '#popExit';
+    navigate('/exit'); 
     setIsUserMenuOpen(false);
+  };
+
+  const handleThemeToggle = () => {
+    toggleTheme();
   };
 
   return (
@@ -111,7 +117,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
                 <ThemeCheckbox 
                   type="checkbox" 
                   checked={isDarkTheme}
-                  onChange={toggleTheme}
+                  onChange={handleThemeToggle}
                 />
               </ThemeToggle>
               <LogoutButton type="button" onClick={handleLogoutClick}>

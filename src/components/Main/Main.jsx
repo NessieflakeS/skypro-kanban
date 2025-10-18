@@ -6,7 +6,7 @@ import {
   MainContent
 } from './Main.styled';
 
-const Main = ({ cards, moveCard, onCardClick, isLoading }) => {
+const Main = ({ cards, moveCard, isLoading }) => {
   const columns = [
     { id: 1, title: "Без статуса", status: "Без статуса" },
     { id: 2, title: "Нужно сделать", status: "Нужно сделать" },
@@ -37,7 +37,6 @@ const Main = ({ cards, moveCard, onCardClick, isLoading }) => {
                 status={column.status}
                 cards={cards.filter(card => card.status === column.status)}
                 moveCard={moveCard}
-                onCardClick={onCardClick}
               />
             ))
           )}

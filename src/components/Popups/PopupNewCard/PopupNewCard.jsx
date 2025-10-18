@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Calendar from '../../Common/Calendar/Calendar';
 import Button from '../../Common/Button/Button';
 import {
@@ -21,8 +22,7 @@ import {
   SubmitButton
 } from './PopupNewCard.styled';
 
-const PopupNewCard = ({ onCreateCard }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const PopupNewCard = ({ onCreateCard, onClose }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -30,18 +30,7 @@ const PopupNewCard = ({ onCreateCard }) => {
     date: ''
   });
 
-  useEffect(() => {
-    const handleHashChange = () => {
-      setIsOpen(window.location.hash === '#popNewCard');
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
-  }, []);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -92,31 +81,20 @@ const PopupNewCard = ({ onCreateCard }) => {
         ...formData,
         date: formData.date || formatDate(new Date())
       });
-      window.location.hash = '';
-      setFormData({
-        title: '',
-        description: '',
-        category: 'Web Design',
-        date: ''
-      });
     }
   };
 
   const handleClose = () => {
-    window.location.hash = '';
+    navigate('/'); 
   };
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <PopupContainer isOpen={isOpen}>
-      <PopupOverlay>
-        <PopupBlock>
+    <PopupContainer isOpen={true}>
+      <PopupOverlay onClick={handleClose}>
+        <PopupBlock onClick={(e) => e.stopPropagation()}>
           <PopupContent>
             <PopupTitle>Создание задачи</PopupTitle>
-            <PopupClose href="#/" onClick={handleClose}>&#10006;</PopupClose>
+            <PopupClose onClick={handleClose}>&#10006;</PopupClose>
             <PopupWrap>
               <PopupForm id="formNewCard" onSubmit={handleSubmit}>
                 <FormBlock>
