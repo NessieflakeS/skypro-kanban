@@ -21,6 +21,7 @@ const AppRoutes = () => {
         element={isAuthenticated ? <Main /> : <Register />} 
       />
       
+      {/* Защищенные маршруты */}
       <Route
         path="/"
         element={
@@ -28,12 +29,33 @@ const AppRoutes = () => {
             <Main />
           </ProtectedRoute>
         }
-      >
-        {/* Маршруты для модальных окон */}
-        <Route path="new-card" element={null} /> {/* Рендерится в Main */}
-        <Route path="card/:id" element={null} /> {/* Рендерится в Main */}
-        <Route path="exit" element={null} /> {/* Рендерится в Main */}
-      </Route>
+      />
+      
+      {/* Отдельные маршруты для модалок */}
+      <Route
+        path="/new-card"
+        element={
+          <ProtectedRoute>
+            <Main />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/card/:id"
+        element={
+          <ProtectedRoute>
+            <Main />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/exit"
+        element={
+          <ProtectedRoute>
+            <Main />
+          </ProtectedRoute>
+        }
+      />
       
       {/* Страница 404 */}
       <Route path="*" element={<NotFound />} />

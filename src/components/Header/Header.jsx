@@ -77,7 +77,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
         <HeaderNav>
           <NewTaskButton 
             onClick={handleNewCardClick}
-            loading={isLoading}
+            $loading={isLoading}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -107,7 +107,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
             )}
             <UserMenu 
               ref={menuRef}
-              isOpen={isUserMenuOpen}
+              $isOpen={isUserMenuOpen}
               id="user-set-target"
             >
               <UserName>{currentUser?.name || 'User'}</UserName>

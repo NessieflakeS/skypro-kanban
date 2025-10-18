@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import Header from '../../components/Header/Header';
 import Main from '../../components/Main/Main';
@@ -13,11 +14,27 @@ const MainPageComponent = () => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
-  const [selectedCard, setSelectedCard] = useState(null);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const currentTheme = isDarkTheme ? darkTheme : lightTheme;
 
-  // Имитация загрузки данных
+  const isNewCardOpen = location.pathname === '/new-card';
+  const isExitOpen = location.pathname === '/exit';
+  const isCardOpen = location.pathname.startsWith('/card/');
+
+  const getCardIdFromUrl = () => {
+    if (isCardOpen) {
+      const match = location.pathname.match(/\/card\/(\d+)/);
+      return match ? parseInt(match[1]) : null;
+    }
+    return null;
+  };
+
+  const currentCardId = getCardIdFromUrl();
+  const currentCard = cards.find(card => card.id === currentCardId);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       const initialCards = [
@@ -57,15 +74,12 @@ const MainPageComponent = () => {
       description: newCardData.description || ""
     };
     setCards(prevCards => [...prevCards, newCard]);
+    navigate('/'); 
   };
 
   const deleteCard = (cardId) => {
     setCards(prevCards => prevCards.filter(card => card.id !== cardId));
-    setSelectedCard(null);
-  };
-
-  const selectCard = (card) => {
-    setSelectedCard(card);
+    navigate('/'); 
   };
 
   const updateCard = (cardId, updatedData) => {
@@ -74,11 +88,15 @@ const MainPageComponent = () => {
         card.id === cardId ? { ...card, ...updatedData } : card
       )
     );
-    setSelectedCard(null);
+    navigate('/'); 
   };
 
   const handleNewCardClick = () => {
-    window.location.hash = '#popNewCard';
+    navigate('/new-card'); 
+  };
+
+  const handleCloseModal = () => {
+    navigate('/'); 
   };
 
   return (
@@ -86,14 +104,26 @@ const MainPageComponent = () => {
       <GlobalStyles />
       <MainPage>
         <MainContent>
-          <PopupNewCard onCreateCard={createCard} />
-          <PopupBrowseCard 
-            card={selectedCard} 
-            onDeleteCard={deleteCard}
-            onUpdateCard={updateCard}
-            onClose={() => setSelectedCard(null)}
-          />
-          <PopupExit />
+          {/* Модальные окна, которые показываются по маршрутам */}
+          {isNewCardOpen && (
+            <PopupNewCard 
+              onCreateCard={createCard}
+              onClose={handleCloseModal}
+            />
+          )}
+          
+          {isCardOpen && currentCard && (
+            <PopupBrowseCard 
+              card={currentCard}
+              onDeleteCard={deleteCard}
+              onUpdateCard={updateCard}
+              onClose={handleCloseModal}
+            />
+          )}
+          
+          {isExitOpen && (
+            <PopupExit onClose={handleCloseModal} />
+          )}
 
           <Header 
             isDarkTheme={isDarkTheme} 
@@ -104,7 +134,6 @@ const MainPageComponent = () => {
           <Main 
             cards={cards} 
             moveCard={moveCard}
-            onCardClick={selectCard}
             isLoading={isLoading}
           />
         </MainContent>

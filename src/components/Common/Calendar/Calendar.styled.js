@@ -115,30 +115,30 @@ export const CalendarCell = styled.div`
   align-items: center;
   justify-content: center;
   color: ${props => {
-    if (props.isOtherMonth) return 'transparent';
-    if (props.isSelected) return '#FFFFFF';
-    if (props.isToday) return props.theme.textPrimary;
+    if (props.$isOtherMonth) return 'transparent';
+    if (props.$isSelected) return '#FFFFFF';
+    if (props.$isToday) return props.theme.textPrimary;
     return props.theme.textTertiary;
   }};
   background-color: ${props => {
-    if (props.isSelected) return props.theme.textSecondary;
-    if (props.isToday) return 'transparent';
+    if (props.$isSelected) return props.theme.textSecondary;
+    if (props.$isToday) return 'transparent';
     return 'transparent';
   }};
   font-size: 10px;
   line-height: 1;
   letter-spacing: -0.2px;
-  cursor: ${props => props.isOtherMonth ? 'default' : 'pointer'};
+  cursor: ${props => props.$isOtherMonth ? 'default' : 'pointer'};
   transition: all 0.2s ease;
-  font-weight: ${props => props.isToday ? '700' : 'normal'};
+  font-weight: ${props => props.$isToday ? '700' : 'normal'};
 
   &:hover {
     background-color: ${props => {
-      if (!props.isOtherMonth && !props.isSelected) return props.theme.bgTertiary;
+      if (!props.$isOtherMonth && !props.$isSelected) return props.theme.bgTertiary;
       return 'transparent';
     }};
     color: ${props => {
-      if (!props.isOtherMonth && !props.isSelected) return props.theme.textTertiary;
+      if (!props.$isOtherMonth && !props.$isSelected) return props.theme.textTertiary;
       return 'inherit';
     }};
   }
@@ -180,20 +180,4 @@ export const CalendarPeriod = styled.div`
   @media screen and (max-width: 660px) {
     padding: 0;
   }
-`;
-
-export const DropPlaceholder = styled.div`
-  height: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 8px 0;
-`;
-
-export const DropPlaceholderLine = styled.div`
-  height: 2px;
-  background-color: ${props => props.theme.textSecondary};
-  border-radius: 2px;
-  width: 100%;
-  animation: ${pulseAnimation} 1.5s infinite;
 `;

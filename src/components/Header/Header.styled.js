@@ -59,8 +59,8 @@ export const NewTaskButton = styled.button`
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
-  cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
-  opacity: ${props => props.loading ? 0.7 : 1};
+  cursor: ${props => props.$loading ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.$loading ? 0.7 : 1};
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -122,7 +122,7 @@ export const UserButton = styled.a`
 `;
 
 export const UserMenu = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  display: ${props => props.$isOpen ? 'block' : 'none'};
   position: absolute;
   top: 50px;
   right: 0;
