@@ -104,7 +104,6 @@ const MainPageComponent = () => {
       <GlobalStyles />
       <MainPage>
         <MainContent>
-          {/* Модальные окна, которые показываются по маршрутам */}
           {isNewCardOpen && (
             <PopupNewCard 
               onCreateCard={createCard}

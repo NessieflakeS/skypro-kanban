@@ -43,7 +43,6 @@ export const SkeletonElement = styled.div`
   animation: ${loading} 1.5s infinite;
   border-radius: 4px;
 
-  /* Варианты размеров */
   ${props => props.variant === 'theme' && `
     width: 100px;
     height: 20px;

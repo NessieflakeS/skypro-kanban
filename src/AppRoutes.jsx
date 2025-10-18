@@ -11,7 +11,6 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* Публичные маршруты */}
       <Route 
         path="/login" 
         element={!isAuthenticated ? <Login /> : <Main />}
@@ -21,7 +20,6 @@ const AppRoutes = () => {
         element={!isAuthenticated ? <Register /> : <Main />}
       />
       
-      {/* Защищенные маршруты */}
       <Route
         path="/"
         element={
@@ -31,7 +29,6 @@ const AppRoutes = () => {
         }
       />
       
-      {/* Маршруты для модальных окон */}
       <Route
         path="/new-card"
         element={
@@ -57,7 +54,6 @@ const AppRoutes = () => {
         }
       />
       
-      {/* Страница 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

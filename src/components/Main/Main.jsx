@@ -19,9 +19,7 @@ const Main = ({ cards, moveCard, isLoading }) => {
     <MainContainer>
       <MainBlock>
         <MainContent>
-          {isLoading ? (
-            // Показываем скелетоны во время загрузки
-            <>
+          {isLoading ? (            <>
               <SkeletonColumn />
               <SkeletonColumn />
               <SkeletonColumn />
@@ -29,7 +27,6 @@ const Main = ({ cards, moveCard, isLoading }) => {
               <SkeletonColumn />
             </>
           ) : (
-            // Показываем реальные колонки после загрузки
             columns.map(column => (
               <Column 
                 key={column.id} 
