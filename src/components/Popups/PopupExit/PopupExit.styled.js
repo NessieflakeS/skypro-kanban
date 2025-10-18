@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const PopupContainer = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  display: ${props => props.$isOpen ? 'block' : 'none'};
   width: 100%;
   min-width: 375px;
   height: 100%;
@@ -73,9 +73,9 @@ export const ExitButton = styled.button`
   width: 153px;
   height: 30px;
   border-radius: 4px;
-  border: 0.7px solid ${props => props.variant === 'yes' ? props.theme.textSecondary : props.theme.borderColor};
-  background-color: ${props => props.variant === 'yes' ? props.theme.textSecondary : 'transparent'};
-  color: ${props => props.variant === 'yes' ? '#FFFFFF' : props.theme.textSecondary};
+  border: 0.7px solid ${props => props.$variant === 'yes' ? props.theme.textSecondary : props.theme.borderColor};
+  background-color: ${props => props.$variant === 'yes' ? props.theme.textSecondary : 'transparent'};
+  color: ${props => props.$variant === 'yes' ? '#FFFFFF' : props.theme.textSecondary};
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
@@ -89,24 +89,9 @@ export const ExitButton = styled.button`
   text-overflow: ellipsis;
   padding: 0 12px;
 
-  a {
-    color: ${props => props.variant === 'yes' ? '#FFFFFF' : props.theme.textSecondary};
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   &:hover {
-    background-color: ${props => props.variant === 'yes' ? '#33399b' : props.theme.textSecondary};
+    background-color: ${props => props.$variant === 'yes' ? '#33399b' : props.theme.textSecondary};
     color: #FFFFFF;
-    
-    a {
-      color: #FFFFFF;
-    }
   }
 
   @media screen and (max-width: 495px) {

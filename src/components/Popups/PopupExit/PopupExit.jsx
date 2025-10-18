@@ -34,11 +34,13 @@ const PopupExit = () => {
     logout();
     navigate('/login');
     window.location.hash = '';
+    setIsOpen(false);
   };
 
   const handleExitNo = (e) => {
     e.preventDefault();
     window.location.hash = '';
+    setIsOpen(false);
   };
 
   if (!isOpen) {
@@ -46,7 +48,7 @@ const PopupExit = () => {
   }
 
   return (
-    <PopupContainer isOpen={isOpen}>
+    <PopupContainer $isOpen={isOpen}>
       <PopupOverlay>
         <PopupBlock>
           <PopupTitle>
@@ -55,13 +57,13 @@ const PopupExit = () => {
           <PopupForm id="formExit">
             <ButtonGroup>
               <ExitButton 
-                variant="yes" 
+                $variant="yes" 
                 onClick={handleExitYes}
               >
                 Да, выйти
               </ExitButton>
               <ExitButton 
-                variant="no" 
+                $variant="no" 
                 onClick={handleExitNo}
               >
                 Нет, остаться

@@ -11,18 +11,20 @@ const cardAnimation = keyframes`
   }
 `;
 
-export const CardItem = styled.div`
+export const CardItem = styled.div.attrs(props => ({
+  dragging: props.$dragging ? 'true' : undefined,
+}))`
   padding: 0;
   animation-name: ${cardAnimation};
   animation-duration: 500ms;
   animation-timing-function: linear;
-  cursor: ${props => props.dragging ? 'grabbing' : 'grab'};
+  cursor: ${props => props.$dragging ? 'grabbing' : 'grab'};
   position: relative;
-  opacity: ${props => props.dragging ? 0.8 : 1};
-  transform: ${props => props.dragging ? 'scale(0.95) rotate(2deg)' : 'scale(1) rotate(0)'};
+  opacity: ${props => props.$dragging ? 0.8 : 1};
+  transform: ${props => props.$dragging ? 'scale(0.95) rotate(2deg)' : 'scale(1) rotate(0)'};
   transition: all 0.2s ease;
-  z-index: ${props => props.dragging ? 10 : 1};
-  box-shadow: ${props => props.dragging ? 
+  z-index: ${props => props.$dragging ? 10 : 1};
+  box-shadow: ${props => props.$dragging ? 
     '0 8px 25px rgba(0, 0, 0, 0.15), 0 0 0 2px ' + props.theme.textSecondary : 
     '0px 2px 10px rgba(0, 0, 0, 0.1)'};
 
@@ -30,14 +32,15 @@ export const CardItem = styled.div`
     cursor: grabbing;
   }
 
-  // Эффект поднятия при hover
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 `;
 
-export const CardContainer = styled.div`
+export const CardContainer = styled.div.attrs(props => ({
+  dragging: props.$dragging ? 'true' : undefined,
+}))`
   width: 220px;
   height: 130px;
   background-color: ${props => props.theme.cardBg};
@@ -61,14 +64,16 @@ export const CardGroup = styled.div`
   justify-content: space-between;
 `;
 
-export const CardTheme = styled.div`
+export const CardTheme = styled.div.attrs(props => ({
+  themecolor: props.$themeColor,
+}))`
   border-radius: 24px;
   padding: 6px 20px;
   font-size: 10px;
   font-weight: 600;
   line-height: 10px;
   background-color: ${props => {
-    switch (props.themeColor) {
+    switch (props.$themeColor) {
       case 'orange': return props.theme.orangeBg;
       case 'green': return props.theme.greenBg;
       case 'purple': return props.theme.purpleBg;
@@ -76,7 +81,7 @@ export const CardTheme = styled.div`
     }
   }};
   color: ${props => {
-    switch (props.themeColor) {
+    switch (props.$themeColor) {
       case 'orange': return props.theme.orangeColor;
       case 'green': return props.theme.greenColor;
       case 'purple': return props.theme.purpleColor;
