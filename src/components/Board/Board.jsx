@@ -1,8 +1,11 @@
-import './Board.css';
 import Column from '../Column/Column';
+import {
+  MainContainer,
+  MainBlock,
+  MainContent
+} from './Board.styled';
 
 function Board() {
-  // Пример данных - в реальном приложении это будет приходить из state/props
   const columnsData = [
     {
       title: "Без статуса",
@@ -43,10 +46,10 @@ function Board() {
   ];
 
   return (
-    <main className="main">
+    <MainContainer>
       <div className="container">
-        <div className="main__block">
-          <div className="main__content">
+        <MainBlock>
+          <MainContent>
             {columnsData.map((column, index) => (
               <Column
                 key={index}
@@ -54,10 +57,10 @@ function Board() {
                 cards={column.cards}
               />
             ))}
-          </div>
-        </div>
+          </MainContent>
+        </MainBlock>
       </div>
-    </main>
+    </MainContainer>
   );
 }
 

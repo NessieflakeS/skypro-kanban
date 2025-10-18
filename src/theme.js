@@ -9,7 +9,6 @@ export const lightTheme = {
   headerBg: '#FFFFFF',
   borderColor: '#D4DBE5',
   
-  // Category colors
   orangeBg: '#FFE4C2',
   orangeColor: '#FF6D00',
   greenBg: '#B4FDD1',
@@ -31,7 +30,6 @@ export const darkTheme = {
   headerBg: '#1A1A1A',
   borderColor: '#404040',
   
-  // Category colors (dark theme variants)
   orangeBg: 'rgba(255, 143, 10, 0.2)',
   orangeColor: '#FFB366',
   greenBg: 'rgba(0, 204, 20, 0.2)',

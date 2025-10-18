@@ -1,27 +1,68 @@
-import './PopupExit.css'
+import { useState, useEffect } from 'react'; 
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
+import {
+  PopupContainer,
+  PopupOverlay,
+  PopupBlock,
+  PopupTitle,
+  PopupForm,
+  ButtonGroup,
+  ExitButton
+} from './PopupExit.styled';
 
 const PopupExit = () => {
-  return (
-    <div className="pop-exit" id="popExit">
-      <div className="pop-exit__container">
-        <div className="pop-exit__block">
-          <div className="pop-exit__ttl">
-            <h2>Выйти из аккаунта?</h2>
-          </div>
-          <form className="pop-exit__form" id="formExit" action="#">
-            <div className="pop-exit__form-group">
-              <button className="pop-exit__exit-yes _hover01" id="exitYes">
-                <a href="#/">Да, выйти</a>
-              </button>
-              <button className="pop-exit__exit-no _hover03" id="exitNo">
-                <a href="#/">Нет, остаться</a>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  )
-}
+  const [isOpen, setIsOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export default PopupExit
+  useEffect(() => {
+    setIsOpen(location.pathname === '/exit');
+  }, [location]);
+
+  const handleExitYes = (e) => {
+    e.preventDefault();
+    logout();
+    navigate('/login');
+  };
+
+  const handleExitNo = (e) => {
+    e.preventDefault();
+    navigate('/');
+  };
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <PopupContainer $isOpen={isOpen}>
+      <PopupOverlay onClick={handleExitNo}>
+        <PopupBlock onClick={(e) => e.stopPropagation()}>
+          <PopupTitle>
+            <h2>Выйти из аккаунта?</h2>
+          </PopupTitle>
+          <PopupForm id="formExit">
+            <ButtonGroup>
+              <ExitButton 
+                $variant="yes" 
+                onClick={handleExitYes}
+              >
+                Да, выйти
+              </ExitButton>
+              <ExitButton 
+                $variant="no" 
+                onClick={handleExitNo}
+              >
+                Нет, остаться
+              </ExitButton>
+            </ButtonGroup>
+          </PopupForm>
+        </PopupBlock>
+      </PopupOverlay>
+    </PopupContainer>
+  );
+};
+
+export default PopupExit;

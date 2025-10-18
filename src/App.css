@@ -33,7 +33,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Убираем классы для body, используем ThemeProvider */
 .wrapper {
   width: 100%;
   min-height: 100vh;

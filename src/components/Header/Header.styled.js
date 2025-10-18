@@ -1,47 +1,100 @@
 import styled, { keyframes } from 'styled-components';
-import { SkeletonElement } from '../SkeletonCard/SkeletonCard.styled';
+
+const dotsAnimation = keyframes`
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+`;
+
+const skeletonPulse = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+`;
 
 export const HeaderContainer = styled.header`
   width: 100%;
-  height: 70px;
+  margin: 0 auto;
   background-color: ${props => props.theme.headerBg};
-  border-bottom: 1px solid ${props => props.theme.borderColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0 16px;
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
 `;
 
 export const HeaderBlock = styled.div`
-  width: 100%;
-  max-width: 1440px;
   height: 70px;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0 135px;
-  box-sizing: border-box;
-
-  @media (max-width: 1200px) {
-    padding: 0 20px;
-  }
+  padding: 0;
+  max-width: 1440px;
+  margin: 0 auto;
 `;
 
 export const HeaderLogo = styled.div`
-  display: block;
+  a {
+    display: block;
+  }
   
   img {
     width: 85px;
+    height: 20px;
+    display: block;
   }
 `;
 
 export const HeaderNav = styled.nav`
   display: flex;
   align-items: center;
-  gap: 103px;
-  position: relative;
+  gap: 20px;
+`;
 
-  @media (max-width: 1200px) {
-    gap: 20px;
+export const NewTaskButton = styled.button`
+  width: 178px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: ${props => props.theme.textSecondary};
+  color: #FFFFFF;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: ${props => props.$loading ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.$loading ? 0.7 : 1};
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px;
+
+  &:hover:not(:disabled) {
+    background-color: #33399b;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
+export const LoadingDots = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    animation: ${dotsAnimation} 1.4s ease-in-out infinite both;
+
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+    &:nth-child(3) { animation-delay: 0s; }
   }
 `;
 
@@ -49,91 +102,39 @@ export const UserContainer = styled.div`
   position: relative;
 `;
 
-export const NewTaskButton = styled.button`
-  width: 178px;
-  height: 30px;
-  background-color: #565EEF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
+export const UserButton = styled.a`
+  height: 20px;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 10px;
-  transition: background-color 0.3s ease;
-  opacity: ${props => props.loading ? 0.7 : 1};
-  cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
-
-  &:hover {
-    background-color: ${props => props.loading ? '#565EEF' : '#454ed0'};
-  }
-
-  @media (max-width: 768px) {
-    width: auto;
-    min-width: 160px;
-    padding: 0 8px;
-    font-size: 13px;
-  }
-`;
-
-export const UserButton = styled.a`
-  color: #565EEF;
   font-size: 14px;
+  line-height: 20px;
+  color: ${props => props.theme.textPrimary};
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
   text-decoration: none;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 1px;
-    border-left: 1.9px solid #565EEF;
-    border-bottom: 1.9px solid #565EEF;
-    transform: rotate(-45deg);
-    margin: -2px 0 0 8px;
-    transition: all 0.3s ease;
-  }
+  transition: color 0.3s ease;
+  white-space: nowrap;
 
   &:hover {
-    color: #33399b;
-    background-color: ${props => props.theme.bgSecondary};
-    
-    &::after {
-      border-left-color: #33399b;
-      border-bottom-color: #33399b;
-    }
+    color: ${props => props.theme.textSecondary};
   }
 `;
 
 export const UserMenu = styled.div`
+  display: ${props => props.$isOpen ? 'block' : 'none'};
   position: absolute;
-  top: 100%;
+  top: 50px;
   right: 0;
-  width: 213px;
-  height: 205px;
+  background: ${props => props.theme.cardBg};
+  border: 0.7px solid ${props => props.theme.borderColor};
   border-radius: 10px;
-  border: 0.7px solid rgba(148, 166, 190, 0.4);
-  background: ${props => props.theme.bgSecondary};
-  box-shadow: 0px 10px 39px 0px rgba(26, 56, 101, 0.21);
   padding: 34px;
+  box-shadow: 0px 10px 39px 0px rgba(26, 56, 101, 0.21);
+  min-width: 213px;
+  height: 205px;
+  z-index: 100;
   text-align: center;
-  z-index: 2;
-  display: ${props => props.isOpen ? 'block' : 'none'};
-  margin-top: 5px;
 `;
 
 export const UserName = styled.p`
@@ -158,10 +159,9 @@ export const ThemeToggle = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
-  color: ${props => props.theme.textPrimary};
-  
+
   p {
-    margin: 0;
+    color: ${props => props.theme.textPrimary};
     font-size: 14px;
     line-height: 21px;
     letter-spacing: -0.14px;
@@ -169,14 +169,14 @@ export const ThemeToggle = styled.div`
 `;
 
 export const ThemeCheckbox = styled.input`
-  position: relative;
   width: 24px;
   height: 13px;
   border-radius: 100px;
-  background: #EAEEF6;
-  outline: none;
+  background: ${props => props.theme.bgTertiary};
   appearance: none;
+  position: relative;
   cursor: pointer;
+  transition: background 0.3s ease;
 
   &::before {
     content: "";
@@ -186,72 +186,52 @@ export const ThemeCheckbox = styled.input`
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    background-color: #94A6BE;
-    transition: 0.3s;
-  }
-
-  &:checked::before {
-    left: 12px;
-    background-color: #FFFFFF;
+    background-color: ${props => props.theme.textTertiary};
+    transition: all 0.3s ease;
   }
 
   &:checked {
-    background: #4CAF50;
+    background: ${props => props.theme.textSecondary};
+    
+    &::before {
+      left: 12px;
+      background-color: #FFFFFF;
+    }
   }
 `;
 
 export const LogoutButton = styled.button`
+  width: 100%;
   background: transparent;
-  color: #565EEF;
+  color: ${props => props.theme.textSecondary};
+  border: 1px solid ${props => props.theme.textSecondary};
   border-radius: 4px;
-  border: 1px solid #565EEF;
+  padding: 8px 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 14px;
 
   a {
-    color: #565EEF;
+    color: ${props => props.theme.textSecondary};
     text-decoration: none;
+    display: block;
+    width: 100%;
   }
 
   &:hover {
-    background-color: #33399b;
+    background-color: ${props => props.theme.textSecondary};
     color: #FFFFFF;
-    
+
     a {
       color: #FFFFFF;
     }
   }
 `;
 
-const bounce = keyframes`
-  0%, 80%, 100% { 
-    transform: scale(0);
-  } 
-  40% { 
-    transform: scale(1);
-  }
-`;
-
-export const LoadingDots = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-
-  span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: white;
-    animation: ${bounce} 1.4s infinite ease-in-out both;
-
-    &:nth-child(1) { animation-delay: -0.32s; }
-    &:nth-child(2) { animation-delay: -0.16s; }
-  }
-`;
-
-export const UserSkeleton = styled(SkeletonElement)`
-  width: 120px;
-  height: 30px;
+export const UserSkeleton = styled.div`
+  width: 100px;
+  height: 20px;
+  background: ${props => props.theme.bgTertiary};
   border-radius: 4px;
+  animation: ${skeletonPulse} 1.5s ease-in-out infinite;
 `;

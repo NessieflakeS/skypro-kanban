@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const StyledButton = styled.button`
+export const StyledButton = styled.button.attrs(props => ({
+  variant: props.$variant,
+  size: props.$size,
+  full: props.$full ? 'true' : undefined,
+}))`
   cursor: pointer;
   outline: none;
   border: none;
@@ -14,66 +18,68 @@ export const StyledButton = styled.button`
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  gap: 8px;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
   
-  /* Варианты кнопок */
-  ${props => props.variant === 'primary' && `
-    background-color: #565EEF;
+  ${props => props.$variant === 'primary' && `
+    background-color: ${props.theme.textSecondary};
     color: #FFFFFF;
     
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: #33399b;
     }
   `}
   
-  ${props => props.variant === 'secondary' && `
+  ${props => props.$variant === 'secondary' && `
     background-color: transparent;
-    color: #565EEF;
-    border: 0.7px solid #565EEF;
+    color: ${props.theme.textSecondary};
+    border: 0.7px solid ${props.theme.textSecondary};
     
-    &:hover {
-      background-color: #33399b;
-      color: #FFFFFF;
-      border-color: #33399b;
-    }
-  `}
-  
-  ${props => props.variant === 'outline' && `
-    background-color: transparent;
-    color: #565EEF;
-    border: 0.7px solid #565EEF;
-    
-    &:hover {
-      background-color: #565EEF;
+    &:hover:not(:disabled) {
+      background-color: ${props.theme.textSecondary};
       color: #FFFFFF;
     }
   `}
   
-  /* Размеры */
-  ${props => props.size === 'small' && `
+  ${props => props.$variant === 'outline' && `
+    background-color: transparent;
+    color: ${props.theme.textSecondary};
+    border: 0.7px solid ${props.theme.textSecondary};
+    
+    &:hover:not(:disabled) {
+      background-color: ${props.theme.textSecondary};
+      color: #FFFFFF;
+    }
+  `}
+  
+  ${props => props.$size === 'small' && `
     height: 30px;
     padding: 0 14px;
     font-size: 12px;
   `}
   
-  ${props => props.size === 'large' && `
+  ${props => props.$size === 'medium' && `
+    height: 35px;
+    padding: 0 16px;
+  `}
+  
+  ${props => props.$size === 'large' && `
     height: 40px;
     padding: 0 20px;
     font-size: 16px;
   `}
   
-  ${props => props.size === 'medium' && `
-    height: 35px;
-    padding: 0 16px;
-  `}
-  
-  /* Полная ширина */
-  ${props => props.full && `
+  ${props => props.$full && `
     width: 100%;
   `}
   
-  /* Disabled state */
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none !important;
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(1px);
   }
 `;

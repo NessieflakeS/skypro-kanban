@@ -6,7 +6,9 @@ const pulse = keyframes`
   100% { opacity: 0.3; }
 `;
 
-export const ColumnContainer = styled.div`
+export const ColumnContainer = styled.div.attrs(props => ({
+  dragover: props.$dragOver ? 'true' : undefined,
+}))`
   min-width: 220px;
   background-color: transparent;
   min-height: 200px;
@@ -14,9 +16,9 @@ export const ColumnContainer = styled.div`
   border: 2px dashed transparent;
   flex: 1;
   max-width: 300px;
-  background-color: ${props => props.dragOver ? 'rgba(86, 94, 239, 0.1)' : 'transparent'};
-  border: ${props => props.dragOver ? '2px dashed #565EEF' : '2px dashed transparent'};
-  border-radius: ${props => props.dragOver ? '10px' : '0'};
+  background-color: ${props => props.$dragOver ? 'rgba(86, 94, 239, 0.1)' : 'transparent'};
+  border: ${props => props.$dragOver ? '2px dashed #565EEF' : '2px dashed transparent'};
+  border-radius: ${props => props.$dragOver ? '10px' : '0'};
 
   @media (max-width: 768px) {
     min-width: 100%;
@@ -24,13 +26,15 @@ export const ColumnContainer = styled.div`
   }
 `;
 
-export const ColumnTitle = styled.div`
+export const ColumnTitle = styled.div.attrs(props => ({
+  dragover: props.$dragOver ? 'true' : undefined,
+}))`
   padding: 0 10px;
   margin: 20px 0;
   text-align: center;
   
   p {
-    color: ${props => props.dragOver ? '#565EEF' : props.theme.textTertiary};
+    color: ${props => props.$dragOver ? '#565EEF' : props.theme.textTertiary};
     font-size: 14px;
     font-weight: 600;
     line-height: 1;

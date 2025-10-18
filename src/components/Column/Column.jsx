@@ -6,7 +6,7 @@ import {
   CardsContainer
 } from './Column.styled';
 
-const Column = ({ title, status, cards, moveCard, onCardClick }) => {
+const Column = ({ title, status, cards, moveCard }) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = (e) => {
@@ -28,12 +28,12 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
 
   return (
     <ColumnContainer 
-      dragOver={isDragOver}
+      $dragOver={isDragOver}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <ColumnTitle dragOver={isDragOver}>
+      <ColumnTitle $dragOver={isDragOver}>
         <p>{title}</p>
       </ColumnTitle>
       <CardsContainer>
@@ -41,7 +41,6 @@ const Column = ({ title, status, cards, moveCard, onCardClick }) => {
           <Card 
             key={card.id} 
             card={card}
-            onCardClick={onCardClick}
           />
         ))}
       </CardsContainer>
