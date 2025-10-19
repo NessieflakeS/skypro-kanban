@@ -36,9 +36,10 @@ const Card = ({ card, dragging = false }) => {
   const handleMenuClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation();
+    e.nativeEvent.stopImmediatePropagation();
     
     if (card && card._id) {
+      console.log('Opening card details:', card._id);
       navigate(`/card/${card._id}`);
     } else {
       console.error('Card ID is undefined:', card);
@@ -72,7 +73,7 @@ const Card = ({ card, dragging = false }) => {
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
-        return ''; 
+        return '';
       }
       
       const day = date.getDate().toString().padStart(2, '0');
@@ -99,7 +100,11 @@ const Card = ({ card, dragging = false }) => {
           </CardTheme>
           <CardButton 
             onClick={handleMenuClick}
-            style={{ cursor: 'pointer' }}
+            style={{ 
+              cursor: 'pointer',
+              position: 'relative',
+              zIndex: 10 
+            }}
           >
             <CardDot />
             <CardDot />

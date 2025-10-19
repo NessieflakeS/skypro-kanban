@@ -48,9 +48,6 @@ export const CardsContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   min-height: 50px;
-  max-height: 70vh;
-  overflow-y: auto;
-  padding-right: 5px;
 `;
 
 export const DropPlaceholder = styled.div`
