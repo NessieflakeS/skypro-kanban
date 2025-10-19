@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   CardItem,
   CardContainer,
@@ -11,8 +12,9 @@ import {
   CardDate
 } from './Card.styled';
 
-const Card = ({ card, onCardClick, dragging = false }) => {
+const Card = ({ card, dragging = false }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const navigate = useNavigate();
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData('cardId', card.id.toString());
@@ -25,13 +27,13 @@ const Card = ({ card, onCardClick, dragging = false }) => {
   };
 
   const handleCardClick = () => {
-    onCardClick(card);
+    navigate(`/card/${card.id}`);
   };
 
   const handleMenuClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    onCardClick(card);
+    navigate(`/card/${card.id}`);
   };
 
   const themeClass = getThemeClass(card.category);
@@ -57,14 +59,14 @@ const Card = ({ card, onCardClick, dragging = false }) => {
 
   return (
     <CardItem 
-      dragging={isDragging || dragging}
+      $dragging={isDragging || dragging}
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <CardContainer dragging={isDragging} onClick={handleCardClick}>
+      <CardContainer $dragging={isDragging} onClick={handleCardClick}>
         <CardGroup>
-          <CardTheme themeColor={themeClass}>
+          <CardTheme $themeColor={themeClass}>
             <p>{themeText}</p>
           </CardTheme>
           <CardButton onClick={handleMenuClick}>

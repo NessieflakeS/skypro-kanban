@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import {
   HeaderContainer,
   HeaderBlock,
@@ -21,6 +23,8 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const userButtonRef = useRef(null);
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -44,29 +48,36 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
 
   const handleNewCardClick = (e) => {
     e.preventDefault();
-    if (onNewCardClick && !isLoading) {
-      onNewCardClick();
+    if (!isLoading) {
+      navigate('/new-card'); 
     }
+  };
+
+  const handleLogoutClick = (e) => {
+  e.preventDefault();
+  navigate('/exit');
+  setIsUserMenuOpen(false);
+  };
+
+  const handleThemeToggle = () => {
+    toggleTheme();
   };
 
   return (
     <HeaderContainer>
       <HeaderBlock>
         <HeaderLogo>
-          {!isDarkTheme ? (
-            <a href="" target="_self" rel="noopener noreferrer">
-              <img src="/images/logo.png" alt="logo" />
-            </a>
-          ) : (
-            <a href="" target="_self" rel="noopener noreferrer">
-              <img src="/images/logo_dark.png" alt="logo" />
-            </a>
-          )}
+          <a href="/" target="_self" rel="noopener noreferrer">
+            <img 
+              src={isDarkTheme ? "/images/logo_dark.png" : "/images/logo.png"} 
+              alt="logo" 
+            />
+          </a>
         </HeaderLogo>
         <HeaderNav>
           <NewTaskButton 
             onClick={handleNewCardClick}
-            loading={isLoading}
+            $loading={isLoading}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -81,7 +92,7 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
           </NewTaskButton>
           <UserContainer>
             {isLoading ? (
-              <UserSkeleton variant="text" />
+              <UserSkeleton />
             ) : (
               <UserButton 
                 ref={userButtonRef}
@@ -91,26 +102,26 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
                   toggleUserMenu();
                 }}
               >
-                Ivan Ivanov
+                {currentUser?.name || 'User'}
               </UserButton>
             )}
             <UserMenu 
               ref={menuRef}
-              isOpen={isUserMenuOpen}
+              $isOpen={isUserMenuOpen}
               id="user-set-target"
             >
-              <UserName>Ivan Ivanov</UserName>
-              <UserEmail>ivan.ivanov@gmail.com</UserEmail>
+              <UserName>{currentUser?.name || 'User'}</UserName>
+              <UserEmail>{currentUser?.email || 'user@example.com'}</UserEmail>
               <ThemeToggle>
                 <p>Темная тема</p>
                 <ThemeCheckbox 
                   type="checkbox" 
                   checked={isDarkTheme}
-                  onChange={toggleTheme}
+                  onChange={handleThemeToggle}
                 />
               </ThemeToggle>
-              <LogoutButton type="button">
-                <a href="#popExit">Выйти</a>
+              <LogoutButton type="button" onClick={handleLogoutClick}>
+                Выйти
               </LogoutButton>
             </UserMenu>
           </UserContainer>
