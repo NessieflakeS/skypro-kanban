@@ -21,13 +21,48 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [localError, setLocalError] = useState('');
   
   const { login, error, setError } = useAuth();
   const navigate = useNavigate();
 
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (localError) setLocalError('');
+    if (error) setError('');
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (localError) setLocalError('');
+    if (error) setError('');
+  };
+
+  const validateForm = () => {
+    if (!email.trim()) {
+      setLocalError('Введите email');
+      return false;
+    }
+    if (!email.includes('@')) {
+      setLocalError('Введите корректный email');
+      return false;
+    }
+    if (!password) {
+      setLocalError('Введите пароль');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLocalError('');
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -55,7 +90,7 @@ const Login = () => {
                 id="email"
                 placeholder="Введите ваш email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
                 disabled={isLoading}
                 required
               />
@@ -68,13 +103,13 @@ const Login = () => {
                 id="password"
                 placeholder="Введите ваш пароль"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 disabled={isLoading}
                 required
               />
             </FormGroup>
 
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {(error || localError) && <ErrorMessage>{error || localError}</ErrorMessage>}
 
             <SubmitButton type="submit" disabled={isLoading}>
               {isLoading ? 'Вход...' : 'Войти'}

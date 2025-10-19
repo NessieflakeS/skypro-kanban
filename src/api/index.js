@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://webdev-hw-api.vercel.app/api';
+const API_BASE_URL = 'https://webdev-hw-api.vercel.app/api/v1';
 
 const makeRequest = async (url, options = {}) => {
   const token = localStorage.getItem('token');
@@ -32,13 +32,13 @@ const makeRequest = async (url, options = {}) => {
 
 export const authAPI = {
   login: (credentials) => 
-    makeRequest('/user/login', {
+    makeRequest('/login', {
       method: 'POST',
       body: credentials,
     }),
 
   register: (userData) => 
-    makeRequest('/user/register', {
+    makeRequest('/register', {
       method: 'POST',
       body: userData,
     }),

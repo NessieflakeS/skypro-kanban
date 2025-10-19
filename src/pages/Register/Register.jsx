@@ -24,20 +24,50 @@ const Register = () => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [localError, setLocalError] = useState('');
   
   const { register, error, setError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
+    if (localError) setLocalError('');
+    if (error) setError('');
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setLocalError('Введите имя');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      setLocalError('Введите email');
+      return false;
+    }
+    if (!formData.email.includes('@')) {
+      setLocalError('Введите корректный email');
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setLocalError('Пароль должен содержать минимум 6 символов');
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLocalError('');
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -92,7 +122,7 @@ const Register = () => {
                 type="password"
                 id="password"
                 name="password"
-                placeholder="Введите пароль"
+                placeholder="Введите пароль (минимум 6 символов)"
                 value={formData.password}
                 onChange={handleChange}
                 disabled={isLoading}
@@ -101,7 +131,9 @@ const Register = () => {
               />
             </FormGroup>
 
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {(error || localError) && (
+              <ErrorMessage>{error || localError}</ErrorMessage>
+            )}
 
             <SubmitButton type="submit" disabled={isLoading}>
               {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}

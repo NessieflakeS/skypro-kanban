@@ -29,12 +29,15 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setError('');
-      const response = await authAPI.login(credentials);
+      const response = await authAPI.login({
+        login: credentials.email, 
+        password: credentials.password
+      });
       
       const userData = {
-        id: response.user.id,
-        name: response.user.name,
-        email: response.user.email,
+        id: response.user?.id || Date.now(),
+        name: response.user?.name || credentials.email.split('@')[0],
+        email: credentials.email,
         token: response.token
       };
 
@@ -44,20 +47,25 @@ export const AuthProvider = ({ children }) => {
       
       return response;
     } catch (err) {
-      setError(err.message || 'Ошибка входа');
-      throw err;
+      const errorMessage = err.message || 'Ошибка входа. Проверьте email и пароль.';
+      setError(errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
   const register = async (userData) => {
     try {
       setError('');
-      const response = await authAPI.register(userData);
+      const response = await authAPI.register({
+        login: userData.email, 
+        name: userData.name,
+        password: userData.password
+      });
       
       const newUser = {
-        id: response.user.id,
-        name: response.user.name,
-        email: response.user.email,
+        id: response.user?.id || Date.now(),
+        name: response.user?.name || userData.name,
+        email: userData.email,
         token: response.token
       };
 
@@ -67,8 +75,18 @@ export const AuthProvider = ({ children }) => {
       
       return response;
     } catch (err) {
-      setError(err.message || 'Ошибка регистрации');
-      throw err;
+      let errorMessage = 'Ошибка регистрации';
+      
+      if (err.message.includes('409')) {
+        errorMessage = 'Пользователь с таким email уже существует';
+      } else if (err.message.includes('400')) {
+        errorMessage = 'Некорректные данные для регистрации';
+      } else {
+        errorMessage = err.message || 'Ошибка регистрации';
+      }
+      
+      setError(errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
