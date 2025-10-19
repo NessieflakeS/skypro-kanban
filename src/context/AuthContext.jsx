@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('currentUser');
     const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('currentUser');
     
-    if (savedUser && token) {
+    if (token && savedUser) {
       setCurrentUser(JSON.parse(savedUser));
     }
     setLoading(false);
@@ -29,98 +29,61 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setError('');
-      console.log('Login attempt with:', { 
-        login: credentials.email, 
-        password: credentials.password 
-      });
-
-      const response = await authAPI.login({
-        login: credentials.email, 
-        password: credentials.password
-      });
+      setLoading(true);
       
-      console.log('Login response:', response);
-
+      const response = await authAPI.login(credentials);
+      
       const userData = {
-        id: response.user?.id || Date.now(),
-        name: response.user?.name || credentials.email.split('@')[0],
-        email: credentials.email,
-        token: response.token
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.login,
+        token: response.user.token
       };
 
       setCurrentUser(userData);
       localStorage.setItem('currentUser', JSON.stringify(userData));
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.user.token);
       
-      return response;
+      return { success: true };
     } catch (err) {
-      console.error('Login error details:', err);
-      let errorMessage = 'Ошибка входа';
-      
-      if (err.message.includes('400')) {
-        errorMessage = 'Неверный email или пароль';
-      } else if (err.message.includes('500')) {
-        errorMessage = 'Ошибка сервера. Попробуйте позже.';
-      } else {
-        errorMessage = err.message || 'Ошибка входа';
-      }
-      
+      const errorMessage = err.message || 'Ошибка при входе';
       setError(errorMessage);
-      throw new Error(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
     }
   };
 
   const register = async (userData) => {
     try {
       setError('');
-      console.log('Register attempt with:', { 
-        login: userData.email, 
-        name: userData.name, 
-        password: userData.password 
-      });
-
-      const response = await authAPI.register({
-        login: userData.email, 
-        name: userData.name,
-        password: userData.password
-      });
+      setLoading(true);
       
-      console.log('Register response:', response);
-
+      const response = await authAPI.register(userData);
+      
       const newUser = {
-        id: response.user?.id || Date.now(),
-        name: response.user?.name || userData.name,
-        email: userData.email,
-        token: response.token
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.login,
+        token: response.user.token
       };
 
       setCurrentUser(newUser);
       localStorage.setItem('currentUser', JSON.stringify(newUser));
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.user.token);
       
-      return response;
+      return { success: true };
     } catch (err) {
-      console.error('Register error details:', err);
-      let errorMessage = 'Ошибка регистрации';
-      
-      if (err.message.includes('409')) {
-        errorMessage = 'Пользователь с таким email уже существует';
-      } else if (err.message.includes('400')) {
-        errorMessage = 'Некорректные данные для регистрации';
-      } else if (err.message.includes('500')) {
-        errorMessage = 'Ошибка сервера. Попробуйте позже.';
-      } else {
-        errorMessage = err.message || 'Ошибка регистрации';
-      }
-      
+      const errorMessage = err.message || 'Ошибка при регистрации';
       setError(errorMessage);
-      throw new Error(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = () => {
     setCurrentUser(null);
-    setError('');
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
   };
@@ -130,14 +93,14 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    isAuthenticated: !!currentUser,
     error,
-    setError,
-    isAuthenticated: !!currentUser
+    loading: loading
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

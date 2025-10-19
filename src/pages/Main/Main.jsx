@@ -26,15 +26,26 @@ const MainPageComponent = () => {
   const isExitOpen = location.pathname === '/exit';
   const isCardOpen = location.pathname.startsWith('/card/');
 
+  const getCardIdFromUrl = () => {
+    if (isCardOpen) {
+      const match = location.pathname.match(/\/card\/(\w+)/);
+      return match ? match[1] : null;
+    }
+    return null;
+  };
+
+  const currentCardId = getCardIdFromUrl();
+  const currentCard = cards.find(card => card._id === currentCardId);
+
   const loadTasks = async () => {
     try {
       setIsLoading(true);
       setError('');
-      const tasks = await tasksAPI.getTasks();
-      setCards(tasks);
+      const response = await tasksAPI.getTasks();
+      setCards(response.tasks || []);
     } catch (err) {
-      setError('Ошибка загрузки задач: ' + err.message);
-      console.error('Failed to load tasks:', err);
+      setError('Ошибка при загрузке задач: ' + err.message);
+      console.error('Error loading tasks:', err);
     } finally {
       setIsLoading(false);
     }
@@ -44,58 +55,49 @@ const MainPageComponent = () => {
     loadTasks();
   }, []);
 
-  const getCardIdFromUrl = () => {
-    if (isCardOpen) {
-      const match = location.pathname.match(/\/card\/(\d+)/);
-      return match ? parseInt(match[1]) : null;
-    }
-    return null;
-  };
-
-  const currentCardId = getCardIdFromUrl();
-  const currentCard = cards.find(card => card.id === currentCardId);
-
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
   };
 
   const moveCard = async (cardId, newStatus) => {
     try {
-      const cardToUpdate = cards.find(card => card.id === cardId);
-      if (cardToUpdate) {
-        await tasksAPI.updateTask(cardId, {
-          ...cardToUpdate,
-          status: newStatus
-        });
-        setCards(prevCards => 
-          prevCards.map(card => 
-            card.id === cardId ? { ...card, status: newStatus } : card
-          )
-        );
-      }
+      const cardToUpdate = cards.find(card => card._id === cardId);
+      if (!cardToUpdate) return;
+
+      const updatedCard = {
+        title: cardToUpdate.title,
+        topic: cardToUpdate.topic,
+        status: newStatus,
+        description: cardToUpdate.description,
+        date: cardToUpdate.date
+      };
+
+      await tasksAPI.updateTask(cardId, updatedCard);
+      await loadTasks(); 
     } catch (err) {
-      setError('Ошибка обновления задачи: ' + err.message);
-      console.error('Failed to update task:', err);
+      setError('Ошибка при обновлении задачи: ' + err.message);
+      console.error('Error updating task:', err);
     }
   };
 
   const createCard = async (newCardData) => {
     try {
       setError('');
-      const newCard = await tasksAPI.createTask({
-        title: newCardData.title || "Новая задача",
-        category: newCardData.category || "Web Design",
-        date: newCardData.date || new Date().toLocaleDateString('ru-RU'),
-        status: "Без статуса",
-        description: newCardData.description || ""
-      });
       
-      setCards(prevCards => [...prevCards, newCard]);
-      navigate('/');
+      const taskData = {
+        title: newCardData.title || "Новая задача",
+        topic: newCardData.category || "Research",
+        status: "Без статуса",
+        description: newCardData.description || "",
+        date: newCardData.date ? new Date(newCardData.date).toISOString() : new Date().toISOString()
+      };
+
+      await tasksAPI.createTask(taskData);
+      await loadTasks(); 
+      navigate('/'); 
     } catch (err) {
-      setError('Ошибка создания задачи: ' + err.message);
-      console.error('Failed to create task:', err);
-      throw err;
+      setError('Ошибка при создании задачи: ' + err.message);
+      console.error('Error creating task:', err);
     }
   };
 
@@ -103,28 +105,32 @@ const MainPageComponent = () => {
     try {
       setError('');
       await tasksAPI.deleteTask(cardId);
-      setCards(prevCards => prevCards.filter(card => card.id !== cardId));
-      navigate('/');
+      await loadTasks(); 
+      navigate('/'); 
     } catch (err) {
-      setError('Ошибка удаления задачи: ' + err.message);
-      console.error('Failed to delete task:', err);
+      setError('Ошибка при удалении задачи: ' + err.message);
+      console.error('Error deleting task:', err);
     }
   };
 
   const updateCard = async (cardId, updatedData) => {
     try {
       setError('');
-      await tasksAPI.updateTask(cardId, updatedData);
-      setCards(prevCards => 
-        prevCards.map(card => 
-          card.id === cardId ? { ...card, ...updatedData } : card
-        )
-      );
+      
+      const taskData = {
+        title: updatedData.title,
+        topic: updatedData.category,
+        status: updatedData.status,
+        description: updatedData.description,
+        date: updatedData.date ? new Date(updatedData.date).toISOString() : new Date().toISOString()
+      };
+
+      await tasksAPI.updateTask(cardId, taskData);
+      await loadTasks(); 
       navigate('/');
     } catch (err) {
-      setError('Ошибка обновления задачи: ' + err.message);
-      console.error('Failed to update task:', err);
-      throw err; 
+      setError('Ошибка при обновлении задачи: ' + err.message);
+      console.error('Error updating task:', err);
     }
   };
 
@@ -145,6 +151,7 @@ const MainPageComponent = () => {
             <PopupNewCard 
               onCreateCard={createCard}
               onClose={handleCloseModal}
+              error={error}
             />
           )}
           
@@ -154,24 +161,12 @@ const MainPageComponent = () => {
               onDeleteCard={deleteCard}
               onUpdateCard={updateCard}
               onClose={handleCloseModal}
+              error={error}
             />
           )}
           
           {isExitOpen && (
             <PopupExit onClose={handleCloseModal} />
-          )}
-
-          {error && (
-            <div style={{ 
-              color: 'red', 
-              textAlign: 'center', 
-              padding: '10px',
-              backgroundColor: '#ffe6e6',
-              margin: '10px',
-              borderRadius: '4px'
-            }}>
-              {error}
-            </div>
           )}
 
           <Header 
@@ -180,6 +175,20 @@ const MainPageComponent = () => {
             isLoading={isLoading}
             onNewCardClick={handleNewCardClick}
           />
+          
+          {error && (
+            <div style={{ 
+              color: '#ff4444', 
+              textAlign: 'center', 
+              padding: '10px',
+              backgroundColor: '#ffeaea',
+              margin: '10px 20px',
+              borderRadius: '4px'
+            }}>
+              {error}
+            </div>
+          )}
+          
           <Main 
             cards={cards} 
             moveCard={moveCard}

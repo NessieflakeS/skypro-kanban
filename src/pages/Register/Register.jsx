@@ -20,61 +20,49 @@ import {
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    password: '',
+    login: '',
+    password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState('');
   
-  const { register, error, setError } = useAuth();
+  const { register, error: authError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [e.target.name]: e.target.value
     }));
     if (localError) setLocalError('');
-    if (error) setError('');
-  };
-
-  const validateForm = () => {
-    if (!formData.name.trim()) {
-      setLocalError('Введите имя');
-      return false;
-    }
-    if (!formData.email.trim()) {
-      setLocalError('Введите email');
-      return false;
-    }
-    if (!formData.email.includes('@')) {
-      setLocalError('Введите корректный email');
-      return false;
-    }
-    if (formData.password.length < 6) {
-      setLocalError('Пароль должен содержать минимум 6 символов');
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLocalError('');
+    
+    if (!formData.name.trim() || !formData.login.trim() || !formData.password.trim()) {
+      setLocalError('Все поля обязательны для заполнения');
+      return;
+    }
 
-    if (!validateForm()) {
+    if (formData.password.length < 6) {
+      setLocalError('Пароль должен содержать минимум 6 символов');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await register(formData);
-      navigate('/');
+      const result = await register(formData);
+      
+      if (result.success) {
+        navigate('/');
+      } else {
+        setLocalError(result.error || 'Ошибка при регистрации');
+      }
     } catch (err) {
-      console.error('Registration error:', err);
+      setLocalError('Ошибка при регистрации: ' + err.message);
     } finally {
       setIsLoading(false);
     }
@@ -103,13 +91,13 @@ const Register = () => {
             </FormGroup>
 
             <FormGroup>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="login">Логин</FormLabel>
               <FormInput
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Введите ваш email"
-                value={formData.email}
+                type="text"
+                id="login"
+                name="login"
+                placeholder="Введите ваш логин"
+                value={formData.login}
                 onChange={handleChange}
                 disabled={isLoading}
                 required
@@ -127,12 +115,12 @@ const Register = () => {
                 onChange={handleChange}
                 disabled={isLoading}
                 required
-                minLength={6}
+                minLength="6"
               />
             </FormGroup>
 
-            {(error || localError) && (
-              <ErrorMessage>{error || localError}</ErrorMessage>
+            {(localError || authError) && (
+              <ErrorMessage>{localError || authError}</ErrorMessage>
             )}
 
             <SubmitButton type="submit" disabled={isLoading}>

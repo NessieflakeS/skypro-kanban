@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from '../../GlobalStyles.styled';
 import { lightTheme } from '../../theme';
-import TestAPI from '../../components/TestAPI/TestAPI'; 
 import {
   LoginPage,
   LoginContainer,
@@ -19,58 +18,45 @@ import {
 } from './Login.styled';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    login: '',
+    password: ''
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState('');
   
-  const { login, error, setError } = useAuth();
+  const { login, error: authError } = useAuth();
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
     if (localError) setLocalError('');
-    if (error) setError('');
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    if (localError) setLocalError('');
-    if (error) setError('');
-  };
-
-  const validateForm = () => {
-    if (!email.trim()) {
-      setLocalError('Введите email');
-      return false;
-    }
-    if (!email.includes('@')) {
-      setLocalError('Введите корректный email');
-      return false;
-    }
-    if (!password) {
-      setLocalError('Введите пароль');
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLocalError('');
-
-    if (!validateForm()) {
+    
+    if (!formData.login.trim() || !formData.password.trim()) {
+      setLocalError('Все поля обязательны для заполнения');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await login({ email, password });
-      navigate('/');
+      const result = await login(formData);
+      
+      if (result.success) {
+        navigate('/');
+      } else {
+        setLocalError(result.error || 'Ошибка при входе');
+      }
     } catch (err) {
-      console.error('Login error:', err);
+      setLocalError('Ошибка при входе: ' + err.message);
     } finally {
       setIsLoading(false);
     }
@@ -85,13 +71,14 @@ const Login = () => {
           
           <LoginForm onSubmit={handleSubmit}>
             <FormGroup>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="login">Логин</FormLabel>
               <FormInput
-                type="email"
-                id="email"
-                placeholder="Введите ваш email"
-                value={email}
-                onChange={handleEmailChange}
+                type="text"
+                id="login"
+                name="login"
+                placeholder="Введите ваш логин"
+                value={formData.login}
+                onChange={handleChange}
                 disabled={isLoading}
                 required
               />
@@ -102,15 +89,18 @@ const Login = () => {
               <FormInput
                 type="password"
                 id="password"
+                name="password"
                 placeholder="Введите ваш пароль"
-                value={password}
-                onChange={handlePasswordChange}
+                value={formData.password}
+                onChange={handleChange}
                 disabled={isLoading}
                 required
               />
             </FormGroup>
 
-            {(error || localError) && <ErrorMessage>{error || localError}</ErrorMessage>}
+            {(localError || authError) && (
+              <ErrorMessage>{localError || authError}</ErrorMessage>
+            )}
 
             <SubmitButton type="submit" disabled={isLoading}>
               {isLoading ? 'Вход...' : 'Войти'}
@@ -122,7 +112,18 @@ const Login = () => {
             <Link to="/register">Зарегистрироваться</Link>
           </RegisterLink>
 
-
+          <div style={{ 
+            marginTop: '20px', 
+            padding: '10px', 
+            backgroundColor: '#f0f8ff', 
+            borderRadius: '4px',
+            fontSize: '12px',
+            color: '#666'
+          }}>
+            <strong>Для тестирования:</strong><br />
+            Логин: admin<br />
+            Пароль: admin
+          </div>
         </LoginContainer>
       </LoginPage>
     </ThemeProvider>
