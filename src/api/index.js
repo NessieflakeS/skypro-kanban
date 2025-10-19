@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://webdev-hw-api.vercel.app/api/v1';
+const API_BASE_URL = 'https://webdev-hw-api.vercel.app/api';
 
 const makeRequest = async (url, options = {}) => {
   const token = localStorage.getItem('token');
@@ -32,13 +32,13 @@ const makeRequest = async (url, options = {}) => {
 
 export const authAPI = {
   login: (credentials) => 
-    makeRequest('/login', {
+    makeRequest('/user/login', { 
       method: 'POST',
       body: credentials,
     }),
 
   register: (userData) => 
-    makeRequest('/register', {
+    makeRequest('/user', {
       method: 'POST',
       body: userData,
     }),
@@ -64,4 +64,8 @@ export const tasksAPI = {
     makeRequest(`/kanban/${taskId}`, {
       method: 'DELETE',
     }),
+};
+
+export const testAPI = {
+  testConnection: () => makeRequest('/test'),
 };

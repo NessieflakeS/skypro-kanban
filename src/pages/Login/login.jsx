@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from '../../GlobalStyles.styled';
 import { lightTheme } from '../../theme';
+// import TestAPI from '../../components/TestAPI/TestAPI'; // Раскомментируйте для тестирования
 import {
   LoginPage,
   LoginContainer,
@@ -120,6 +121,9 @@ const Login = () => {
             Еще нет аккаунта?
             <Link to="/register">Зарегистрироваться</Link>
           </RegisterLink>
+
+          {/* Раскомментируйте для тестирования API */}
+          {/* <TestAPI /> */}
         </LoginContainer>
       </LoginPage>
     </ThemeProvider>

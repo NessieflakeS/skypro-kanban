@@ -29,11 +29,18 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setError('');
+      console.log('Login attempt with:', { 
+        login: credentials.email, 
+        password: credentials.password 
+      });
+
       const response = await authAPI.login({
         login: credentials.email, 
         password: credentials.password
       });
       
+      console.log('Login response:', response);
+
       const userData = {
         id: response.user?.id || Date.now(),
         name: response.user?.name || credentials.email.split('@')[0],
@@ -47,7 +54,17 @@ export const AuthProvider = ({ children }) => {
       
       return response;
     } catch (err) {
-      const errorMessage = err.message || 'Ошибка входа. Проверьте email и пароль.';
+      console.error('Login error details:', err);
+      let errorMessage = 'Ошибка входа';
+      
+      if (err.message.includes('400')) {
+        errorMessage = 'Неверный email или пароль';
+      } else if (err.message.includes('500')) {
+        errorMessage = 'Ошибка сервера. Попробуйте позже.';
+      } else {
+        errorMessage = err.message || 'Ошибка входа';
+      }
+      
       setError(errorMessage);
       throw new Error(errorMessage);
     }
@@ -56,12 +73,20 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       setError('');
+      console.log('Register attempt with:', { 
+        login: userData.email, 
+        name: userData.name, 
+        password: userData.password 
+      });
+
       const response = await authAPI.register({
         login: userData.email, 
         name: userData.name,
         password: userData.password
       });
       
+      console.log('Register response:', response);
+
       const newUser = {
         id: response.user?.id || Date.now(),
         name: response.user?.name || userData.name,
@@ -75,12 +100,15 @@ export const AuthProvider = ({ children }) => {
       
       return response;
     } catch (err) {
+      console.error('Register error details:', err);
       let errorMessage = 'Ошибка регистрации';
       
       if (err.message.includes('409')) {
         errorMessage = 'Пользователь с таким email уже существует';
       } else if (err.message.includes('400')) {
         errorMessage = 'Некорректные данные для регистрации';
+      } else if (err.message.includes('500')) {
+        errorMessage = 'Ошибка сервера. Попробуйте позже.';
       } else {
         errorMessage = err.message || 'Ошибка регистрации';
       }
