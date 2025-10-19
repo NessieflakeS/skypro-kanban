@@ -32,14 +32,16 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (card) {
-      setEditData(card);
-    }
-  }, [card]);
-
-  if (!card) {
-    return null;
+  if (card) {
+    setEditData({
+      title: card.title,
+      category: card.topic, 
+      status: card.status,
+      description: card.description || '',
+      date: card.date ? formatDate(new Date(card.date)) : ''
+    });
   }
+}, [card]);
 
   const handleDelete = async () => {
     if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
@@ -55,23 +57,18 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
   };
 
   const handleSave = async () => {
-    if (!editData.title?.trim()) {
-      setError('Введите название задачи');
-      return;
-    }
-
-    setError('');
-    setIsLoading(true);
-
-    try {
-      await onUpdateCard(card.id, editData);
-      setIsEditing(false);
-    } catch (err) {
-      setError(err.message || 'Ошибка при обновлении задачи');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  setIsLoading(true);
+  try {
+    await onUpdateCard(card._id, {
+      ...editData,
+      category: editData.category 
+    });
+  } catch (err) {
+    console.error('Error updating card:', err);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleCancel = () => {
     setEditData(card);

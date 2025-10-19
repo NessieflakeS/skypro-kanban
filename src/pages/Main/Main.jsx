@@ -60,46 +60,56 @@ const MainPageComponent = () => {
   };
 
   const moveCard = async (cardId, newStatus) => {
-    try {
-      const cardToUpdate = cards.find(card => card._id === cardId);
-      if (!cardToUpdate) return;
-
-      const updatedCard = {
-        title: cardToUpdate.title,
-        topic: cardToUpdate.topic,
-        status: newStatus,
-        description: cardToUpdate.description,
-        date: cardToUpdate.date
-      };
-
-      await tasksAPI.updateTask(cardId, updatedCard);
-      await loadTasks(); 
-    } catch (err) {
-      setError('Ошибка при обновлении задачи: ' + err.message);
-      console.error('Error updating task:', err);
+  try {
+    const cardToUpdate = cards.find(card => card._id === cardId);
+    if (!cardToUpdate || cardToUpdate.status === newStatus) {
+      return;
     }
-  };
+
+    const updatedCard = {
+      title: cardToUpdate.title,
+      topic: cardToUpdate.topic, 
+      status: newStatus,
+      description: cardToUpdate.description,
+      date: cardToUpdate.date
+    };
+
+    await tasksAPI.updateTask(cardId, updatedCard);
+    await loadTasks();
+  } catch (err) {
+    setError('Ошибка при обновлении задачи: ' + err.message);
+    console.error('Error updating task:', err);
+  }
+};
 
   const createCard = async (newCardData) => {
-    try {
-      setError('');
-      
-      const taskData = {
-        title: newCardData.title || "Новая задача",
-        topic: newCardData.category || "Research",
-        status: "Без статуса",
-        description: newCardData.description || "",
-        date: newCardData.date ? new Date(newCardData.date).toISOString() : new Date().toISOString()
-      };
-
-      await tasksAPI.createTask(taskData);
-      await loadTasks(); 
-      navigate('/'); 
-    } catch (err) {
-      setError('Ошибка при создании задачи: ' + err.message);
-      console.error('Error creating task:', err);
+  try {
+    setError('');
+    
+    let dateISO;
+    if (newCardData.date) {
+      const [day, month, year] = newCardData.date.split('.');
+      dateISO = new Date(`${year}-${month}-${day}`).toISOString();
+    } else {
+      dateISO = new Date().toISOString();
     }
-  };
+
+    const taskData = {
+      title: newCardData.title || "Новая задача",
+      topic: newCardData.category || "Research",
+      status: "Без статуса",
+      description: newCardData.description || "",
+      date: dateISO
+    };
+
+    await tasksAPI.createTask(taskData);
+    await loadTasks();
+    navigate('/');
+  } catch (err) {
+    setError('Ошибка при создании задачи: ' + err.message);
+    console.error('Error creating task:', err);
+  }
+};
 
   const deleteCard = async (cardId) => {
     try {
@@ -114,25 +124,33 @@ const MainPageComponent = () => {
   };
 
   const updateCard = async (cardId, updatedData) => {
-    try {
-      setError('');
-      
-      const taskData = {
-        title: updatedData.title,
-        topic: updatedData.category,
-        status: updatedData.status,
-        description: updatedData.description,
-        date: updatedData.date ? new Date(updatedData.date).toISOString() : new Date().toISOString()
-      };
-
-      await tasksAPI.updateTask(cardId, taskData);
-      await loadTasks(); 
-      navigate('/');
-    } catch (err) {
-      setError('Ошибка при обновлении задачи: ' + err.message);
-      console.error('Error updating task:', err);
+  try {
+    setError('');
+    
+    let dateISO;
+    if (updatedData.date) {
+      const [day, month, year] = updatedData.date.split('.');
+      dateISO = new Date(`${year}-${month}-${day}`).toISOString();
+    } else {
+      dateISO = new Date().toISOString();
     }
-  };
+
+    const taskData = {
+      title: updatedData.title,
+      topic: updatedData.category,
+      status: updatedData.status,
+      description: updatedData.description,
+      date: dateISO
+    };
+
+    await tasksAPI.updateTask(cardId, taskData);
+    await loadTasks();
+    navigate('/');
+  } catch (err) {
+    setError('Ошибка при обновлении задачи: ' + err.message);
+    console.error('Error updating task:', err);
+  }
+};
 
   const handleNewCardClick = () => {
     navigate('/new-card');

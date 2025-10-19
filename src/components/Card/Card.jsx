@@ -17,14 +17,18 @@ const Card = ({ card, dragging = false }) => {
   const navigate = useNavigate();
 
   const handleDragStart = (e) => {
-    e.dataTransfer.setData('cardId', card.id.toString());
+    e.dataTransfer.setData('cardId', card._id.toString());
+    e.dataTransfer.setData('currentStatus', card.status);
     setIsDragging(true);
     e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => {
+      setIsDragging(true);
+    }, 0);
   };
 
   const handleDragEnd = () => {
-    setIsDragging(false);
-  };
+  setIsDragging(false);
+};
 
   const handleCardClick = () => {
     navigate(`/card/${card.id}`);
@@ -36,8 +40,8 @@ const Card = ({ card, dragging = false }) => {
     navigate(`/card/${card.id}`);
   };
 
-  const themeClass = getThemeClass(card.category);
-  const themeText = getThemeText(card.category);
+  const themeClass = getThemeClass(card.topic); 
+  const themeText = getThemeText(card.topic);
 
   function getThemeClass(category) {
     const themes = {
@@ -63,17 +67,24 @@ const Card = ({ card, dragging = false }) => {
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      style={{ 
+        cursor: isDragging ? 'grabbing' : 'grab',
+        opacity: isDragging ? 0.6 : 1 
+      }}
     >
       <CardContainer $dragging={isDragging} onClick={handleCardClick}>
         <CardGroup>
           <CardTheme $themeColor={themeClass}>
             <p>{themeText}</p>
           </CardTheme>
-          <CardButton onClick={handleMenuClick}>
-            <CardDot />
-            <CardDot />
-            <CardDot />
-          </CardButton>
+        <CardButton 
+          onClick={handleMenuClick}
+          style={{ cursor: 'pointer', zIndex: 2 }}
+        >
+          <CardDot />
+          <CardDot />
+          <CardDot />
+        </CardButton>
         </CardGroup>
         <CardContent>
           <CardTitle>{card.title}</CardTitle>
@@ -104,6 +115,15 @@ const Card = ({ card, dragging = false }) => {
       </CardContainer>
     </CardItem>
   );
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString); // API присылает ISO строку
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear().toString().slice(-2);
+  return `${day}.${month}.${year}`;
 };
 
 export default Card;
