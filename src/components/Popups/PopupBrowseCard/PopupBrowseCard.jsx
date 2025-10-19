@@ -203,73 +203,73 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
 
             {error && <ErrorMessage>{error}</ErrorMessage>}
 
-            {!isEditing ? (
-              <ButtonsContainer>
-                <ButtonGroup>
-                  <Button 
-                    $variant="outline"
-                    $size="small"
-                    onClick={() => setIsEditing(true)}
-                    disabled={isLoading}
-                  >
-                    Редактировать задачу
-                  </Button>
-                  <Button 
-                    $variant="outline"
-                    $size="small"
-                    onClick={handleDelete}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Удаление...' : 'Удалить задачу'}
-                  </Button>
-                </ButtonGroup>
+          {!isEditing ? (
+            <ButtonsContainer>
+              <ButtonGroup>
+                <Button 
+                  $variant="outline"
+                  $size="small"
+                  onClick={() => setIsEditing(true)}
+                  disabled={isLoading}
+                >
+                  Редактировать задачу
+                </Button>
+                <Button 
+                  $variant="outline"
+                  $size="small"
+                  onClick={handleDelete}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Удаление...' : 'Удалить задачу'}
+                </Button>
+              </ButtonGroup>
+              <Button 
+                $variant="primary"
+                $size="small"
+                onClick={onClose}
+                disabled={isLoading}
+              >
+                Закрыть
+              </Button>
+            </ButtonsContainer>
+          ) : (
+            <ButtonsContainer>
+              <ButtonGroup>
                 <Button 
                   $variant="primary"
                   $size="small"
-                  onClick={onClose}
+                  onClick={handleSave}
                   disabled={isLoading}
                 >
-                  Закрыть
+                  {isLoading ? 'Сохранение...' : 'Сохранить'}
                 </Button>
-              </ButtonsContainer>
-            ) : (
-              <ButtonsContainer>
-                <ButtonGroup>
-                  <Button 
-                    $variant="primary"
-                    $size="small"
-                    onClick={handleSave}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Сохранение...' : 'Сохранить'}
-                  </Button>
-                  <Button 
-                    $variant="outline"
-                    $size="small"
-                    onClick={handleCancel}
-                    disabled={isLoading}
-                  >
-                    Отменить
-                  </Button>
-                  <Button 
-                    $variant="outline"
-                    $size="small"
-                    onClick={handleDelete}
-                    disabled={isLoading}
-                  >
-                    Удалить задачу
-                  </Button>
-                </ButtonGroup>
                 <Button 
-                  $variant="primary"
+                  $variant="outline"
                   $size="small"
-                  onClick={onClose}
+                  onClick={handleCancel}
                   disabled={isLoading}
                 >
-                  Закрыть
+                  Отменить
                 </Button>
-              </ButtonsContainer>
-            )}
+                <Button 
+                  $variant="outline"
+                  $size="small"
+                  onClick={handleDelete}
+                  disabled={isLoading}
+                >
+                  Удалить задачу
+                </Button>
+              </ButtonGroup>
+              <Button 
+                $variant="primary"
+                $size="small"
+                onClick={onClose}
+                disabled={isLoading}
+              >
+                Закрыть
+              </Button>
+            </ButtonsContainer>
+          )}
           </PopupContent>
         </PopupBlock>
       </PopupOverlay>

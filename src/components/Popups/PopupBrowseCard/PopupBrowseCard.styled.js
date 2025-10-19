@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const PopupContainer = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  display: ${props => props.$isOpen ? 'block' : 'none'};
   width: 100%;
   height: 100%;
   min-width: 375px;
@@ -79,7 +79,7 @@ export const CategoryBadge = styled.div`
   white-space: nowrap;
   
   background-color: ${props => {
-    switch (props.theme) {
+    switch (props.$theme) {
       case 'orange': return props.theme.orangeBg;
       case 'green': return props.theme.greenBg;
       case 'purple': return props.theme.purpleBg;
@@ -88,7 +88,7 @@ export const CategoryBadge = styled.div`
   }};
   
   color: ${props => {
-    switch (props.theme) {
+    switch (props.$theme) {
       case 'orange': return props.theme.orangeColor;
       case 'green': return props.theme.greenColor;
       case 'purple': return props.theme.purpleColor;
@@ -120,21 +120,21 @@ export const StatusThemes = styled.div`
 export const StatusTheme = styled.div`
   border-radius: 24px;
   border: 0.7px solid ${props => props.theme.borderColor};
-  color: ${props => props.active ? '#FFFFFF' : props.theme.textTertiary};
-  background-color: ${props => props.active ? props.theme.textSecondary : 'transparent'};
+  color: ${props => props.$active ? '#FFFFFF' : props.theme.textTertiary};
+  background-color: ${props => props.$active ? props.theme.textSecondary : 'transparent'};
   padding: 11px 14px 10px;
-  cursor: ${props => props.clickable ? 'pointer' : 'default'};
+  cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: all 0.3s ease;
 
   p {
     font-size: 14px;
     line-height: 1;
     letter-spacing: -0.14px;
-    color: ${props => props.active ? '#FFFFFF' : props.theme.textTertiary};
+    color: ${props => props.$active ? '#FFFFFF' : props.theme.textTertiary};
   }
 
   &:hover {
-    ${props => props.clickable && `
+    ${props => props.$clickable && `
       background-color: ${props.theme.textSecondary};
       color: #FFFFFF;
       border-color: ${props.theme.textSecondary};
@@ -279,5 +279,4 @@ export const ErrorMessage = styled.div`
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 10px;
 `;

@@ -260,5 +260,4 @@ export const ErrorMessage = styled.div`
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 10px;
 `;
