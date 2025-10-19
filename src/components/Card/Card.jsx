@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'; // Один импорт для всех хуков
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CardItem,
@@ -16,6 +16,11 @@ const Card = ({ card, dragging = false }) => {
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
   const menuButtonRef = useRef(null);
+
+  if (!card || !card._id) {
+    console.error('Invalid card in Card component:', card);
+    return null;
+  }
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData('cardId', card._id.toString());

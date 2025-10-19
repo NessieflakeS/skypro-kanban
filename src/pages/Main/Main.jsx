@@ -114,16 +114,25 @@ const MainPageComponent = () => {
 };
 
   const deleteCard = async (cardId) => {
-    try {
-      setError('');
-      await tasksAPI.deleteTask(cardId);
-      await loadTasks(); 
-      navigate('/'); 
-    } catch (err) {
-      setError('Ошибка при удалении задачи: ' + err.message);
-      console.error('Error deleting task:', err);
+  try {
+    setError('');
+    
+    if (!cardId || cardId === 'undefined') {
+      setError('Неверный идентификатор задачи');
+      console.error('Invalid card ID:', cardId);
+      return;
     }
-  };
+
+    console.log('Deleting card with ID:', cardId);
+    
+    await tasksAPI.deleteTask(cardId);
+    await loadTasks();
+    navigate('/');
+  } catch (err) {
+    setError('Ошибка при удалении задачи: ' + err.message);
+    console.error('Error deleting task:', err);
+  }
+};
 
   const updateCard = async (cardId, updatedData) => {
   try {
@@ -177,7 +186,7 @@ const MainPageComponent = () => {
             />
           )}
           
-          {isCardOpen && currentCard && (
+          {isCardOpen && currentCard && currentCard._id && (
             <PopupBrowseCard 
               card={currentCard}
               onDeleteCard={deleteCard}

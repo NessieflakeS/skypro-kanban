@@ -25,79 +25,28 @@ import {
   ErrorMessage
 } from './PopupBrowseCard.styled';
 
-const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
+const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose, error }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-  if (card) {
-    setEditData({
-      title: card.title,
-      category: card.topic, 
-      status: card.status,
-      description: card.description || '',
-      date: card.date ? formatDate(new Date(card.date)) : ''
-    });
-  }
-}, [card]);
-
-  const handleDelete = async () => {
-    if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
-      setIsLoading(true);
-      try {
-        await onDeleteCard(card.id);
-      } catch (err) {
-        setError(err.message || 'Ошибка при удалении задачи');
-      } finally {
-        setIsLoading(false);
-      }
+    if (card && card._id) {
+      setEditData({
+        title: card.title,
+        category: card.topic,
+        status: card.status,
+        description: card.description || '',
+        date: card.date ? formatDate(new Date(card.date)) : ''
+      });
     }
-  };
+  }, [card]);
 
-  const handleSave = async () => {
-  setIsLoading(true);
-  try {
-    await onUpdateCard(card._id, {
-      ...editData,
-      category: editData.category 
-    });
-  } catch (err) {
-    console.error('Error updating card:', err);
-  } finally {
-    setIsLoading(false);
+  if (!card || !card._id) {
+    console.error('Card or card ID is undefined:', card);
+    onClose();
+    return null;
   }
-};
-
-  const handleCancel = () => {
-    setEditData(card);
-    setIsEditing(false);
-    setError('');
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleStatusChange = (status) => {
-    setEditData(prev => ({
-      ...prev,
-      status
-    }));
-  };
-
-  const handleDateSelect = (date) => {
-    const formattedDate = formatDate(date);
-    setEditData(prev => ({
-      ...prev,
-      date: formattedDate
-    }));
-  };
 
   const formatDate = (date) => {
     if (!date) return '';
@@ -123,6 +72,74 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
     }
   };
 
+  const handleDelete = async () => {
+    if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
+      setIsLoading(true);
+      try {
+        if (card && card._id) {
+          await onDeleteCard(card._id);
+        } else {
+          console.error('Cannot delete: card ID is undefined');
+        }
+      } catch (err) {
+        console.error('Error deleting card:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      if (card && card._id) {
+        await onUpdateCard(card._id, editData);
+      } else {
+        console.error('Cannot update: card ID is undefined');
+      }
+    } catch (err) {
+      console.error('Error updating card:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (card) {
+      setEditData({
+        title: card.title,
+        category: card.topic,
+        status: card.status,
+        description: card.description || '',
+        date: card.date ? formatDate(new Date(card.date)) : ''
+      });
+    }
+    setIsEditing(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleStatusChange = (status) => {
+    setEditData(prev => ({
+      ...prev,
+      status
+    }));
+  };
+
+  const handleDateSelect = (date) => {
+    const formattedDate = formatDate(date);
+    setEditData(prev => ({
+      ...prev,
+      date: formattedDate
+    }));
+  };
+
   const getThemeClass = (category) => {
     const themes = {
       'Web Design': 'orange',
@@ -132,7 +149,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
     return themes[category] || 'green';
   };
 
-  const themeClass = getThemeClass(card.category);
+  const themeClass = getThemeClass(card.topic);
 
   return (
     <PopupContainer $isOpen={!!card}>
@@ -152,7 +169,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                 <PopupTitle>{card.title}</PopupTitle>
               )}
               <CategoryBadge $theme={themeClass}>
-                {card.category}
+                {card.topic}
               </CategoryBadge>
             </PopupTopBlock>
             
@@ -183,13 +200,13 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
                     placeholder="Введите описание задачи..."
                     value={editData.description || ''}
                     onChange={handleInputChange}
-                    disabled={!isEditing || isLoading}
+                    disabled={isLoading}
                   />
                 </FormBlock>
               </PopupForm>
               
               <Calendar 
-                selectedDate={parseDate(editData.date)}
+                selectedDate={editData.date ? parseDate(editData.date) : null}
                 onDateSelect={isEditing ? handleDateSelect : null}
               />
             </PopupWrap>
@@ -197,79 +214,79 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
             <CategoriesSection>
               <StatusTitle>Категория</StatusTitle>
               <CategoryBadge $theme={themeClass}>
-                {card.category}
+                {card.topic}
               </CategoryBadge>
             </CategoriesSection>
 
             {error && <ErrorMessage>{error}</ErrorMessage>}
 
-          {!isEditing ? (
-            <ButtonsContainer>
-              <ButtonGroup>
-                <Button 
-                  $variant="outline"
-                  $size="small"
-                  onClick={() => setIsEditing(true)}
-                  disabled={isLoading}
-                >
-                  Редактировать задачу
-                </Button>
-                <Button 
-                  $variant="outline"
-                  $size="small"
-                  onClick={handleDelete}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Удаление...' : 'Удалить задачу'}
-                </Button>
-              </ButtonGroup>
-              <Button 
-                $variant="primary"
-                $size="small"
-                onClick={onClose}
-                disabled={isLoading}
-              >
-                Закрыть
-              </Button>
-            </ButtonsContainer>
-          ) : (
-            <ButtonsContainer>
-              <ButtonGroup>
+            {!isEditing ? (
+              <ButtonsContainer>
+                <ButtonGroup>
+                  <Button 
+                    $variant="outline"
+                    $size="small"
+                    onClick={() => setIsEditing(true)}
+                    disabled={isLoading}
+                  >
+                    Редактировать задачу
+                  </Button>
+                  <Button 
+                    $variant="outline"
+                    $size="small"
+                    onClick={handleDelete}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Удаление...' : 'Удалить задачу'}
+                  </Button>
+                </ButtonGroup>
                 <Button 
                   $variant="primary"
                   $size="small"
-                  onClick={handleSave}
+                  onClick={onClose}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Сохранение...' : 'Сохранить'}
+                  Закрыть
                 </Button>
+              </ButtonsContainer>
+            ) : (
+              <ButtonsContainer>
+                <ButtonGroup>
+                  <Button 
+                    $variant="primary"
+                    $size="small"
+                    onClick={handleSave}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Сохранение...' : 'Сохранить'}
+                  </Button>
+                  <Button 
+                    $variant="outline"
+                    $size="small"
+                    onClick={handleCancel}
+                    disabled={isLoading}
+                  >
+                    Отменить
+                  </Button>
+                  <Button 
+                    $variant="outline"
+                    $size="small"
+                    onClick={handleDelete}
+                    disabled={isLoading}
+                  >
+                    Удалить задачу
+                  </Button>
+                </ButtonGroup>
                 <Button 
-                  $variant="outline"
+                  $variant="primary"
                   $size="small"
-                  onClick={handleCancel}
+                  onClick={onClose}
                   disabled={isLoading}
                 >
-                  Отменить
+                  Закрыть
                 </Button>
-                <Button 
-                  $variant="outline"
-                  $size="small"
-                  onClick={handleDelete}
-                  disabled={isLoading}
-                >
-                  Удалить задачу
-                </Button>
-              </ButtonGroup>
-              <Button 
-                $variant="primary"
-                $size="small"
-                onClick={onClose}
-                disabled={isLoading}
-              >
-                Закрыть
-              </Button>
-            </ButtonsContainer>
-          )}
+              </ButtonsContainer>
+            )}
           </PopupContent>
         </PopupBlock>
       </PopupOverlay>
