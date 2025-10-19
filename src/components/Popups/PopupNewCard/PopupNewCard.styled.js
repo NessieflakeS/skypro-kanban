@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const PopupContainer = styled.div`
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  display: ${props => props.$isOpen ? 'block' : 'none'};
   width: 100%;
   min-width: 375px;
   height: 100%;
@@ -185,11 +185,11 @@ export const CategoryTheme = styled.div`
   padding: 8px 20px;
   border-radius: 24px;
   cursor: pointer;
-  opacity: ${props => props.active ? 1 : 0.4};
+  opacity: ${props => props.$active ? 1 : 0.4};
   transition: all 0.3s ease;
   
   background-color: ${props => {
-    switch (props.theme) {
+    switch (props.$theme) {
       case 'orange': return props.theme.orangeBg;
       case 'green': return props.theme.greenBg;
       case 'purple': return props.theme.purpleBg;
@@ -198,7 +198,7 @@ export const CategoryTheme = styled.div`
   }};
   
   color: ${props => {
-    switch (props.theme) {
+    switch (props.$theme) {
       case 'orange': return props.theme.orangeColor;
       case 'green': return props.theme.greenColor;
       case 'purple': return props.theme.purpleColor;
@@ -253,4 +253,12 @@ export const SubmitButton = styled.button`
     height: 40px;
     float: none;
   }
+`;
+
+export const ErrorMessage = styled.div`
+  color: #ff4444;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;

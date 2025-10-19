@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Calendar from '../../Common/Calendar/Calendar';
 import Button from '../../Common/Button/Button';
@@ -20,7 +20,7 @@ import {
   CategoriesThemes,
   CategoryTheme,
   SubmitButton,
-  ErrorMessage
+  ErrorMessage // Убедитесь, что этот импорт присутствует
 } from './PopupNewCard.styled';
 
 const PopupNewCard = ({ onCreateCard, onClose }) => {

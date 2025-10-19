@@ -273,3 +273,11 @@ export const CategoriesTitle = styled.p`
   line-height: 1;
   margin-bottom: 14px;
 `;
+
+export const ErrorMessage = styled.div`
+  color: #ff4444;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
