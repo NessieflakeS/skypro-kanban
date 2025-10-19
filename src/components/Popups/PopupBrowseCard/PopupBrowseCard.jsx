@@ -101,17 +101,22 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose }) => {
 
   const formatDate = (date) => {
     if (!date) return '';
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear().toString().slice(-2);
-    return `${day}.${month}.${year}`;
+    try {
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear().toString().slice(-2);
+      return `${day}.${month}.${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
   };
 
   const parseDate = (dateString) => {
     if (!dateString) return null;
     try {
       const [day, month, year] = dateString.split('.');
-      return new Date(`20${year}-${month}-${day}`);
+      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     } catch (error) {
       console.error('Error parsing date:', error);
       return null;

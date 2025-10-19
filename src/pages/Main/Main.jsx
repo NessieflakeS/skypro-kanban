@@ -89,7 +89,7 @@ const MainPageComponent = () => {
     let dateISO;
     if (newCardData.date) {
       const [day, month, year] = newCardData.date.split('.');
-      dateISO = new Date(`${year}-${month}-${day}`).toISOString();
+      dateISO = new Date(year, month - 1, day).toISOString();
     } else {
       dateISO = new Date().toISOString();
     }
@@ -102,6 +102,8 @@ const MainPageComponent = () => {
       date: dateISO
     };
 
+    console.log('Creating task with data:', taskData); // Для отладки
+    
     await tasksAPI.createTask(taskData);
     await loadTasks();
     navigate('/');
@@ -130,7 +132,7 @@ const MainPageComponent = () => {
     let dateISO;
     if (updatedData.date) {
       const [day, month, year] = updatedData.date.split('.');
-      dateISO = new Date(`${year}-${month}-${day}`).toISOString();
+      dateISO = new Date(year, month - 1, day).toISOString();
     } else {
       dateISO = new Date().toISOString();
     }
@@ -143,6 +145,8 @@ const MainPageComponent = () => {
       date: dateISO
     };
 
+    console.log('Updating task with data:', taskData);
+    
     await tasksAPI.updateTask(cardId, taskData);
     await loadTasks();
     navigate('/');

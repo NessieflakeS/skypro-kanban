@@ -43,13 +43,6 @@ export const ColumnTitle = styled.div.attrs(props => ({
   }
 `;
 
-export const CardsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-height: 50px;
-`;
-
 export const DropPlaceholder = styled.div`
   height: 4px;
   display: flex;

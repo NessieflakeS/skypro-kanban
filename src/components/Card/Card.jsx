@@ -21,45 +21,69 @@ const Card = ({ card, dragging = false }) => {
     e.dataTransfer.setData('currentStatus', card.status);
     setIsDragging(true);
     e.dataTransfer.effectAllowed = 'move';
-    setTimeout(() => {
-      setIsDragging(true);
-    }, 0);
   };
 
   const handleDragEnd = () => {
-  setIsDragging(false);
-};
+    setIsDragging(false);
+  };
 
   const handleCardClick = () => {
-    navigate(`/card/${card.id}`);
+    if (card && card._id) {
+      navigate(`/card/${card._id}`);
+    }
   };
 
   const handleMenuClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    navigate(`/card/${card.id}`);
+    e.stopImmediatePropagation();
+    
+    if (card && card._id) {
+      navigate(`/card/${card._id}`);
+    } else {
+      console.error('Card ID is undefined:', card);
+    }
   };
 
-  const themeClass = getThemeClass(card.topic); 
+  const themeClass = getThemeClass(card.topic);
   const themeText = getThemeText(card.topic);
 
-  function getThemeClass(category) {
+  function getThemeClass(topic) {
     const themes = {
       'Web Design': 'orange',
       'Research': 'green',
       'Copywriting': 'purple'
     };
-    return themes[category] || 'green';
+    return themes[topic] || 'green';
   }
 
-  function getThemeText(category) {
+  function getThemeText(topic) {
     const texts = {
       'Web Design': 'Web Design',
       'Research': 'Research',
       'Copywriting': 'Copywriting'
     };
-    return texts[category] || 'Research';
+    return texts[topic] || 'Research';
   }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return ''; 
+      }
+      
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear().toString().slice(-2);
+      return `${day}.${month}.${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
+  };
 
   return (
     <CardItem 
@@ -67,24 +91,20 @@ const Card = ({ card, dragging = false }) => {
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      style={{ 
-        cursor: isDragging ? 'grabbing' : 'grab',
-        opacity: isDragging ? 0.6 : 1 
-      }}
     >
       <CardContainer $dragging={isDragging} onClick={handleCardClick}>
         <CardGroup>
           <CardTheme $themeColor={themeClass}>
             <p>{themeText}</p>
           </CardTheme>
-        <CardButton 
-          onClick={handleMenuClick}
-          style={{ cursor: 'pointer', zIndex: 2 }}
-        >
-          <CardDot />
-          <CardDot />
-          <CardDot />
-        </CardButton>
+          <CardButton 
+            onClick={handleMenuClick}
+            style={{ cursor: 'pointer' }}
+          >
+            <CardDot />
+            <CardDot />
+            <CardDot />
+          </CardButton>
         </CardGroup>
         <CardContent>
           <CardTitle>{card.title}</CardTitle>
@@ -109,21 +129,12 @@ const Card = ({ card, dragging = false }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{card.date}</p>
+            <p>{formatDate(card.date)}</p>
           </CardDate>
         </CardContent>
       </CardContainer>
     </CardItem>
   );
-};
-
-const formatDate = (dateString) => {
-  if (!dateString) return '';
-  const date = new Date(dateString); // API присылает ISO строку
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear().toString().slice(-2);
-  return `${day}.${month}.${year}`;
 };
 
 export default Card;
