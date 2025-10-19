@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../api';
 
 const AuthContext = createContext();
 
@@ -13,28 +14,69 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
+    const token = localStorage.getItem('token');
+    
+    if (savedUser && token) {
       setCurrentUser(JSON.parse(savedUser));
     }
     setLoading(false);
   }, []);
 
-  const login = (userData) => {
-    setCurrentUser(userData);
-    localStorage.setItem('currentUser', JSON.stringify(userData));
+  const login = async (credentials) => {
+    try {
+      setError('');
+      const response = await authAPI.login(credentials);
+      
+      const userData = {
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email,
+        token: response.token
+      };
+
+      setCurrentUser(userData);
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      localStorage.setItem('token', response.token);
+      
+      return response;
+    } catch (err) {
+      setError(err.message || 'Ошибка входа');
+      throw err;
+    }
   };
 
-  const register = (userData) => {
-    setCurrentUser(userData);
-    localStorage.setItem('currentUser', JSON.stringify(userData));
+  const register = async (userData) => {
+    try {
+      setError('');
+      const response = await authAPI.register(userData);
+      
+      const newUser = {
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email,
+        token: response.token
+      };
+
+      setCurrentUser(newUser);
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      localStorage.setItem('token', response.token);
+      
+      return response;
+    } catch (err) {
+      setError(err.message || 'Ошибка регистрации');
+      throw err;
+    }
   };
 
   const logout = () => {
     setCurrentUser(null);
+    setError('');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
   };
 
   const value = {
@@ -42,6 +84,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    error,
+    setError,
     isAuthenticated: !!currentUser
   };
 

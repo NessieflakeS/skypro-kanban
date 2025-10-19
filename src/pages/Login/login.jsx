@@ -20,10 +20,9 @@ import {
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  const { login } = useAuth();
+  const { login, error, setError } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -32,27 +31,10 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (!email || !password) {
-        throw new Error('Все поля обязательны для заполнения');
-      }
-
-      if (!email.includes('@')) {
-        throw new Error('Введите корректный email');
-      }
-
-      const userData = {
-        id: 1,
-        name: 'Ivan Ivanov',
-        email: email,
-        token: 'fake-jwt-token'
-      };
-
-      login(userData);
+      await login({ email, password });
       navigate('/');
     } catch (err) {
-      setError(err.message);
+      console.error('Login error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -75,6 +57,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
+                required
               />
             </FormGroup>
 
@@ -87,6 +70,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
+                required
               />
             </FormGroup>
 

@@ -19,7 +19,8 @@ import {
   CategoriesTitle,
   CategoriesThemes,
   CategoryTheme,
-  SubmitButton
+  SubmitButton,
+  ErrorMessage
 } from './PopupNewCard.styled';
 
 const PopupNewCard = ({ onCreateCard, onClose }) => {
@@ -29,6 +30,8 @@ const PopupNewCard = ({ onCreateCard, onClose }) => {
     category: 'Web Design',
     date: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
@@ -74,22 +77,31 @@ const PopupNewCard = ({ onCreateCard, onClose }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.title.trim()) {
-      onCreateCard({
-        ...formData,
-        date: formData.date || formatDate(new Date())
-      });
+    if (!formData.title.trim()) {
+      setError('Введите название задачи');
+      return;
+    }
+
+    setError('');
+    setIsLoading(true);
+
+    try {
+      await onCreateCard(formData);
+    } catch (err) {
+      setError(err.message || 'Ошибка при создании задачи');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleClose = () => {
-    navigate('/'); 
+    navigate('/');
   };
 
   return (
-    <PopupContainer isOpen={true}>
+    <PopupContainer $isOpen={true}>
       <PopupOverlay onClick={handleClose}>
         <PopupBlock onClick={(e) => e.stopPropagation()}>
           <PopupContent>
@@ -107,6 +119,7 @@ const PopupNewCard = ({ onCreateCard, onClose }) => {
                     autoFocus 
                     value={formData.title}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                     required
                   />
                 </FormBlock>
@@ -118,6 +131,7 @@ const PopupNewCard = ({ onCreateCard, onClose }) => {
                     placeholder="Введите описание задачи..."
                     value={formData.description}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </FormBlock>
               </PopupForm>
@@ -131,33 +145,36 @@ const PopupNewCard = ({ onCreateCard, onClose }) => {
               <CategoriesTitle>Категория</CategoriesTitle>
               <CategoriesThemes>
                 <CategoryTheme 
-                  theme="orange"
-                  active={formData.category === 'Web Design'}
+                  $theme="orange"
+                  $active={formData.category === 'Web Design'}
                   onClick={() => handleCategorySelect('Web Design')}
                 >
                   Web Design
                 </CategoryTheme>
                 <CategoryTheme 
-                  theme="green"
-                  active={formData.category === 'Research'}
+                  $theme="green"
+                  $active={formData.category === 'Research'}
                   onClick={() => handleCategorySelect('Research')}
                 >
                   Research
                 </CategoryTheme>
                 <CategoryTheme 
-                  theme="purple"
-                  active={formData.category === 'Copywriting'}
+                  $theme="purple"
+                  $active={formData.category === 'Copywriting'}
                   onClick={() => handleCategorySelect('Copywriting')}
                 >
                   Copywriting
                 </CategoryTheme>
               </CategoriesThemes>
             </Categories>
+
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+
             <SubmitButton 
               onClick={handleSubmit}
-              disabled={!formData.title.trim()}
+              disabled={!formData.title.trim() || isLoading}
             >
-              Создать задачу
+              {isLoading ? 'Создание...' : 'Создать задачу'}
             </SubmitButton>
           </PopupContent>
         </PopupBlock>

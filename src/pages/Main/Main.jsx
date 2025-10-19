@@ -9,11 +9,13 @@ import PopupExit from '../../components/Popups/PopupExit/PopupExit';
 import { GlobalStyles } from '../../GlobalStyles.styled';
 import { lightTheme, darkTheme } from '../../theme';
 import { MainPage, MainContent } from './Main.styled';
+import { tasksAPI } from '../../api';
 
 const MainPageComponent = () => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
+  const [error, setError] = useState('');
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,6 +25,24 @@ const MainPageComponent = () => {
   const isNewCardOpen = location.pathname === '/new-card';
   const isExitOpen = location.pathname === '/exit';
   const isCardOpen = location.pathname.startsWith('/card/');
+
+  const loadTasks = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+      const tasks = await tasksAPI.getTasks();
+      setCards(tasks);
+    } catch (err) {
+      setError('Ошибка загрузки задач: ' + err.message);
+      console.error('Failed to load tasks:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   const getCardIdFromUrl = () => {
     if (isCardOpen) {
@@ -35,68 +55,85 @@ const MainPageComponent = () => {
   const currentCardId = getCardIdFromUrl();
   const currentCard = cards.find(card => card.id === currentCardId);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const initialCards = [
-        { id: 1, title: "Название задачи 1", category: "Web Design", date: "15.09.25", status: "Без статуса", description: "Описание задачи 1" },
-        { id: 2, title: "Название задачи 2", category: "Research", date: "20.09.25", status: "Без статуса", description: "Описание задачи 2" },
-        { id: 3, title: "Название задачи 3", category: "Copywriting", date: "25.09.25", status: "Нужно сделать", description: "Описание задачи 3" },
-        { id: 4, title: "Название задачи 4", category: "Copywriting", date: "10.09.25", status: "В работе", description: "Описание задачи 4" },
-        { id: 5, title: "Название задачи 5", category: "Research", date: "28.09.25", status: "Тестирование", description: "Описание задачи 5" },
-        { id: 6, title: "Название задачи 6", category: "Research", date: "05.09.25", status: "Готово", description: "Описание задачи 6" }
-      ];
-      setCards(initialCards);
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
   };
 
-  const moveCard = (cardId, newStatus) => {
-    setCards(prevCards => 
-      prevCards.map(card => 
-        card.id === cardId ? { ...card, status: newStatus } : card
-      )
-    );
+  const moveCard = async (cardId, newStatus) => {
+    try {
+      const cardToUpdate = cards.find(card => card.id === cardId);
+      if (cardToUpdate) {
+        await tasksAPI.updateTask(cardId, {
+          ...cardToUpdate,
+          status: newStatus
+        });
+        setCards(prevCards => 
+          prevCards.map(card => 
+            card.id === cardId ? { ...card, status: newStatus } : card
+          )
+        );
+      }
+    } catch (err) {
+      setError('Ошибка обновления задачи: ' + err.message);
+      console.error('Failed to update task:', err);
+    }
   };
 
-  const createCard = (newCardData) => {
-    const newCard = {
-      id: Date.now(),
-      title: newCardData.title || "Новая задача",
-      category: newCardData.category || "Web Design",
-      date: newCardData.date || new Date().toLocaleDateString('ru-RU'),
-      status: "Без статуса",
-      description: newCardData.description || ""
-    };
-    setCards(prevCards => [...prevCards, newCard]);
-    navigate('/'); 
+  const createCard = async (newCardData) => {
+    try {
+      setError('');
+      const newCard = await tasksAPI.createTask({
+        title: newCardData.title || "Новая задача",
+        category: newCardData.category || "Web Design",
+        date: newCardData.date || new Date().toLocaleDateString('ru-RU'),
+        status: "Без статуса",
+        description: newCardData.description || ""
+      });
+      
+      setCards(prevCards => [...prevCards, newCard]);
+      navigate('/');
+    } catch (err) {
+      setError('Ошибка создания задачи: ' + err.message);
+      console.error('Failed to create task:', err);
+      throw err;
+    }
   };
 
-  const deleteCard = (cardId) => {
-    setCards(prevCards => prevCards.filter(card => card.id !== cardId));
-    navigate('/'); 
+  const deleteCard = async (cardId) => {
+    try {
+      setError('');
+      await tasksAPI.deleteTask(cardId);
+      setCards(prevCards => prevCards.filter(card => card.id !== cardId));
+      navigate('/');
+    } catch (err) {
+      setError('Ошибка удаления задачи: ' + err.message);
+      console.error('Failed to delete task:', err);
+    }
   };
 
-  const updateCard = (cardId, updatedData) => {
-    setCards(prevCards => 
-      prevCards.map(card => 
-        card.id === cardId ? { ...card, ...updatedData } : card
-      )
-    );
-    navigate('/'); 
+  const updateCard = async (cardId, updatedData) => {
+    try {
+      setError('');
+      await tasksAPI.updateTask(cardId, updatedData);
+      setCards(prevCards => 
+        prevCards.map(card => 
+          card.id === cardId ? { ...card, ...updatedData } : card
+        )
+      );
+      navigate('/');
+    } catch (err) {
+      setError('Ошибка обновления задачи: ' + err.message);
+      console.error('Failed to update task:', err);
+      throw err; 
+    }
   };
 
   const handleNewCardClick = () => {
-    navigate('/new-card'); 
+    navigate('/new-card');
   };
 
   const handleCloseModal = () => {
-    navigate('/'); 
+    navigate('/');
   };
 
   return (
@@ -122,6 +159,19 @@ const MainPageComponent = () => {
           
           {isExitOpen && (
             <PopupExit onClose={handleCloseModal} />
+          )}
+
+          {error && (
+            <div style={{ 
+              color: 'red', 
+              textAlign: 'center', 
+              padding: '10px',
+              backgroundColor: '#ffe6e6',
+              margin: '10px',
+              borderRadius: '4px'
+            }}>
+              {error}
+            </div>
           )}
 
           <Header 

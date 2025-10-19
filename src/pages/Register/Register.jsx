@@ -22,12 +22,10 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
   });
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  const { register } = useAuth();
+  const { register, error, setError } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -43,35 +41,10 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-        throw new Error('Все поля обязательны для заполнения');
-      }
-
-      if (!formData.email.includes('@')) {
-        throw new Error('Введите корректный email');
-      }
-
-      if (formData.password.length < 6) {
-        throw new Error('Пароль должен содержать минимум 6 символов');
-      }
-
-      if (formData.password !== formData.confirmPassword) {
-        throw new Error('Пароли не совпадают');
-      }
-
-      const userData = {
-        id: Date.now(),
-        name: formData.name,
-        email: formData.email,
-        token: 'fake-jwt-token'
-      };
-
-      register(userData);
+      await register(formData);
       navigate('/');
     } catch (err) {
-      setError(err.message);
+      console.error('Registration error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -95,6 +68,7 @@ const Register = () => {
                 value={formData.name}
                 onChange={handleChange}
                 disabled={isLoading}
+                required
               />
             </FormGroup>
 
@@ -108,6 +82,7 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 disabled={isLoading}
+                required
               />
             </FormGroup>
 
@@ -121,19 +96,8 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 disabled={isLoading}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormLabel htmlFor="confirmPassword">Подтвердите пароль</FormLabel>
-              <FormInput
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Подтвердите пароль"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                disabled={isLoading}
+                required
+                minLength={6}
               />
             </FormGroup>
 
