@@ -13,13 +13,13 @@ function Button({
 }) {
   return (
     <StyledButton 
-      variant={variant}
-      size={size}
+      $variant={variant}        
+      $size={size}            
       onClick={onClick}
       disabled={disabled}
       type={type}
       className={className}
-      full={full}
+      $full={full}            
       {...props}
     >
       {children}
