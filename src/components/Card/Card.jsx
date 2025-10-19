@@ -1,5 +1,4 @@
-import { useState, useRef } from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react'; // Один импорт для всех хуков
 import { useNavigate } from 'react-router-dom';
 import {
   CardItem,
@@ -30,7 +29,6 @@ const Card = ({ card, dragging = false }) => {
   };
 
   const handleCardClick = (e) => {
-    // Проверяем, не был ли клик по кнопке меню
     if (menuButtonRef.current && menuButtonRef.current.contains(e.target)) {
       return;
     }
@@ -46,7 +44,6 @@ const Card = ({ card, dragging = false }) => {
     
     setTimeout(() => {
       if (card && card._id) {
-        console.log('Opening card details via menu:', card._id);
         navigate(`/card/${card._id}`);
       }
     }, 10);
@@ -107,11 +104,6 @@ const Card = ({ card, dragging = false }) => {
           <CardButton 
             ref={menuButtonRef}
             onClick={handleMenuClick}
-            style={{ 
-              cursor: 'pointer',
-              position: 'relative',
-              zIndex: 10
-            }}
           >
             <CardDot />
             <CardDot />
