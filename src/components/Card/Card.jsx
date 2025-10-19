@@ -15,6 +15,7 @@ import {
 const Card = ({ card, dragging = false }) => {
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
+  const menuButtonRef = useRef(null);
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData('cardId', card._id.toString());
@@ -27,7 +28,12 @@ const Card = ({ card, dragging = false }) => {
     setIsDragging(false);
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (e) => {
+    // Проверяем, не был ли клик по кнопке меню
+    if (menuButtonRef.current && menuButtonRef.current.contains(e.target)) {
+      return;
+    }
+    
     if (card && card._id) {
       navigate(`/card/${card._id}`);
     }
@@ -36,14 +42,13 @@ const Card = ({ card, dragging = false }) => {
   const handleMenuClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
     
-    if (card && card._id) {
-      console.log('Opening card details:', card._id);
-      navigate(`/card/${card._id}`);
-    } else {
-      console.error('Card ID is undefined:', card);
-    }
+    setTimeout(() => {
+      if (card && card._id) {
+        console.log('Opening card details via menu:', card._id);
+        navigate(`/card/${card._id}`);
+      }
+    }, 10);
   };
 
   const themeClass = getThemeClass(card.topic);
@@ -99,11 +104,12 @@ const Card = ({ card, dragging = false }) => {
             <p>{themeText}</p>
           </CardTheme>
           <CardButton 
+            ref={menuButtonRef}
             onClick={handleMenuClick}
             style={{ 
               cursor: 'pointer',
               position: 'relative',
-              zIndex: 10 
+              zIndex: 10
             }}
           >
             <CardDot />

@@ -97,6 +97,9 @@ export const CardButton = styled.div`
   padding: 2px;
   cursor: pointer;
   flex-direction: column;
+  position: relative;
+  z-index: 10; 
+  pointer-events: auto !important;
 `;
 
 export const CardDot = styled.div`
