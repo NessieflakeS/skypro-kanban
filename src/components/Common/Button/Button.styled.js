@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledButton = styled.button.attrs(props => ({
-  variant: props.$variant,
-  size: props.$size,
-  full: props.$full ? 'true' : undefined,
+  'data-variant': props.$variant,
+  'data-size': props.$size,
+  'data-full': props.$full,
 }))`
   cursor: pointer;
   outline: none;

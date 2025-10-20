@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Main from './pages/Main/Main';
 import Login from './pages/Login/login';
@@ -13,11 +13,11 @@ const AppRoutes = () => {
     <Routes>
       <Route 
         path="/login" 
-        element={!isAuthenticated ? <Login /> : <Main />}
+        element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />}
       />
       <Route 
         path="/register" 
-        element={!isAuthenticated ? <Register /> : <Main />}
+        element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />}
       />
       
       <Route

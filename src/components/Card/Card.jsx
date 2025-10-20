@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CardItem,
@@ -15,9 +15,16 @@ import {
 const Card = ({ card, dragging = false }) => {
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
+  const menuButtonRef = useRef(null);
+
+  if (!card || !card._id) {
+    console.error('Invalid card in Card component:', card);
+    return null;
+  }
 
   const handleDragStart = (e) => {
-    e.dataTransfer.setData('cardId', card.id.toString());
+    e.dataTransfer.setData('cardId', card._id.toString());
+    e.dataTransfer.setData('currentStatus', card.status);
     setIsDragging(true);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -26,36 +33,66 @@ const Card = ({ card, dragging = false }) => {
     setIsDragging(false);
   };
 
-  const handleCardClick = () => {
-    navigate(`/card/${card.id}`);
+  const handleCardClick = (e) => {
+    if (menuButtonRef.current && menuButtonRef.current.contains(e.target)) {
+      return;
+    }
+    
+    if (card && card._id) {
+      navigate(`/card/${card._id}`);
+    }
   };
 
   const handleMenuClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    navigate(`/card/${card.id}`);
+    
+    setTimeout(() => {
+      if (card && card._id) {
+        navigate(`/card/${card._id}`);
+      }
+    }, 10);
   };
 
-  const themeClass = getThemeClass(card.category);
-  const themeText = getThemeText(card.category);
+  const themeClass = getThemeClass(card.topic);
+  const themeText = getThemeText(card.topic);
 
-  function getThemeClass(category) {
+  function getThemeClass(topic) {
     const themes = {
       'Web Design': 'orange',
       'Research': 'green',
       'Copywriting': 'purple'
     };
-    return themes[category] || 'green';
+    return themes[topic] || 'green';
   }
 
-  function getThemeText(category) {
+  function getThemeText(topic) {
     const texts = {
       'Web Design': 'Web Design',
       'Research': 'Research',
       'Copywriting': 'Copywriting'
     };
-    return texts[category] || 'Research';
+    return texts[topic] || 'Research';
   }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return '';
+      }
+      
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear().toString().slice(-2);
+      return `${day}.${month}.${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
+  };
 
   return (
     <CardItem 
@@ -69,7 +106,10 @@ const Card = ({ card, dragging = false }) => {
           <CardTheme $themeColor={themeClass}>
             <p>{themeText}</p>
           </CardTheme>
-          <CardButton onClick={handleMenuClick}>
+          <CardButton 
+            ref={menuButtonRef}
+            onClick={handleMenuClick}
+          >
             <CardDot />
             <CardDot />
             <CardDot />
@@ -98,7 +138,7 @@ const Card = ({ card, dragging = false }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{card.date}</p>
+            <p>{formatDate(card.date)}</p>
           </CardDate>
         </CardContent>
       </CardContainer>

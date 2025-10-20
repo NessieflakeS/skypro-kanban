@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   HeaderContainer,
@@ -49,30 +49,35 @@ const Header = ({ isDarkTheme, toggleTheme, onNewCardClick, isLoading }) => {
   const handleNewCardClick = (e) => {
     e.preventDefault();
     if (!isLoading) {
-      navigate('/new-card'); 
+      navigate('/new-card');
     }
   };
 
   const handleLogoutClick = (e) => {
-  e.preventDefault();
-  navigate('/exit');
-  setIsUserMenuOpen(false);
+    e.preventDefault();
+    navigate('/exit');
+    setIsUserMenuOpen(false);
   };
 
   const handleThemeToggle = () => {
     toggleTheme();
   };
 
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    navigate('/');
+  };
+
   return (
     <HeaderContainer>
       <HeaderBlock>
         <HeaderLogo>
-          <a href="/" target="_self" rel="noopener noreferrer">
+          <Link to="/" onClick={handleLogoClick}>
             <img 
               src={isDarkTheme ? "/images/logo_dark.png" : "/images/logo.png"} 
               alt="logo" 
             />
-          </a>
+          </Link>
         </HeaderLogo>
         <HeaderNav>
           <NewTaskButton 

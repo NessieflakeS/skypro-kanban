@@ -12,6 +12,7 @@ const Column = ({ title, status, cards, moveCard }) => {
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);
+    e.dataTransfer.dropEffect = 'move';
   };
 
   const handleDragLeave = (e) => {
@@ -22,8 +23,13 @@ const Column = ({ title, status, cards, moveCard }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
-    const cardId = parseInt(e.dataTransfer.getData('cardId'));
-    moveCard(cardId, status);
+    
+    const cardId = e.dataTransfer.getData('cardId');
+    const currentStatus = e.dataTransfer.getData('currentStatus');
+    
+    if (currentStatus !== status) {
+      moveCard(cardId, status);
+    }
   };
 
   return (
@@ -32,14 +38,20 @@ const Column = ({ title, status, cards, moveCard }) => {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      style={{
+        backgroundColor: isDragOver ? 'rgba(86, 94, 239, 0.1)' : 'transparent',
+        border: isDragOver ? '2px dashed #565EEF' : '2px dashed transparent',
+        borderRadius: isDragOver ? '10px' : '0',
+        transition: 'all 0.3s ease'
+      }}
     >
       <ColumnTitle $dragOver={isDragOver}>
-        <p>{title}</p>
+        <p>{title} ({cards.length})</p>
       </ColumnTitle>
       <CardsContainer>
         {cards.map(card => (
           <Card 
-            key={card.id} 
+            key={card._id} 
             card={card}
           />
         ))}
