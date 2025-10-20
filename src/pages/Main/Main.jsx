@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import { useTasks } from '../../context/TaskContext';
 import Header from '../../components/Header/Header';
 import Main from '../../components/Main/Main';
 import PopupNewCard from '../../components/Popups/PopupNewCard/PopupNewCard';
@@ -9,13 +10,20 @@ import PopupExit from '../../components/Popups/PopupExit/PopupExit';
 import { GlobalStyles } from '../../GlobalStyles.styled';
 import { lightTheme, darkTheme } from '../../theme';
 import { MainPage, MainContent } from './Main.styled';
-import { tasksAPI } from '../../api';
 
 const MainPageComponent = () => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [cards, setCards] = useState([]);
-  const [error, setError] = useState('');
+  
+  const { 
+    tasks, 
+    loading, 
+    error, 
+    createTask, 
+    updateTask, 
+    deleteTask, 
+    moveTask,
+    setError 
+  } = useTasks();
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,57 +43,13 @@ const MainPageComponent = () => {
   };
 
   const currentCardId = getCardIdFromUrl();
-  const currentCard = cards.find(card => card._id === currentCardId);
-
-  const loadTasks = async () => {
-    try {
-      setIsLoading(true);
-      setError('');
-      const response = await tasksAPI.getTasks();
-      setCards(response.tasks || []);
-    } catch (err) {
-      setError('Ошибка при загрузке задач: ' + err.message);
-      console.error('Error loading tasks:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadTasks();
-  }, []);
+  const currentCard = tasks.find(task => task._id === currentCardId);
 
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
   };
 
-  const moveCard = async (cardId, newStatus) => {
-  try {
-    const cardToUpdate = cards.find(card => card._id === cardId);
-    if (!cardToUpdate || cardToUpdate.status === newStatus) {
-      return;
-    }
-
-    const updatedCard = {
-      title: cardToUpdate.title,
-      topic: cardToUpdate.topic, 
-      status: newStatus,
-      description: cardToUpdate.description,
-      date: cardToUpdate.date
-    };
-
-    await tasksAPI.updateTask(cardId, updatedCard);
-    await loadTasks();
-  } catch (err) {
-    setError('Ошибка при обновлении задачи: ' + err.message);
-    console.error('Error updating task:', err);
-  }
-};
-
-  const createCard = async (newCardData) => {
-  try {
-    setError('');
-    
+  const handleCreateCard = async (newCardData) => {
     let dateISO;
     if (newCardData.date) {
       const [day, month, year] = newCardData.date.split('.');
@@ -102,42 +66,13 @@ const MainPageComponent = () => {
       date: dateISO
     };
 
-    console.log('Creating task with data:', taskData); // Для отладки
-    
-    await tasksAPI.createTask(taskData);
-    await loadTasks();
-    navigate('/');
-  } catch (err) {
-    setError('Ошибка при создании задачи: ' + err.message);
-    console.error('Error creating task:', err);
-  }
-};
-
-  const deleteCard = async (cardId) => {
-  try {
-    setError('');
-    
-    if (!cardId || cardId === 'undefined') {
-      setError('Неверный идентификатор задачи');
-      console.error('Invalid card ID:', cardId);
-      return;
+    const result = await createTask(taskData);
+    if (result.success) {
+      navigate('/');
     }
+  };
 
-    console.log('Deleting card with ID:', cardId);
-    
-    await tasksAPI.deleteTask(cardId);
-    await loadTasks();
-    navigate('/');
-  } catch (err) {
-    setError('Ошибка при удалении задачи: ' + err.message);
-    console.error('Error deleting task:', err);
-  }
-};
-
-  const updateCard = async (cardId, updatedData) => {
-  try {
-    setError('');
-    
+  const handleUpdateCard = async (cardId, updatedData) => {
     let dateISO;
     if (updatedData.date) {
       const [day, month, year] = updatedData.date.split('.');
@@ -154,16 +89,26 @@ const MainPageComponent = () => {
       date: dateISO
     };
 
-    console.log('Updating task with data:', taskData);
-    
-    await tasksAPI.updateTask(cardId, taskData);
-    await loadTasks();
-    navigate('/');
-  } catch (err) {
-    setError('Ошибка при обновлении задачи: ' + err.message);
-    console.error('Error updating task:', err);
-  }
-};
+    const result = await updateTask(cardId, taskData);
+    if (result.success) {
+      navigate('/');
+    }
+  };
+
+  const handleDeleteCard = async (cardId) => {
+    if (cardId && cardId !== 'undefined') {
+      const result = await deleteTask(cardId);
+      if (result.success) {
+        navigate('/');
+      }
+    } else {
+      setError('Неверный идентификатор задачи');
+    }
+  };
+
+  const handleMoveCard = async (cardId, newStatus) => {
+    await moveTask(cardId, newStatus);
+  };
 
   const handleNewCardClick = () => {
     navigate('/new-card');
@@ -180,17 +125,17 @@ const MainPageComponent = () => {
         <MainContent>
           {isNewCardOpen && (
             <PopupNewCard 
-              onCreateCard={createCard}
+              onCreateCard={handleCreateCard}
               onClose={handleCloseModal}
               error={error}
             />
           )}
           
-          {isCardOpen && currentCard && currentCard._id && (
+          {isCardOpen && currentCard && (
             <PopupBrowseCard 
               card={currentCard}
-              onDeleteCard={deleteCard}
-              onUpdateCard={updateCard}
+              onDeleteCard={handleDeleteCard}
+              onUpdateCard={handleUpdateCard}
               onClose={handleCloseModal}
               error={error}
             />
@@ -203,7 +148,7 @@ const MainPageComponent = () => {
           <Header 
             isDarkTheme={isDarkTheme} 
             toggleTheme={toggleTheme}
-            isLoading={isLoading}
+            isLoading={loading}
             onNewCardClick={handleNewCardClick}
           />
           
@@ -221,9 +166,9 @@ const MainPageComponent = () => {
           )}
           
           <Main 
-            cards={cards} 
-            moveCard={moveCard}
-            isLoading={isLoading}
+            cards={tasks} 
+            moveCard={handleMoveCard}
+            isLoading={loading}
           />
         </MainContent>
       </MainPage>
