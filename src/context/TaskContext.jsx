@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { tasksAPI } from '../api';
+import { useAuth } from './AuthContext';
 
 const TaskContext = createContext();
 
@@ -15,8 +16,15 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { currentUser, isAuthenticated } = useAuth();
 
-  const loadTasks = async () => {
+   const loadTasks = async () => {
+    if (!isAuthenticated || !currentUser) {
+      setLoading(false);
+      setTasks([]);
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
@@ -25,6 +33,9 @@ export const TaskProvider = ({ children }) => {
     } catch (err) {
       setError('Ошибка при загрузке задач: ' + err.message);
       console.error('Error loading tasks:', err);
+      if (err.message.includes('Пользователь не найден') || err.message.includes('401')) {
+        setTasks([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -56,7 +67,6 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Удаление задачи
   const deleteTask = async (taskId) => {
     try {
       setError('');
@@ -94,8 +104,8 @@ export const TaskProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    loadTasks();
-  }, []);
+     loadTasks();
+  }, [isAuthenticated, currentUser]);
 
   const value = {
     tasks,
