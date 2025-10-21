@@ -18,7 +18,7 @@ export const TaskProvider = ({ children }) => {
   const [error, setError] = useState('');
   const { currentUser, isAuthenticated } = useAuth();
 
-   const loadTasks = async () => {
+  const loadTasks = async () => {
     if (!isAuthenticated || !currentUser) {
       setLoading(false);
       setTasks([]);
@@ -44,8 +44,8 @@ export const TaskProvider = ({ children }) => {
   const createTask = async (taskData) => {
     try {
       setError('');
-      await tasksAPI.createTask(taskData);
-      await loadTasks();
+      const response = await tasksAPI.createTask(taskData);
+      setTasks(prev => [...prev, response.task || taskData]);
       return { success: true };
     } catch (err) {
       const errorMessage = 'Ошибка при создании задачи: ' + err.message;
@@ -57,8 +57,10 @@ export const TaskProvider = ({ children }) => {
   const updateTask = async (taskId, taskData) => {
     try {
       setError('');
-      await tasksAPI.updateTask(taskId, taskData);
-      await loadTasks(); 
+      const response = await tasksAPI.updateTask(taskId, taskData);
+      setTasks(prev => prev.map(task => 
+        task._id === taskId ? { ...task, ...response.task, ...taskData } : task
+      ));
       return { success: true };
     } catch (err) {
       const errorMessage = 'Ошибка при обновлении задачи: ' + err.message;
@@ -71,7 +73,7 @@ export const TaskProvider = ({ children }) => {
     try {
       setError('');
       await tasksAPI.deleteTask(taskId);
-      await loadTasks(); 
+      setTasks(prev => prev.filter(task => task._id !== taskId));
       return { success: true };
     } catch (err) {
       const errorMessage = 'Ошибка при удалении задачи: ' + err.message;
@@ -84,8 +86,12 @@ export const TaskProvider = ({ children }) => {
     try {
       const taskToUpdate = tasks.find(task => task._id === taskId);
       if (!taskToUpdate || taskToUpdate.status === newStatus) {
-        return { success: true }; 
+        return { success: true };
       }
+
+      setTasks(prev => prev.map(task => 
+        task._id === taskId ? { ...task, status: newStatus } : task
+      ));
 
       const updatedTask = {
         title: taskToUpdate.title,
@@ -95,7 +101,15 @@ export const TaskProvider = ({ children }) => {
         date: taskToUpdate.date
       };
 
-      return await updateTask(taskId, updatedTask);
+      tasksAPI.updateTask(taskId, updatedTask).catch(err => {
+        console.error('Error updating task on server:', err);
+        setTasks(prev => prev.map(task => 
+          task._id === taskId ? { ...task, status: taskToUpdate.status } : task
+        ));
+        setError('Ошибка при перемещении задачи: ' + err.message);
+      });
+
+      return { success: true };
     } catch (err) {
       const errorMessage = 'Ошибка при перемещении задачи: ' + err.message;
       setError(errorMessage);
@@ -104,7 +118,7 @@ export const TaskProvider = ({ children }) => {
   };
 
   useEffect(() => {
-     loadTasks();
+    loadTasks();
   }, [isAuthenticated, currentUser]);
 
   const value = {
