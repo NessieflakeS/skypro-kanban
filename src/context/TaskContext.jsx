@@ -45,7 +45,7 @@ export const TaskProvider = ({ children }) => {
     try {
       setError('');
       const response = await tasksAPI.createTask(taskData);
-      setTasks(prev => [...prev, response.task || taskData]);
+      setTasks(prev => [...prev, response.task || { ...taskData, _id: Date.now().toString() }]);
       return { success: true };
     } catch (err) {
       const errorMessage = 'Ошибка при создании задачи: ' + err.message;
@@ -57,12 +57,21 @@ export const TaskProvider = ({ children }) => {
   const updateTask = async (taskId, taskData) => {
     try {
       setError('');
-      const response = await tasksAPI.updateTask(taskId, taskData);
+      const originalTasks = [...tasks];
+      
       setTasks(prev => prev.map(task => 
-        task._id === taskId ? { ...task, ...response.task, ...taskData } : task
+        task._id === taskId ? { ...task, ...taskData } : task
       ));
+      
+      const response = await tasksAPI.updateTask(taskId, taskData);
+      
+      setTasks(prev => prev.map(task => 
+        task._id === taskId ? { ...task, ...response.task } : task
+      ));
+      
       return { success: true };
     } catch (err) {
+      setTasks(originalTasks);
       const errorMessage = 'Ошибка при обновлении задачи: ' + err.message;
       setError(errorMessage);
       return { success: false, error: errorMessage };
@@ -72,10 +81,14 @@ export const TaskProvider = ({ children }) => {
   const deleteTask = async (taskId) => {
     try {
       setError('');
-      await tasksAPI.deleteTask(taskId);
+      const originalTasks = [...tasks];
+      
       setTasks(prev => prev.filter(task => task._id !== taskId));
+      
+      await tasksAPI.deleteTask(taskId);
       return { success: true };
     } catch (err) {
+      setTasks(originalTasks);
       const errorMessage = 'Ошибка при удалении задачи: ' + err.message;
       setError(errorMessage);
       return { success: false, error: errorMessage };

@@ -90,6 +90,21 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose, error }) =
   };
 
   const handleSave = async () => {
+    if (!editData.title?.trim()) {
+      setError('Введите название задачи');
+      return;
+    }
+    
+    if (!editData.date?.trim()) {
+      setError('Выберите дату выполнения');
+      return;
+    }
+    
+    if (!editData.category?.trim()) {
+      setError('Выберите категорию');
+      return;
+    }
+
     setIsLoading(true);
     try {
       if (card && card._id) {
@@ -98,7 +113,7 @@ const PopupBrowseCard = ({ card, onDeleteCard, onUpdateCard, onClose, error }) =
         console.error('Cannot update: card ID is undefined');
       }
     } catch (err) {
-      console.error('Error updating card:', err);
+      setError('Ошибка при обновлении задачи: ' + err.message);
     } finally {
       setIsLoading(false);
     }
