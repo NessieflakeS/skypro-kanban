@@ -40,12 +40,17 @@ const Login = () => {
     e.preventDefault();
     setLocalError('');
     
-    if (!formData.login.trim() || !formData.password.trim()) {
-      setLocalError('Все поля обязательны для заполнения');
-      return;
-    }
+    if (!formData.login?.trim() || !formData.password?.trim()) {
+    setLocalError('Все поля обязательны для заполнения');
+    return;
+  }
 
-    setIsLoading(true);
+  if (formData.login.trim().length === 0 || formData.password.trim().length === 0) {
+    setLocalError('Поля не могут состоять только из пробелов');
+    return;
+  }
+
+  setIsLoading(true);
 
     try {
       const result = await login(formData);

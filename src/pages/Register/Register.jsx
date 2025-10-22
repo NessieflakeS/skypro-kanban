@@ -41,8 +41,13 @@ const Register = () => {
     e.preventDefault();
     setLocalError('');
     
-    if (!formData.name.trim() || !formData.login.trim() || !formData.password.trim()) {
+    if (!formData.login?.trim() || !formData.password?.trim() || !formData.name?.trim()) {
       setLocalError('Все поля обязательны для заполнения');
+      return;
+    }
+
+    if (formData.login.trim().length === 0 || formData.password.trim().length === 0 || formData.name.trim().length === 0) {
+      setLocalError('Поля не могут состоять только из пробелов');
       return;
     }
 

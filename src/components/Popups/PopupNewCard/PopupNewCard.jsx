@@ -79,8 +79,19 @@ const PopupNewCard = ({ onCreateCard, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title.trim()) {
+  
+    if (!formData.title?.trim()) {
       setError('Введите название задачи');
+      return;
+    }
+    
+    if (!formData.date?.trim()) {
+      setError('Выберите дату выполнения');
+      return;
+    }
+    
+    if (!formData.category?.trim()) {
+      setError('Выберите категорию');
       return;
     }
 
