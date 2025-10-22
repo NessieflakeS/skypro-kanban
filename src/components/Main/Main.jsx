@@ -15,17 +15,33 @@ const Main = ({ cards, moveCard, isLoading }) => {
     { id: 5, title: "Готово", status: "Готово" }
   ];
 
+  const totalTasks = cards.length;
+
   return (
     <MainContainer>
       <MainBlock>
         <MainContent>
-          {isLoading ? (            <>
+          {isLoading ? (
+            <>
               <SkeletonColumn />
               <SkeletonColumn />
               <SkeletonColumn />
               <SkeletonColumn />
               <SkeletonColumn />
             </>
+          ) : totalTasks === 0 ? (
+            <div style={{ 
+              width: '100%', 
+              textAlign: 'center', 
+              padding: '60px 20px',
+              color: '${props => props.theme.textTertiary}',
+              fontSize: '16px'
+            }}>
+              <p>Задачи не найдены</p>
+              <p style={{ fontSize: '14px', marginTop: '10px' }}>
+                Создайте первую задачу, нажав на кнопку "Создать новую задачу"
+              </p>
+            </div>
           ) : (
             columns.map(column => (
               <Column 
